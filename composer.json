@@ -1,0 +1,12 @@
+{
+    "name": "demeanor/demeanor"
+    , "description": "A multi-paradigm testing utility"
+    , "authors": [
+        { "name": "Christopher Davis", "homepage": "http://christopherdavis.me" }
+    ]
+    , "autoload": {
+        "psr-4": {
+            "Demeanor\\": "src/"
+        }
+    }
+}
