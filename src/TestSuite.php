@@ -22,13 +22,11 @@
 namespace Demeanor;
 
 /**
- * Turns files into `TestCase` instances to be run. Probably knows about things
- * like directories and such, but all of that detail is irrelavant to the interface
- * itself.
+ * Represents a test suite (collection of test cases).
  *
  * @since   0.1
  */
-interface TestLoader
+interface TestSuite
 {
     /**
      * locate all the test files and turn them into `TestCase` instances.
