@@ -22,17 +22,21 @@
 namespace Demeanor\Unit;
 
 use Demeanor\TestCase;
+use Demeanor\DefaultTestResult;
+use Demeanor\DefaultTestContext;
+use Demeanor\Exception\TestFailed;
+use Demeanor\Exception\TestSkipped;
 
 class UnitTestCase implements TestCase
 {
-    private $class;
-    private $method;
+    private $refClass;
+    private $refMethod;
     private $name = null;
 
     public function __construct(\ReflectionClass $class, \ReflectionMethod $method)
     {
-        $this->class = $class;
-        $this->method = $method;
+        $this->refClass = $class;
+        $this->refMethod = $method;
     }
 
     /**
@@ -54,7 +58,21 @@ class UnitTestCase implements TestCase
      */
     public function run()
     {
-        
+        $object = $this->createObject();
+        $result = new DefaultTestResult();
+        $context = new DefaultTestContext($result);
+        try {
+            $this->refMethod->invoke($object, $context);
+        } catch (TestFailed $e) {
+            $result->fail();
+        } catch (TestSkipped $e) {
+            $result->skip();
+        } catch (\Exception $e) {
+            $result->addMessage('error', $e->getMessage());
+            $result->error();
+        }
+
+        return $result;
     }
 
     /**
@@ -62,11 +80,24 @@ class UnitTestCase implements TestCase
      */
     private function prettifyName()
     {
-        return implode(' ', preg_split(
+        $testName = implode(' ', preg_split(
             '/(?=[A-Z])/',
-            substr($this->method->name, 4),
+            substr($this->refMethod->name, 4),
             -1,
             PREG_SPLIT_NO_EMPTY
         ));
+
+        return sprintf('[%s] %s', $this->refClass->name, $testName);
+    }
+
+    /**
+     * Creates the class in which the test method resides.
+     *
+     * @since   0.1
+     * @return  object
+     */
+    private function createObject()
+    {
+        return $this->refClass->newInstanceArgs([]);
     }
 }

@@ -24,7 +24,6 @@ namespace Demeanor;
 use Demeanor\Exception\TestFailed;
 use Demeanor\Exception\TestSkipped;
 
-
 class DefaultTestContext implements TestContext
 {
     private $result;

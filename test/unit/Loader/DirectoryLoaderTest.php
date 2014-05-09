@@ -21,11 +21,13 @@
 
 namespace Demeanor\Loader;
 
+use Demeanor\TestContext;
+
 class DirectoryLoaderTest
 {
-    public function testLoadWithInvalidDirectoryThrowsException()
+    public function testLoadWithInvalidDirectoryThrowsException(TestContext $ctx)
     {
-        
+        $ctx->skip('nope');
     }
 
     public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix()

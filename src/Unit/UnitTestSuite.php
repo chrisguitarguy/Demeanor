@@ -86,6 +86,11 @@ class UnitTestSuite implements TestSuite
     {
         $testcases = array();
         $ref = new \ReflectionClass($class);
+
+        if ($ref->isAbstract()) {
+            return $testcases;
+        }
+
         foreach ($ref->getMethods(\ReflectionMethod::IS_PUBLIC) as $meth) {
             if ('test' !== strtolower(substr($meth->name, 0, 4))) {
                 continue;

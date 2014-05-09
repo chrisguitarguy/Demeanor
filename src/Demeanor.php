@@ -121,7 +121,35 @@ final class Demeanor extends Command
 
         foreach ($tests as $test) {
             $result = $test->run();
-            $out->writeln($test->getName() . ': ');
+            $tag = 'info';
+            $status = 'Passed';
+            if ($result->errored()) {
+                $tag = 'error';
+                $status = 'Error';
+            } elseif ($result->skipped()) {
+                $tag = 'comment';
+                $status = 'Skipped';
+            } elseif ($result->failed()) {
+                $tag = 'error';
+                $status = 'Failed';
+            }
+
+            $out->writeln(sprintf(
+                '%1$s: <%2$s>%3$s</%2$s>',
+                $test->getName(),
+                $tag,
+                $status
+            ));
+            $this->writeMessage($out, $result->getMessages(), $result->getStatus());
+        }
+    }
+
+    private function writeMessage(OutputInterface $out, array $messages)
+    {
+        foreach ($messages as $messageType => $typeMessages) {
+            foreach ($typeMessages as $msg) {
+                $out->writeln("  {$messageType} - {$msg}");
+            }
         }
     }
 }

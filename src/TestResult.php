@@ -32,6 +32,7 @@ interface TestResult
     const STATUS_SUCCESS    = 0;
     const STATUS_FAILED     = 1;
     const STATUS_SKIPPED    = 2;
+    const STATUS_ERROR      = 3;
 
     /**
      * Mark the test as failed.
@@ -66,6 +67,22 @@ interface TestResult
     public function skipped();
 
     /**
+     * Mark the test as having an error.
+     *
+     * @since   0.1
+     * @return  void
+     */
+    public function error();
+
+    /**
+     * Whether or not the test is in an error state.
+     *
+     * @since   0.1
+     * @return  boolean
+     */
+    public function errored();
+
+    /**
      * Add a log message.
      *
      * @since   0.1
@@ -82,4 +99,12 @@ interface TestResult
      * @return  string[]
      */
     public function getMessages();
+
+    /**
+     * Get the test status code.
+     *
+     * @since   0.1
+     * @return  int
+     */
+    public function getStatus();
 }

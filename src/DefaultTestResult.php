@@ -61,9 +61,29 @@ class DefaultTestResult implements TestResult
     /**
      * {@inheritdoc}
      */
+    public function error()
+    {
+        $this->status = self::STATUS_ERROR;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function errored()
+    {
+        return self::STATUS_ERROR === $this->status;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addMessage($messageType, $message)
     {
-        $this->messages = sprintf('[%s] %s', $messageType, $message);
+        if (!isset($this->messages[$messageType])) {
+            $this->messages[$messageType] = array();
+        }
+
+        $this->messages[$messageType][] = $message;
     }
 
     /**
@@ -72,5 +92,13 @@ class DefaultTestResult implements TestResult
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }
