@@ -57,33 +57,16 @@ class UnitTestCase implements TestCase
         
     }
 
+    /**
+     * @see     http://stackoverflow.com/questions/8577300/explode-a-string-on-upper-case-characters
+     */
     private function prettifyName()
     {
-        // XXX this is pretty terrible
-        $words = array();
-        $count = 1;
-        $name = substr($this->method->name, 4);
-        while (strlen($name) && $count < strlen($name)) {
-            if (!$this->isUpperCase($name[$count])) {
-                $count++;
-                continue;
-            }
-
-            $words[] = substr($name, 0, $count);
-            $name = substr($name, $count);
-            $count = 1;
-        }
-
-        if ($name) {
-            $words[] = $name;
-        }
-
-        return implode(' ', $words);
-    }
-
-    private function isUpperCase($char)
-    {
-        $char = ord($char);
-        return $char >= ord('A') && $char <= ord('Z');
+        return implode(' ', preg_split(
+            '/(?=[A-Z])/',
+            substr($this->method->name, 4),
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        ));
     }
 }
