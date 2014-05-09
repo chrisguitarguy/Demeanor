@@ -22,18 +22,36 @@
 namespace Demeanor\Loader;
 
 /**
- * Locates files matching a configuration pass to it's constructor and returns
- * them as an iterable.
+ * Combine multiple loader instances into one.
  *
  * @since   0.1
  */
-interface Loader
+class ChainLoader implements Loader
 {
+    private $loaders = array();
+
+    public function __construct(array $loaders=array())
+    {
+        foreach ($loaders as $loader) {
+            $this->addLoader($loader);
+        }
+    }
+
     /**
-     * Locate all the files and return them.
-     *
-     * @since   0.1
-     * @return  array
+     * {@inheritdoc}
      */
-    public function load();
+    public function load()
+    {
+        $files = array();
+        foreach ($this->loaders as $loader) {
+            $files = array_merge($files, $loader->load());
+        }
+
+        return $files;
+    }
+
+    public function addLoader(Loader $loader)
+    {
+        $this->loaders[] = $loader;
+    }
 }
