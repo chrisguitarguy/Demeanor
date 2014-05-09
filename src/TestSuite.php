@@ -35,4 +35,12 @@ interface TestSuite
      * @return  TestCase[]
      */
     public function load();
+
+    /**
+     * Bootstrap the test suite (include all the files required for it).
+     *
+     * @since   0.1
+     * @return  void
+     */
+    public function bootstrap();
 }
