@@ -21,6 +21,7 @@
 
 namespace Demeanor\Unit;
 
+use Counterpart\Exception\AssertionFailed;
 use Demeanor\TestCase;
 use Demeanor\DefaultTestResult;
 use Demeanor\DefaultTestContext;
@@ -69,6 +70,9 @@ class UnitTestCase implements TestCase
             $result->fail();
         } catch (TestSkipped $e) {
             $result->skip();
+        } catch (AssertionFailed $e) {
+            $result->fail();
+            $result->addMessage('fail', $e->getMessage());
         } catch (\Exception $e) {
             $this->caughtException($e);
             if (!$this->isExpected($e)) {

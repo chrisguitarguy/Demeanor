@@ -21,6 +21,7 @@
 
 namespace Demeanor\Loader;
 
+use Counterpart\Assert;
 use Demeanor\TestContext;
 
 class DirectoryLoaderTest
@@ -34,7 +35,10 @@ class DirectoryLoaderTest
 
     public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix(TestContext $ctx)
     {
-        $ctx->log('here we are');
+        $loader = new DirectoryLoader(__DIR__ . '/../Fixtures/dirloader', '_test');
+        $files = $loader->load();
+        Assert::assertType('array', $files);
+        Assert::assertCount(2, $files);
     }
 
     public function notATest()
