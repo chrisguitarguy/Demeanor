@@ -30,9 +30,9 @@ class DirectoryLoaderTest
         $ctx->skip('nope');
     }
 
-    public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix()
+    public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix(TestContext $ctx)
     {
-        
+        $ctx->log('here we are');
     }
 
     public function notATest()
