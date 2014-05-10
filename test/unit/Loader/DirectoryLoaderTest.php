@@ -28,6 +28,8 @@ class DirectoryLoaderTest
     public function testLoadWithInvalidDirectoryThrowsException(TestContext $ctx)
     {
         $ctx->expectException('Demeanor\\Exception\\FileNotFoundException');
+        $loader = new DirectoryLoader(__DIR__ . '/does/not/exist');
+        $loader->load();
     }
 
     public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix(TestContext $ctx)
