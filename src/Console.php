@@ -73,7 +73,7 @@ class Console extends Application
      */
     protected function getCommandName(InputInterface $in)
     {
-        return Demeanor::NAME;
+        return Command::NAME;
     }
 
     /**
@@ -83,7 +83,7 @@ class Console extends Application
     {
         return [
             new HelpCommand(),
-            new Demeanor(),
+            new Command(),
         ];
     }
 }

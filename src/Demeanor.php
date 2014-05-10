@@ -21,9 +21,6 @@
 
 namespace Demeanor;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Command\Command;
 use Demeanor\Exception\ConfigurationException;
 
 /**
@@ -31,42 +28,36 @@ use Demeanor\Exception\ConfigurationException;
  *
  * @since   0.1
  */
-final class Demeanor extends Command
+final class Demeanor
 {
     const VERSION   = '0.1';
-    const NAME      = 'demeanor';
+    const NAME      = 'Demeanor';
 
-    /**
-     * The main application entry point.
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $in, OutputInterface $out)
+    private $outputWriter;
+
+    public function __construct(OutputWriter $writer)
+    {
+        $this->outputWriter = $writer;
+    }
+
+    public function run()
     {
         try {
             $testsuites = $this->loadTestSuites();
         } catch (\Exception $e) {
-            $out->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            $this->outputWriter->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return 1;
         }
 
         foreach ($testsuites as $testsuite) {
             try {
-                $this->runTestSuite($testsuite, $out);
+                $this->runTestSuite($testsuite);
             } catch (\Exception $e) {
 
             }
         }
 
         return 0;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
-    {
-        $this->setName(self::NAME);
-        $this->setDescription('Run all or a single test suite');
     }
 
     private function loadTestSuites()
@@ -114,33 +105,14 @@ final class Demeanor extends Command
         return $config;
     }
 
-    private function runTestSuite(TestSuite $suite, OutputInterface $out)
+    private function runTestSuite(TestSuite $suite)
     {
         $suite->bootstrap();
         $tests = $suite->load();
 
         foreach ($tests as $test) {
             $result = $test->run();
-            $tag = 'info';
-            $status = 'Passed';
-            if ($result->errored()) {
-                $tag = 'error';
-                $status = 'Error';
-            } elseif ($result->skipped()) {
-                $tag = 'comment';
-                $status = 'Skipped';
-            } elseif ($result->failed()) {
-                $tag = 'error';
-                $status = 'Failed';
-            }
-
-            $out->writeln(sprintf(
-                '%1$s: <%2$s>%3$s</%2$s>',
-                $test->getName(),
-                $tag,
-                $status
-            ));
-            $this->writeMessage($out, $result->getMessages(), $result->getStatus());
+            $this->outputWriter->writeResult($test, $result);
         }
     }
 
