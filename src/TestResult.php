@@ -35,6 +35,14 @@ interface TestResult
     const STATUS_ERROR      = 3;
 
     /**
+     * Check to see if the test was successful.
+     *
+     * @since   0.1
+     * @return  boolean
+     */
+    public function successful();
+
+    /**
      * Mark the test as failed.
      *
      * @since   0.1

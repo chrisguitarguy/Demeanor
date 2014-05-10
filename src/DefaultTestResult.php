@@ -29,6 +29,14 @@ class DefaultTestResult implements TestResult
     /**
      * {@inheritdoc}
      */
+    public function successful()
+    {
+        return self::STATUS_SUCCESS === $this->status;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function fail()
     {
         $this->status = self::STATUS_FAILED;
