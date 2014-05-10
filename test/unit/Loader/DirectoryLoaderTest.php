@@ -27,7 +27,7 @@ class DirectoryLoaderTest
 {
     public function testLoadWithInvalidDirectoryThrowsException(TestContext $ctx)
     {
-        $ctx->skip('nope');
+        $ctx->expectException('Demeanor\\Exception\\FileNotFoundException');
     }
 
     public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix(TestContext $ctx)

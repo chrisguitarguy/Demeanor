@@ -65,4 +65,13 @@ interface TestContext
      * @return  void
      */
     public function skip($message='');
+
+    /**
+     * Tell the test that to expect an exception.
+     *
+     * @since   0.1
+     * @param   string $exceptionClass
+     * @return  void
+     */
+    public function expectException($exceptionClass);
 }

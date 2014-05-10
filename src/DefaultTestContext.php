@@ -26,10 +26,12 @@ use Demeanor\Exception\TestSkipped;
 
 class DefaultTestContext implements TestContext
 {
+    private $testcase;
     private $result;
 
-    public function __construct(TestResult $result)
+    public function __construct(TestCase $testcase, TestResult $result)
     {
+        $this->testcase = $testcase;
         $this->result = $result;
     }
 
@@ -57,6 +59,14 @@ class DefaultTestContext implements TestContext
     {
         $this->addMessage('skip', $message);
         throw new TestSkipped($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function expectException($exceptionClass)
+    {
+        $this->testcase->setExpectedException($exceptionClass);
     }
 
     private function addMessage($messageType, $message)

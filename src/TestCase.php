@@ -49,4 +49,14 @@ interface TestCase
      * @return  string
      */
     public function getName();
+
+    /**
+     * Set the expected exception that the TestCase will encounter along its
+     * run.
+     *
+     * @since   0.1
+     * @param   string $exceptionClass
+     * @return  void
+     */
+    public function setExpectedException($exceptionClass);
 }

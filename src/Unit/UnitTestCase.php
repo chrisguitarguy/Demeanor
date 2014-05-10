@@ -32,6 +32,8 @@ class UnitTestCase implements TestCase
     private $refClass;
     private $refMethod;
     private $name = null;
+    private $expectedException = null;
+    private $caughtException = null;
 
     public function __construct(\ReflectionClass $class, \ReflectionMethod $method)
     {
@@ -60,7 +62,7 @@ class UnitTestCase implements TestCase
     {
         $object = $this->createObject();
         $result = new DefaultTestResult();
-        $context = new DefaultTestContext($result);
+        $context = new DefaultTestContext($this, $result);
         try {
             $this->refMethod->invoke($object, $context);
         } catch (TestFailed $e) {
@@ -68,11 +70,31 @@ class UnitTestCase implements TestCase
         } catch (TestSkipped $e) {
             $result->skip();
         } catch (\Exception $e) {
-            $result->addMessage('error', $e->getMessage());
-            $result->error();
+            $this->caughtException($e);
+            if (!$this->isExpected($e)) {
+                $result->addMessage('error', $e->getMessage());
+                $result->error();
+            }
+        }
+
+        if (!$this->caughtExpectedException()) {
+            $result->fail();
+            $result->addMessage('fail', sprintf(
+                'Expected exception of class %s, got %s',
+                $this->expectedException,
+                is_object($this->caughtException) ? get_class($this->caughtException) : gettype($this->caughtException)
+            ));
         }
 
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExpectedException($exceptionClass)
+    {
+        $this->expectedException = $exceptionClass;
     }
 
     /**
@@ -93,11 +115,56 @@ class UnitTestCase implements TestCase
     /**
      * Creates the class in which the test method resides.
      *
+     * TODO allow for factory methods.
+     *
      * @since   0.1
      * @return  object
      */
     private function createObject()
     {
         return $this->refClass->newInstanceArgs([]);
+    }
+
+    /**
+     * Check whether an exception was expected or not.
+     *
+     * @since   0.1
+     * @param   \Exception $e
+     * @return  boolean
+     */
+    private function isExpected(\Exception $e)
+    {
+        if (null === $this->expectedException) {
+            return false;
+        }
+
+        return $e instanceof $this->expectedException;
+    }
+
+    /**
+     * Set the exception that was caught during test execution.
+     *
+     * @since   0.1
+     * @param   \Exception $e
+     * @return  void
+     */
+    private function caughtException(\Exception $e)
+    {
+        $this->caughtException = $e;
+    }
+
+    /**
+     * Check whether or not we caught the expected exception.
+     *
+     * @since   0.1
+     * @return  boolean
+     */
+    private function caughtExpectedException()
+    {
+        if (null === $this->expectedException) {
+            return true;
+        }
+
+        return $this->caughtException && $this->isExpected($this->caughtException);
     }
 }
