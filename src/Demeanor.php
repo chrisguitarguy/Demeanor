@@ -49,15 +49,16 @@ final class Demeanor
             return 1;
         }
 
+        $hasErrors = false;
         foreach ($testsuites as $testsuite) {
             try {
-                $this->runTestSuite($testsuite);
+                $hasErrors = $this->runTestSuite($testsuite);
             } catch (\Exception $e) {
-
+                // TODO
             }
         }
 
-        return 0;
+        return $hasErrors ? 1 : 0;
     }
 
     private function loadTestSuites()
@@ -105,15 +106,28 @@ final class Demeanor
         return $config;
     }
 
+    /**
+     * Run a single test suite.
+     *
+     * @since   0.1
+     * @param   TestSuite $suite
+     * @return  boolean True if errors were encountered.
+     */
     private function runTestSuite(TestSuite $suite)
     {
         $suite->bootstrap();
         $tests = $suite->load();
 
+        $errors = false;
         foreach ($tests as $test) {
             $result = $test->run();
+            if (!$result->successful() && !$result->skipped()) {
+                $errors = true;
+            }
             $this->outputWriter->writeResult($test, $result);
         }
+
+        return $errors;
     }
 
     private function writeMessage(OutputInterface $out, array $messages)
