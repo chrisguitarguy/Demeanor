@@ -34,7 +34,7 @@ class GlobLoaderTest
 
     public function testLoadWithExistingDirectoryReturnsArrayOfExpectedFiles()
     {
-        $loader = new GlobLoader(__DIR__.'/../Fixtures/dirloader/*test');
+        $loader = new GlobLoader(__DIR__.'/../Fixtures/globloader/*test');
         $files = $loader->load();
         Assert::assertType('array', $files);
         Assert::assertCount(2, $files);
