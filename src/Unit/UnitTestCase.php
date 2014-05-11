@@ -23,6 +23,7 @@ namespace Demeanor\Unit;
 
 use Counterpart\Exception\AssertionFailed;
 use Demeanor\TestCase;
+use Demeanor\TestResult;
 use Demeanor\DefaultTestResult;
 use Demeanor\DefaultTestContext;
 use Demeanor\Exception\TestFailed;
@@ -72,7 +73,7 @@ class UnitTestCase implements TestCase
             $result->skip();
         } catch (AssertionFailed $e) {
             $result->fail();
-            $result->addMessage('fail', $e->getMessage());
+            $this->addAssertMessage($result, $e);
         } catch (\Exception $e) {
             $this->caughtException($e);
             if (!$this->isExpected($e)) {
@@ -170,5 +171,25 @@ class UnitTestCase implements TestCase
         }
 
         return $this->caughtException && $this->isExpected($this->caughtException);
+    }
+
+    private function addAssertMessage(TestResult $result, AssertionFailed $e)
+    {
+        $trace = $e->getTrace();
+        array_shift($trace); // first item is always Counterpart\Assert::assertThat
+        $where = array_shift($trace);
+        if (!$where) {
+            return $result->addMessage('fail', $e->getMessage());
+        }
+
+        $file = isset($where['file']) ? $where['file'] : null;
+        $line = isset($where['line']) ? $where['line'] : null;
+
+        $result->addMessage('fail', sprintf(
+            '%s in %s, line %s',
+            $e->getMessage(),
+            $file ?: 'UNKNOWN',
+            $line ?: 'UNKNOWN'
+        ));
     }
 }
