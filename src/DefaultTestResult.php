@@ -31,7 +31,7 @@ class DefaultTestResult implements TestResult
      */
     public function successful()
     {
-        return self::STATUS_SUCCESS === $this->status;
+        return self::STATUS_SUCCESS === $this->getStatus();
     }
 
     /**
@@ -47,7 +47,7 @@ class DefaultTestResult implements TestResult
      */
     public function failed()
     {
-        return self::STATUS_FAILED === $this->status;
+        return self::STATUS_FAILED === $this->getStatus();
     }
 
     /**
@@ -63,7 +63,7 @@ class DefaultTestResult implements TestResult
      */
     public function skipped()
     {
-        return self::STATUS_SKIPPED === $this->status;
+        return self::STATUS_SKIPPED === $this->getStatus();
     }
 
     /**
@@ -79,7 +79,7 @@ class DefaultTestResult implements TestResult
      */
     public function errored()
     {
-        return self::STATUS_ERROR === $this->status;
+        return self::STATUS_ERROR === $this->getStatus();
     }
 
     /**
