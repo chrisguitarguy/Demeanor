@@ -22,20 +22,15 @@
 namespace Demeanor\Unit;
 
 use Counterpart\Exception\AssertionFailed;
-use Demeanor\TestCase;
+use Demeanor\AbstractTestCase;
 use Demeanor\TestResult;
-use Demeanor\DefaultTestResult;
-use Demeanor\DefaultTestContext;
-use Demeanor\Exception\TestFailed;
-use Demeanor\Exception\TestSkipped;
+use Demeanor\TestContext;
 
-class UnitTestCase implements TestCase
+class UnitTestCase extends AbstractTestCase
 {
     private $refClass;
     private $refMethod;
     private $name = null;
-    private $expectedException = null;
-    private $caughtException = null;
 
     public function __construct(\ReflectionClass $class, \ReflectionMethod $method)
     {
@@ -60,46 +55,10 @@ class UnitTestCase implements TestCase
     /**
      * {@inheritdoc}
      */
-    public function run()
+    protected function doRun(TestContext $ctx, TestResult $res)
     {
         $object = $this->createObject();
-        $result = new DefaultTestResult();
-        $context = new DefaultTestContext($this, $result);
-        try {
-            $this->refMethod->invoke($object, $context);
-        } catch (TestFailed $e) {
-            $result->fail();
-        } catch (TestSkipped $e) {
-            $result->skip();
-        } catch (AssertionFailed $e) {
-            $result->fail();
-            $this->addAssertMessage($result, $e);
-        } catch (\Exception $e) {
-            $this->caughtException($e);
-            if (!$this->isExpected($e)) {
-                $result->addMessage('error', $e->getMessage());
-                $result->error();
-            }
-        }
-
-        if (!$this->caughtExpectedException()) {
-            $result->fail();
-            $result->addMessage('fail', sprintf(
-                'Expected exception of class %s, got %s',
-                $this->expectedException,
-                is_object($this->caughtException) ? get_class($this->caughtException) : gettype($this->caughtException)
-            ));
-        }
-
-        return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setExpectedException($exceptionClass)
-    {
-        $this->expectedException = $exceptionClass;
+        $this->refMethod->invoke($object, $ctx);
     }
 
     /**
@@ -128,68 +87,5 @@ class UnitTestCase implements TestCase
     private function createObject()
     {
         return $this->refClass->newInstanceArgs([]);
-    }
-
-    /**
-     * Check whether an exception was expected or not.
-     *
-     * @since   0.1
-     * @param   \Exception $e
-     * @return  boolean
-     */
-    private function isExpected(\Exception $e)
-    {
-        if (null === $this->expectedException) {
-            return false;
-        }
-
-        return $e instanceof $this->expectedException;
-    }
-
-    /**
-     * Set the exception that was caught during test execution.
-     *
-     * @since   0.1
-     * @param   \Exception $e
-     * @return  void
-     */
-    private function caughtException(\Exception $e)
-    {
-        $this->caughtException = $e;
-    }
-
-    /**
-     * Check whether or not we caught the expected exception.
-     *
-     * @since   0.1
-     * @return  boolean
-     */
-    private function caughtExpectedException()
-    {
-        if (null === $this->expectedException) {
-            return true;
-        }
-
-        return $this->caughtException && $this->isExpected($this->caughtException);
-    }
-
-    private function addAssertMessage(TestResult $result, AssertionFailed $e)
-    {
-        $trace = $e->getTrace();
-        array_shift($trace); // first item is always Counterpart\Assert::assertThat
-        $where = array_shift($trace);
-        if (!$where) {
-            return $result->addMessage('fail', $e->getMessage());
-        }
-
-        $file = isset($where['file']) ? $where['file'] : null;
-        $line = isset($where['line']) ? $where['line'] : null;
-
-        $result->addMessage('fail', sprintf(
-            '%s in %s, line %s',
-            $e->getMessage(),
-            $file ?: 'UNKNOWN',
-            $line ?: 'UNKNOWN'
-        ));
     }
 }
