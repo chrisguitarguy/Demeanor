@@ -32,7 +32,7 @@ namespace Demeanor;
  *
  * @since   0.1
  */
-interface TestContext
+interface TestContext extends \ArrayAccess
 {
     /**
      * Log some information to the text context. This may or may not be displayed

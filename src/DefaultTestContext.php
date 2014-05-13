@@ -24,7 +24,7 @@ namespace Demeanor;
 use Demeanor\Exception\TestFailed;
 use Demeanor\Exception\TestSkipped;
 
-class DefaultTestContext implements TestContext
+class DefaultTestContext extends \ArrayObject implements TestContext
 {
     private $testcase;
     private $result;
