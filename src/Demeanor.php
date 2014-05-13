@@ -23,6 +23,7 @@ namespace Demeanor;
 
 use Demeanor\Event\Emitter;
 use Demeanor\Event\DefaultEmitter;
+use Demeanor\Extension\MockeryExtension;
 use Demeanor\Config\Configuration;
 use Demeanor\Exception\ConfigurationException;
 
@@ -56,6 +57,8 @@ final class Demeanor
             return 1;
         }
 
+        $this->addEventSubscribers();
+
         $hasErrors = false;
         foreach ($this->loadTestSuites() as $testsuite) {
             try {
@@ -73,7 +76,7 @@ final class Demeanor
         $factory = new TestSuiteFactory();
         $suites = array();
         foreach ($this->config->getTestSuites() as $name => $suiteConfig) {
-            $suites[] = $factory->create($name, $suiteConfig);
+            $suites[$name] = $factory->create($name, $suiteConfig);
         }
 
         return $suites;
@@ -101,5 +104,16 @@ final class Demeanor
         }
 
         return $errors;
+    }
+
+    private function addEventSubscribers()
+    {
+        $subscribers = array_merge([
+            new MockeryExtension(),
+        ], $this->config->getEventSubscribers());
+
+        foreach ($subscribers as $sub) {
+            $this->emitter->addSubscriber($sub);
+        }
     }
 }
