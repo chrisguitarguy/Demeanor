@@ -23,6 +23,8 @@ namespace Demeanor;
 
 use Demeanor\Loader\ChainLoader;
 use Demeanor\Loader\DirectoryLoader;
+use Demeanor\Loader\FileLoader;
+use Demeanor\Loader\GlobLoader;
 use Demeanor\Unit\UnitTestSuite;
 use Demeanor\Exception\InvalidTestSuiteException;
 
@@ -68,14 +70,40 @@ class TestSuiteFactory
     {
         $loader = new ChainLoader();
         $this->addDirectoryLoaders($loader, $configuration['directories']);
+        $this->addFileLoaders($loader, $configuration['files']);
+        $this->addGlobLoaders($loader, $configuration['glob']);
 
         return new UnitTestSuite($name, $loader, $configuration['bootstrap']);
     }
 
     private function addDirectoryLoaders(ChainLoader $chain, array $directories, $suffix=null)
     {
+        if (!$directories) {
+            return;
+        }
+
         foreach ($directories as $directory) {
             $chain->addLoader(new DirectoryLoader($directory, $suffix));
+        }
+    }
+
+    private function addFileLoaders(ChainLoader $chain, array $files)
+    {
+        if (!$files) {
+            return;
+        }
+
+        $chain->addLoader(new FileLoader($files));
+    }
+
+    private function addGlobLoaders(ChainLoader $chain, array $globs)
+    {
+        if (!$globs) {
+            return;
+        }
+
+        foreach ($globs as $glob) {
+            $chain->addLoader(new GlobLoader($glob));
         }
     }
 }
