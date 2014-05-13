@@ -24,6 +24,7 @@ namespace Demeanor;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command as BaseCommand;
+use Demeanor\Config\JsonConfiguration;
 
 class Command extends BaseCommand
 {
@@ -44,7 +45,7 @@ class Command extends BaseCommand
     protected function execute(InputInterface $in, OutputInterface $out)
     {
         $writer = new ConsoleOutputWriter($out);
-        $demeanor = new Demeanor($writer);
+        $demeanor = new Demeanor($writer, new JsonConfiguration());
         return $demeanor->run();
     }
 }

@@ -23,6 +23,7 @@ namespace Demeanor;
 
 use Demeanor\Event\Emitter;
 use Demeanor\Event\DefaultEmitter;
+use Demeanor\Config\Configuration;
 use Demeanor\Exception\ConfigurationException;
 
 /**
@@ -37,24 +38,26 @@ final class Demeanor
 
     private $outputWriter;
     private $emitter;
+    private $config;
 
-    public function __construct(OutputWriter $writer, Emitter $emitter=null)
+    public function __construct(OutputWriter $writer, Configuration $config, Emitter $emitter=null)
     {
         $this->outputWriter = $writer;
+        $this->config = $config;
         $this->emitter = $emitter ?: new DefaultEmitter();
     }
 
     public function run()
     {
         try {
-            $testsuites = $this->loadTestSuites();
-        } catch (\Exception $e) {
+            $this->config->initialize();
+        } catch (ConfiguraitonException $e) {
             $this->outputWriter->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return 1;
         }
 
         $hasErrors = false;
-        foreach ($testsuites as $testsuite) {
+        foreach ($this->loadTestSuites() as $testsuite) {
             try {
                 $hasErrors = $this->runTestSuite($testsuite);
             } catch (\Exception $e) {
@@ -67,47 +70,13 @@ final class Demeanor
 
     private function loadTestSuites()
     {
-        $config = $this->loadConfiguration();
-        if (empty($config['testsuites'])) {
-            throw new ConfigurationException('No Test suites defined in configuration');
-        }
-
-        if (!is_array($config['testsuites'])) {
-            throw new ConfigurationException('`testsuites` configuration much be an object');
-        }
-
         $factory = new TestSuiteFactory();
         $suites = array();
-        foreach ($config['testsuites'] as $name => $suiteConfig) {
+        foreach ($this->config->getTestSuites() as $name => $suiteConfig) {
             $suites[] = $factory->create($name, $suiteConfig);
         }
 
         return $suites;
-    }
-
-    private function loadConfiguration()
-    {
-        $files = ['demeanor.json', 'demeanor.dist.json'];
-        $configFile = null;
-        foreach ($files as $file) {
-            if (file_exists($file)) {
-                $configFile = $file;
-                break;
-            }
-        }
-
-        if (!$configFile) {
-            throw new ConfigurationException('No '.implode(' or ', $files). ' configuration file found');
-        }
-
-        $json = file_get_contents($configFile);
-        $config = json_decode($json, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            // XXX figure how to get the json error here and give a better message
-            throw new ConfigurationException('Could not load configuration json file');
-        }
-
-        return $config;
     }
 
     /**
@@ -132,14 +101,5 @@ final class Demeanor
         }
 
         return $errors;
-    }
-
-    private function writeMessage(OutputInterface $out, array $messages)
-    {
-        foreach ($messages as $messageType => $typeMessages) {
-            foreach ($typeMessages as $msg) {
-                $out->writeln("  {$messageType} - {$msg}");
-            }
-        }
     }
 }
