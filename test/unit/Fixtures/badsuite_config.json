@@ -1,0 +1,7 @@
+{
+    "testsuites": {
+        "a_suite": [
+            "not", "an", "assoc", "array"
+        ]
+    }
+}
