@@ -52,7 +52,7 @@ final class Demeanor
     {
         try {
             $this->config->initialize();
-        } catch (ConfiguraitonException $e) {
+        } catch (ConfigurationException $e) {
             $this->outputWriter->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return 1;
         }
