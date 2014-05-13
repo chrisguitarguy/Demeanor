@@ -9,5 +9,11 @@
                 "test/unit"
             ]
         }
+        , "integration": {
+            "type": "spec"
+            , "directories": [
+                "test/integration"
+            ]
+        }
     }
 }

@@ -26,6 +26,7 @@ use Demeanor\Loader\DirectoryLoader;
 use Demeanor\Loader\FileLoader;
 use Demeanor\Loader\GlobLoader;
 use Demeanor\Unit\UnitTestSuite;
+use Demeanor\Spec\SpecTestSuite;
 use Demeanor\Exception\InvalidTestSuiteException;
 
 /**
@@ -41,11 +42,12 @@ class TestSuiteFactory
 
     public function create($name, array $configuration)
     {
-        $configuration = $this->setDefaults($configuration);
-
         switch ($configuration['type']) {
             case self::TYPE_UNIT:
                 $suite = $this->createUnitTestSuite($name, $configuration);
+                break;
+            case self::TYPE_SPEC:
+                $suite = $this->createSpecTestSuite($name, $configuration);
                 break;
             default:
                 throw new InvalidTestSuiteException("{$configuration['type']} is not a valid test suite type");
@@ -55,25 +57,26 @@ class TestSuiteFactory
         return $suite;
     }
 
-    private function setDefaults(array $configuration)
-    {
-        return array_replace([
-            'type'          => self::TYPE_UNIT,
-            'directories'   => array(),
-            'files'         => array(),
-            'glob'          => array(),
-            'bootstrap'     => array(),
-        ], $configuration);
-    }
-
     private function createUnitTestSuite($name, array $configuration)
     {
+        $loader = $this->createLoader($configuration);
+        return new UnitTestSuite($name, $loader, $configuration['bootstrap']);
+    }
+
+    private function createSpecTestSuite($name, array $configuration)
+    {
+        $loader = $this->createLoader($configuration, 'spec.php');
+        return new SpecTestSuite($name, $loader, $configuration['bootstrap']);
+    }
+
+    private function createLoader(array $configuration, $suffix=null)
+    {
         $loader = new ChainLoader();
-        $this->addDirectoryLoaders($loader, $configuration['directories']);
+        $this->addDirectoryLoaders($loader, $configuration['directories'], $suffix);
         $this->addFileLoaders($loader, $configuration['files']);
         $this->addGlobLoaders($loader, $configuration['glob']);
 
-        return new UnitTestSuite($name, $loader, $configuration['bootstrap']);
+        return $loader;
     }
 
     private function addDirectoryLoaders(ChainLoader $chain, array $directories, $suffix=null)

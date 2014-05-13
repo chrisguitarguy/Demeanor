@@ -69,9 +69,9 @@ class SpecTestCase extends AbstractTestCase
         }
     }
 
-    private function call(\Closure $cb, $newThis)
+    private function call(\Closure $cb, TestContext $ctx)
     {
-        $cb = $cb->bindTo($newThis);
-        $cb();
+        $cb = $cb->bindTo(null);
+        $cb($ctx);
     }
 }
