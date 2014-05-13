@@ -22,6 +22,7 @@
 namespace Demeanor;
 
 use Counterpart\Exception\AssertionFailed;
+use Demeanor\Event\Emitter;
 use Demeanor\Exception\TestFailed;
 use Demeanor\Exception\TestSkipped;
 
@@ -33,7 +34,7 @@ abstract class AbstractTestCase implements TestCase
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(Emitter $emitter)
     {
         $result = new DefaultTestResult();
         $context = new DefaultTestContext($this, $result);

@@ -21,6 +21,8 @@
 
 namespace Demeanor;
 
+use Demeanor\Event\Emitter;
+use Demeanor\Event\DefaultEmitter;
 use Demeanor\Exception\ConfigurationException;
 
 /**
@@ -34,10 +36,12 @@ final class Demeanor
     const NAME      = 'Demeanor';
 
     private $outputWriter;
+    private $emitter;
 
-    public function __construct(OutputWriter $writer)
+    public function __construct(OutputWriter $writer, Emitter $emitter=null)
     {
         $this->outputWriter = $writer;
+        $this->emitter = $emitter ?: new DefaultEmitter();
     }
 
     public function run()
@@ -120,7 +124,7 @@ final class Demeanor
 
         $errors = false;
         foreach ($tests as $test) {
-            $result = $test->run();
+            $result = $test->run($this->emitter);
             if (!$result->successful() && !$result->skipped()) {
                 $errors = true;
             }

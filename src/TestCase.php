@@ -21,6 +21,8 @@
 
 namespace Demeanor;
 
+use Demeanor\Event\Emitter;
+
 /**
  * Represents a single test case. What exactly that is up to the implementation.
  *
@@ -38,9 +40,10 @@ interface TestCase
      * Run the test case and return a result. This should never throw.
      *
      * @since   0.1
+     * @param   Emitter $emitter
      * @return  TestResult
      */
-    public function run();
+    public function run(Emitter $emitter);
 
     /**
      * Get a pretty, printable version of the test's name.
