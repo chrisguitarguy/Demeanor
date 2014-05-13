@@ -60,4 +60,13 @@ interface Emitter
      * @return  void
      */
     public function addSubscriber(Subscriber $subscriber);
+
+    /**
+     * Check to see if an event has listeners.
+     *
+     * @since   0.1
+     * @param   string $eventName
+     * @return  boolean
+     */
+    public function hasListeners($eventName);
 }
