@@ -22,6 +22,7 @@
 namespace Demeanor\Config;
 
 use Symfony\Component\Console\Input\InputInterface;
+use Demeanor\Exception\ConfigurationException;
 
 /**
  * A configuration object that's aware of the Symfony InputInterface and serves
@@ -58,6 +59,13 @@ class ConsoleConfiguration implements Configuration
         }
 
         $this->wrappedConfig->initialize();
+
+        if ($suiteName = $this->consoleInput->getOption('testsuite')) {
+            $suites = $this->wrappedConfig->getTestSuites();
+            if (!isset($suites[$suiteName])) {
+                throw new ConfigurationException(sprintf('Test suite "%s" does not exist', $suiteName));
+            }
+        }
     }
 
     /**
@@ -66,13 +74,11 @@ class ConsoleConfiguration implements Configuration
     public function getTestSuites()
     {
         $suites = $this->wrappedConfig->getTestSuites();
-        $suiteName = $this->consoleInput->getOption('testsuite');
-
-        if (!$suiteName) {
-            return $suites;
+        if ($suiteName = $this->consoleInput->getOption('testsuite')) {
+            return [$suites[$suiteName]];
         }
 
-        return isset($suites[$suiteName]) ? [$suites[$suiteName]] : array();
+        return $suites;
     }
 
     /**
