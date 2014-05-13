@@ -80,7 +80,7 @@ class DefaultEmitter implements Emitter
      */
     public function addSubscriber(Subscriber $subscriber)
     {
-        foreach ($subcriber->getSubscribedEvents() as $eventName => $listeners) {
+        foreach ($subscriber->getSubscribedEvents() as $eventName => $listeners) {
             if (is_string($listeners)) { // method name only
                 $this->addListener($eventName, [$subscriber, $listeners]);
             } elseif (is_string($listeners[0])) {
