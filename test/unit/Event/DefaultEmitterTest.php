@@ -67,84 +67,47 @@ class DefaultEmitterTest
     public function testAddSubscriberWithOnlyMethodNameAddsCorrectListener()
     {
         $em = $this->createEmitter();
-        $subscriber = new MethodNameOnlySubscriber();
-        $em->addSubscriber($subscriber);
-        $em->emit(TestSubscriber::EVENT);
+        $subscriber = $this->subscriberReturning([
+            self::EVENT     => 'onEvent',
+        ]);
 
-        Assert::assertTrue($subscriber->called(), 'Emitter should have called TestSubscriber::onEvent');
+        $em->addSubscriber($subscriber);
     }
 
     public function testAddSubscriberWithMethodNameAndPriorityAddsCorrectListener()
     {
         $em = $this->createEmitter();
-        $subscriber = new WithPrioritySubscriber();
-        $em->addSubscriber($subscriber);
-        $em->emit(TestSubscriber::EVENT);
+        $subscriber = $this->subscriberReturning([
+            self::EVENT     => ['onEvent', 10],
+        ]);
 
-        Assert::assertTrue($subscriber->called(), 'Emitter should have called TestSubscriber::onEvent');
+        $em->addSubscriber($subscriber);
     }
 
     public function testAddSubscriberWithMultipleCallbacksAddsCorrectListener()
     {
         $em = $this->createEmitter();
-        $subscriber = new MultipleSubscriber();
-        $em->addSubscriber($subscriber);
-        $em->emit(TestSubscriber::EVENT);
+        $subscriber = $this->subscriberReturning([
+            self::EVENT => [
+                ['onEvent', 100],
+            ]
+        ]);
 
-        Assert::assertTrue($subscriber->called(), 'Emitter should have called TestSubscriber::onEvent');
+        $em->addSubscriber($subscriber);
     }
 
     private function createEmitter()
     {
         return new DefaultEmitter();
     }
-}
 
-abstract class TestSubscriber implements Subscriber
-{
-    const EVENT = 'another_event';
-
-    private $wasCalled = false;
-
-    public function onEvent()
+    private function subscriberReturning(array $events)
     {
-        $this->wasCalled = true;
-    }
+        $sub = \Mockery::mock('Demeanor\\Event\\Subscriber');
+        $sub->shouldReceive('getSubscribedEvents')
+            ->once()
+            ->andReturn($events);
 
-    public function called()
-    {
-        return $this->wasCalled;
-    }
-}
-
-class MethodNameOnlySubscriber extends TestSubscriber
-{
-    public function getSubscribedEvents()
-    {
-        return [
-            self::EVENT => 'onEvent',
-        ];
-    }
-}
-
-class WithPrioritySubscriber extends TestSubscriber
-{
-    public function getSubscribedEvents()
-    {
-        return [
-            self::EVENT => ['onEvent', 10],
-        ];
-    }
-}
-
-class MultipleSubscriber extends TestSubscriber
-{
-    public function getSubscribedEvents()
-    {
-        return [
-            self::EVENT => [
-                ['onEvent', 100],
-            ]
-        ];
+        return $sub;
     }
 }
