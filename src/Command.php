@@ -22,9 +22,11 @@
 namespace Demeanor;
 
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Demeanor\Config\JsonConfiguration;
+use Demeanor\Config\ConsoleConfiguration;
 
 class Command extends BaseCommand
 {
@@ -37,6 +39,18 @@ class Command extends BaseCommand
     {
         $this->setName(self::NAME);
         $this->setDescription('Run all or some of the test suites');
+        $this->addOption(
+            'config',
+            'c',
+            InputOption::VALUE_REQUIRED,
+            'The path to a valid configuration file'
+        );
+        $this->addOption(
+            'testsuite',
+            's',
+            InputOption::VALUE_REQUIRED,
+            'The test suite to run'
+        );
     }
 
     /**
@@ -45,7 +59,7 @@ class Command extends BaseCommand
     protected function execute(InputInterface $in, OutputInterface $out)
     {
         $writer = new ConsoleOutputWriter($out);
-        $demeanor = new Demeanor($writer, new JsonConfiguration());
+        $demeanor = new Demeanor($writer, new ConsoleConfiguration(new JsonConfiguration(), $in));
         return $demeanor->run();
     }
 }
