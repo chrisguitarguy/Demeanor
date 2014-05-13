@@ -75,7 +75,9 @@ class ConsoleConfiguration implements Configuration
     {
         $suites = $this->wrappedConfig->getTestSuites();
         if ($suiteName = $this->consoleInput->getOption('testsuite')) {
-            return [$suites[$suiteName]];
+            return [
+                $suiteName => $suites[$suiteName]
+            ];
         }
 
         return $suites;
