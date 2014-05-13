@@ -54,6 +54,8 @@ class SpecTestSuite extends AbstractTestSuite
     private function filenameDescription($filename)
     {
         $filename = basename($filename, '.php');
-        return str_replace('_', ' ', $filename);
+        $parts = explode('.', $filename, 2);
+        $name = array_shift($parts);
+        return str_replace('_', ' ', $name);
     }
 }
