@@ -21,7 +21,6 @@
 
 namespace Demeanor\Unit;
 
-use Counterpart\Exception\AssertionFailed;
 use Demeanor\AbstractTestCase;
 use Demeanor\TestResult;
 use Demeanor\TestContext;
