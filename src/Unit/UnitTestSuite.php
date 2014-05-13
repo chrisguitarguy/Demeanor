@@ -21,27 +21,15 @@
 
 namespace Demeanor\Unit;
 
-use Demeanor\TestSuite;
-use Demeanor\Loader\Loader;
+use Demeanor\AbstractTestSuite;
 
 /**
  * A test suite implementation that represents a unit test suite.
  *
  * @since   0.1
  */
-class UnitTestSuite implements TestSuite
+class UnitTestSuite extends AbstractTestSuite
 {
-    private $loader;
-    private $name;
-    private $bootstrap;
-
-    public function __construct($name, Loader $loader, array $bootstrap=array())
-    {
-        $this->name = $name;
-        $this->loader = $loader;
-        $this->bootstrap = $bootstrap;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -53,24 +41,6 @@ class UnitTestSuite implements TestSuite
         }
 
         return $this->compileClasses($files);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function bootstrap()
-    {
-        foreach ($this->bootstrap as $bootstrap) {
-            require_once $bootstrap;
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function name()
-    {
-        return $this->name;
     }
 
     private function compileClasses(array $files)
