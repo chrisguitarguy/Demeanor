@@ -65,6 +65,14 @@ class UnitTestSuite implements TestSuite
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function name()
+    {
+        return $this->name;
+    }
+
     private function compileClasses(array $files)
     {
         $classes = get_declared_classes();

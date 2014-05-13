@@ -43,4 +43,12 @@ interface TestSuite
      * @return  void
      */
     public function bootstrap();
+
+    /**
+     * Get the name of the test suite.
+     *
+     * @since   0.1
+     * @return  string
+     */
+    public function name();
 }
