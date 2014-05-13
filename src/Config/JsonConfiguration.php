@@ -54,6 +54,14 @@ class JsonConfiguration implements Configuration
     /**
      * {@inheritdoc}
      */
+    public function setFile($filename)
+    {
+        $this->configFile = $filename;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function initialize()
     {
         $this->loadConfigFile();
@@ -85,6 +93,9 @@ class JsonConfiguration implements Configuration
                 'Could not locate configuration file, searched for %s',
                 implode(' or ', $this->search)
             ));
+        }
+        if (!file_exists($fn)) {
+            throw new ConfigurationException(sprintf('Configuration file %s does not exist', $fn));
         }
 
         $this->config = json_decode(file_get_contents($fn), true);

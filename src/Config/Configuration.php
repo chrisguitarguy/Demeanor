@@ -32,6 +32,15 @@ use Demeanor\Exception\ConfigurationException;
 interface Configuration
 {
     /**
+     * Manually set the configuration file name.
+     *
+     * @since   0.1
+     * @param   string $filename
+     * @return  void
+     */
+    public function setFile($filename);
+
+    /**
      * Initialize the configuration, loading any files required, and validating
      * that everything is okay.
      *

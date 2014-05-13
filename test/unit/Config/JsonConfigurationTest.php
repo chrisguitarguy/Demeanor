@@ -27,6 +27,15 @@ use Demeanor\Event\Subscriber;
 
 class JsonConfigurationTest
 {
+    public function testInitializeThrowsWhenANonExistentConfigurationFileIsSet(TestContext $ctx)
+    {
+        $this->expect($ctx);
+        $config = new JsonConfiguration();
+        $config->setFile(__DIR__ . '/does/not/exist.json');
+
+        $config->initialize();
+    }
+
     public function testInitializeThrowsWhenAConfigurationFileCannotBeFound(TestContext $ctx)
     {
         $this->expect($ctx);
