@@ -26,7 +26,7 @@ namespace Demeanor\Event;
  *
  * @since   0.1
  */
-class DefaultEmitter
+class DefaultEmitter implements Emitter
 {
     /**
      * The array of listeners - this is an associative array with event names

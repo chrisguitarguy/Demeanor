@@ -26,7 +26,7 @@ namespace Demeanor\Event;
  *
  * @since   0.1
  */
-class DefaultEvent
+class DefaultEvent implements Event
 {
     private $stopped = false;
 
