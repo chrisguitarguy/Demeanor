@@ -47,15 +47,12 @@ class UnitTestSuite implements TestSuite
      */
     public function load()
     {
-        $currentClasses = get_declared_classes();
         $files = $this->loader->load();
         foreach ($files as $file) {
             include_once $file;
         }
 
-        $newClasses = array_diff(get_declared_classes(), $currentClasses);
-
-        return $this->compileClasses($newClasses);
+        return $this->compileClasses($files);
     }
 
     /**
@@ -68,24 +65,29 @@ class UnitTestSuite implements TestSuite
         }
     }
 
-    private function compileClasses(array $classes)
+    private function compileClasses(array $files)
     {
+        $classes = get_declared_classes();
         $testcases = array();
         foreach ($classes as $class) {
             if ('test' !== strtolower(substr($class, -4))) {
                 continue;
             }
 
-            $testcases = array_merge($testcases, $this->compileClass($class));
+            $ref = new \ReflectionClass($class);
+            if (!in_array($ref->getFilename(), $files)) {
+                continue;
+            }
+
+            $testcases = array_merge($testcases, $this->compileClass($ref));
         }
 
         return $testcases;
     }
 
-    private function compileClass($class)
+    private function compileClass(\ReflectionClass $ref)
     {
         $testcases = array();
-        $ref = new \ReflectionClass($class);
 
         if ($ref->isAbstract()) {
             return $testcases;
