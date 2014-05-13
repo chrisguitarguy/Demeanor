@@ -52,7 +52,7 @@ class DirectoryLoader implements Loader
                 continue;
             }
 
-            $files[] = $file->getPathname();
+            $files[] = $file->getRealPath();
         }
 
         return $files;

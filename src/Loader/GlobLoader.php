@@ -47,6 +47,6 @@ class GlobLoader implements Loader
             throw new GlobException("Could not excute glob pattern {$this->pattern}");
         }
 
-        return array_filter($files, 'is_file');
+        return array_filter(array_map('realpath', $files), 'is_file');
     }
 }

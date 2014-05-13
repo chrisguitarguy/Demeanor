@@ -42,12 +42,14 @@ class FileLoader implements Loader
      */
     public function load()
     {
+        $files = array();
         foreach ($this->files as $file) {
             if (!file_exists($file)) {
                 throw new FileNotFoundException("{$file} does not exist");
             }
+            $files[] = realpath($file);
         }
 
-        return $this->files;
+        return $files;
     }
 }
