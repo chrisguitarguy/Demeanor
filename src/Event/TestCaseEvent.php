@@ -40,7 +40,7 @@ class TestCaseEvent extends DefaultEvent
     {
         $this->testCase = $testCase;
         $this->context = $context;
-        $this->testResult = $result;
+        $this->result = $result;
     }
 
     public function getTestCase()
