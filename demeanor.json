@@ -5,14 +5,8 @@
             , "bootstrap": [
                 "test/unit/bootstrap.php"
             ]
-            , "files": [
-                "test/unit/files/test.php"
-            ]
             , "directories": [
                 "test/unit"
-            ]
-            , "glob": [
-                "test/unit/glob/*_test.php"
             ]
         }
     }
