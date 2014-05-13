@@ -96,6 +96,84 @@ process works like this:
 3. Create a new instance of `TruthyTest`
 4. Run `testFalsyValuesReturnFalse`
 
+## Specification Tests
+
+Specification tests are SpecBDD-style tests that use the familiar `describe`,
+`before`, `after`, and `it` API.
+
+To run specification tests, define a test suite in `demeanor.json` that uses
+`spec` as a type.
+
+Spec tests are just `.php` files that look something like this:
+
+    <?php
+    // a_specification_for_something_spec.php'
+
+    use Counterpart\Assert;
+    use Demeanor\TestContext;
+
+    /** @var Demeanor\Spec\Specification $this */
+
+    // Technically this file is a "specification" and it's description, by
+    // default, is the file's basename without the extension and with
+    // underscores replaced with spaces. You can change that by calling
+    // `describe` without its second argument
+    $this->describe('SomeObject');
+
+    // Add a callback to run before every test
+    $this->before(function (TestContext $ctx) {
+        // do stuff to $ctx here, it will be the same `TestContext` that's
+        // passed to the `it` callback later on.
+    });
+
+    // Add a callback to run after every test
+    $this->after(function (TestContext $ctx) {
+        // $ctx is the same one that was passed to before and the test callback
+    });
+
+    // This actually creates a TestCase
+    $this->it('should be null', function (TestContext $ctx) {
+        // whatever is here should look an awful lot like a unit test:
+        // assertions, value checks, etc
+        Assert::assertNull(null, 'Null is not null, something is really effed up');
+    });
+
+    // You can also nest descriptions. This would create a new specification
+    // with the description SomeObject#someMethod
+    $this->describe('#someMethod', function () {
+        /** @var Demeanor\Spec\Specification $this */
+
+        // $this here is a new specification object, it has all the `before` and
+        // `after` callbacks as the outer specification, but you can add more if
+        // you like.
+        $this->before(function (TestContext $ctx) {
+            // see `before` call above
+        });
+
+        $this->after(function (TestContext $ctx) {
+            // see `after` call above
+        });
+
+        // Again: this actually create test case.
+        $this->it('should be null', function (TestContext $ctx) {
+            Assert::assertNull(null);
+        });
+    });
+
+#### Locating Test Files
+
+If the `directories` argument is used, demeanor will look for files that end in
+`spec.php` and load them as test cases.
+
+Some examples:
+
+- SomeObject.spec.php
+- SomeObject_spec.php
+- SomeObjectspec.php
+
+Of these, the first is preferable: demeanor will discard anything after
+the `.` and remove it from the test case name.
+
 ## License (Apache)
 
 Copyright 2014 Christopher Davis
