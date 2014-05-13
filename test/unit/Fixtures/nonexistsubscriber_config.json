@@ -1,0 +1,13 @@
+{
+    "subscribers": [
+        "__DoesNotExistAtAll"
+    ]
+    , "testsuites": {
+        "a_suite": {
+            "directories": "a_dir"
+            , "glob": "*.php"
+            , "files": "a_file.php"
+            , "bootstrap": "a_bootstrap.php"
+        }
+    }
+}

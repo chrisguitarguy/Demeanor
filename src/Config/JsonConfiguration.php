@@ -21,6 +21,7 @@
 
 namespace Demeanor\Config;
 
+use Demeanor\Event\Subscriber;
 use Demeanor\Exception\ConfigurationException;
 
 /**
@@ -57,6 +58,7 @@ class JsonConfiguration implements Configuration
     {
         $this->loadConfigFile();
         $this->validateTestSuites();
+        $this->validateEventSubscribers();
     }
 
     /**
@@ -65,6 +67,14 @@ class JsonConfiguration implements Configuration
     public function getTestSuites()
     {
         return $this->config['testsuites'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventSubscribers()
+    {
+        return $this->config['subscribers'];
     }
 
     private function loadConfigFile()
@@ -144,6 +154,49 @@ class JsonConfiguration implements Configuration
             'files'         => array(),
             'glob'          => array(),
         ], $config);
+    }
+
+    private function validateEventSubscribers()
+    {
+        if (empty($this->config['subscribers'])) {
+            $this->config['subscribers'] = array();
+            return;
+        }
+
+        if (!is_array($this->config['subscribers'])) {
+            $this->config['subscribers'] = [$this->config['subscribers']];
+        }
+
+        $subs = array();
+        foreach ($this->config['subscribers'] as $cls) {
+            $subs[] = $this->createSubscriber($cls);
+        }
+
+        $this->config['subscribers'] = $subs;
+    }
+
+    private function createSubscriber($cls)
+    {
+        if (!is_string($cls)) {
+            throw new ConfigurationException('Subscriber class names must be strings');
+        }
+
+        if (!class_exists($cls)) {
+            throw new ConfigurationException(sprintf(
+                "Class %s cannot be added as a subscriber because it doesn't exist",
+                $cls
+            ));
+        }
+
+        $obj = new $cls();
+        if (!$obj instanceof Subscriber) {
+            throw new ConfigurationException(sprintf(
+                "Class %s could not be added as a subscriber because it doesn't implement Demeanor\\Event\\Subscriber",
+                $cls
+            ));
+        }
+
+        return $obj;
     }
 
     private function isAssociativeArray($obj)

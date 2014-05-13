@@ -23,6 +23,7 @@ namespace Demeanor\Config;
 
 use Counterpart\Assert;
 use Demeanor\TestContext;
+use Demeanor\Event\Subscriber;
 
 class JsonConfigurationTest
 {
@@ -71,6 +72,51 @@ class JsonConfigurationTest
         Assert::assertType('array', $suite);
         foreach (['bootstrap', 'files', 'glob', 'directories'] as $kn) {
             Assert::assertType('array', $suite[$kn]);
+        }
+    }
+
+    public function testConfiWithoutSubscribersReturnsEmptyArrayFromGetEventSubscribers()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
+        $config->initialize();
+
+        $subs = $config->getEventSubscribers();
+
+        Assert::assertType('array', $subs);
+        Assert::assertEmpty($subs);
+    }
+
+    public function testConfigWithNonStringSubscriberThrowsException(TestContext $ctx)
+    {
+        $this->expect($ctx);
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/badsubscriber_config.json']);
+        $config->initialize();
+    }
+
+    public function testSubscriberThatDoesNotExistThrowsException(TestContext $ctx)
+    {
+        $this->expect($ctx);
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/nonexistsubscriber_config.json']);
+        $config->initialize();
+    }
+
+    public function testSubscriberClassNameThatDoesNotImplementSubscriberThrows(TestContext $ctx)
+    {
+        $this->expect($ctx);
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/badimplementssubscriber_config.json']);
+        $config->initialize();
+    }
+
+    public function testGetEventSubscribersReturnInstanceOfSubscriberWhenGivenValidConfig()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validsubscriber_config.json']);
+
+        $config->initialize();
+        $subs = $config->getEventSubscribers();
+
+        Assert::assertType('array', $subs);
+        foreach ($subs as $sub) {
+            Assert::assertInstanceOf('Demeanor\\Event\\Subscriber', $sub);
         }
     }
 

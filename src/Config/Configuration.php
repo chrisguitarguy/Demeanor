@@ -48,4 +48,12 @@ interface Configuration
      * @return  array[]
      */
     public function getTestSuites();
+
+    /**
+     * Get the listeners to be added to the event emitter.
+     *
+     * @since   0.1
+     * @return  Demeanor\Event\Subscriber
+     */
+    public function getEventSubscribers();
 }

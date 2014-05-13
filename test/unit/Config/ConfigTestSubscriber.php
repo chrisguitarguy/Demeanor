@@ -19,6 +19,14 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-$loader = require __DIR__.'/../../vendor/autoload.php';
+namespace Demeanor\Config;
 
-$loader->addPsr4('Demeanor\\', __DIR__);
+use Demeanor\Event\Subscriber;
+
+class ConfigTestSubscriber implements Subscriber
+{
+    public function getSubscribedEvents()
+    {
+        return [];
+    }
+}
