@@ -39,7 +39,7 @@ class SpecTestCase extends AbstractTestCase
 
     public function __construct($name, \Closure $testClosure, array $before, array $after)
     {
-        $this->name;
+        $this->name = $name;
         $this->testClosure = $testClosure;
         $this->before = $before;
         $this->after = $after;
