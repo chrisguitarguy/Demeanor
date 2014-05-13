@@ -91,6 +91,8 @@ final class Demeanor
      */
     private function runTestSuite(TestSuite $suite)
     {
+        $this->outputWriter->writeln(sprintf('Running test suite "%s"', $suite->name()));
+
         $suite->bootstrap();
         $tests = $suite->load();
 
@@ -102,6 +104,8 @@ final class Demeanor
             }
             $this->outputWriter->writeResult($test, $result);
         }
+
+        $this->outputWriter->writeln('');
 
         return $errors;
     }
