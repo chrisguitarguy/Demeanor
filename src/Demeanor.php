@@ -25,6 +25,7 @@ use Demeanor\Event\Emitter;
 use Demeanor\Event\DefaultEmitter;
 use Demeanor\Event\TestCaseEvent;
 use Demeanor\Extension\MockeryExtension;
+use Demeanor\Extension\Annotation\AnnotationExtension;
 use Demeanor\Config\Configuration;
 use Demeanor\Exception\ConfigurationException;
 
@@ -119,6 +120,7 @@ final class Demeanor
     {
         $subscribers = array_merge([
             new MockeryExtension(),
+            new AnnotationExtension(),
         ], $this->config->getEventSubscribers());
 
         foreach ($subscribers as $sub) {
