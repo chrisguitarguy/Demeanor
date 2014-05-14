@@ -9,6 +9,7 @@
         , "symfony/console": "~2.4"
         , "counterpart/counterpart": "~1.0"
         , "mockery/mockery": "~0.9"
+        , "chrisguitarguy/annotation": "dev-master"
     }
     , "autoload": {
         "psr-4": {
