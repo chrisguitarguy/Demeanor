@@ -47,6 +47,19 @@ abstract class Annotation
     }
 
     /**
+     * Do whatever the annotation is meant to do with the test case. This is
+     * called from a `TestRunEvent` that's aware of test results and contexts
+     *
+     * @since   0.1
+     * @param   TestCase $testcase
+     * @return  void
+     */
+    public function attach(UnitTestCase $testcase, TestContext $context, TestResult $result)
+    {
+        // noop by default, subclasses can do their thing
+    }
+
+    /**
      * Remove doubled backslashes and replace them with singles.
      *
      * @since   0.1
@@ -57,13 +70,4 @@ abstract class Annotation
     {
         return str_replace('\\\\', '\\', $ident);
     }
-
-    /**
-     * Do whatever the annotation is meant to do with the test case
-     *
-     * @since   0.1
-     * @param   TestCase $testcase
-     * @return  void
-     */
-    abstract public function attach(UnitTestCase $testcase, TestContext $context, TestResult $result);
 }
