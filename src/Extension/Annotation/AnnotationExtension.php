@@ -58,36 +58,46 @@ class AnnotationExtension implements Subscriber
             return;
         }
 
-        $docblock = $testcase->getReflectionMethod()->getDocComment();
-        if (!$docblock) {
-            return;
-        }
+        $toParse = [
+            'method'    => $testcase->getReflectionMethod(),
+            'class'     => $testcase->getReflectionClass(),
+        ];
 
-        try {
-            $annotations = $this->parser->parse($docblock);
-        } catch (\Exception $e) {
-            return;
+        $annotations = array();
+        foreach ($toParse as $ctxName => $ref) {
+            $annotations = array_merge($annotations, $this->parseDocblock($ref->getDocComment(), [
+                $ctxName => $ref,
+            ]));
         }
-
-        if (!$annotations) {
-            return;
-        }
-
-        $results = array();
-        $ctx = ['method' => $testcase->getReflectionMethod()];
-        foreach ($annotations as $annotation) {
-            list($name, $arguments) = $annotation;
-            if ($anot = $this->collection->create($name, $arguments, $ctx)) {
-                $results[] = $anot;
-            }
-        }
-
 
         $context = $event->getTestContext();
         $result = $event->getTestResult();
-        foreach ($results as $anot) {
-            $anot->attach($testcase, $context, $result);
+        foreach ($annotations as $annot) {
+            $annot->attach($testcase, $context, $result);
         }
+    }
+
+    private function parseDocblock($docblock, array $colContext)
+    {
+        $annotations = array();
+        if (!$docblock) {
+            return $annotations;
+        }
+
+        try {
+            $found = $this->parser->parse($docblock);
+        } catch (\Exception $e) {
+            return $annotations;
+        }
+
+        foreach ($found as $foundAnnotation) {
+            list($name, $arguments) = $foundAnnotation;
+            if ($annot = $this->collection->create($name, $arguments, $colContext)) {
+                $annotations[] = $annot;
+            }
+        }
+
+        return $annotations;
     }
 
     private function createCollection()
