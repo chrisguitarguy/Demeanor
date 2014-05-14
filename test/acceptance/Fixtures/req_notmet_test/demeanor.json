@@ -1,0 +1,10 @@
+{
+    "testsuites": {
+        "aSuite": {
+            "type": "spec"
+            , "glob": [
+                "*_test.php"
+            ]
+        }
+    }
+}

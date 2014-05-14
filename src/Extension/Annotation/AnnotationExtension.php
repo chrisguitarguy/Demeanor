@@ -119,6 +119,7 @@ class AnnotationExtension implements Subscriber
             'Before'    => __NAMESPACE__ . '\\Before',
             'After'     => __NAMESPACE__ . '\\After',
             'Expect'    => __NAMESPACE__ . '\\Expect',
+            'Require'   => __NAMESPACE__ . '\\Requirement',
         ]);
     }
 }
