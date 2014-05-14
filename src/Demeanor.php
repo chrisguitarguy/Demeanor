@@ -65,10 +65,8 @@ final class Demeanor
 
         $hasErrors = false;
         foreach ($this->loadTestSuites() as $testsuite) {
-            try {
-                $hasErrors = $this->runTestSuite($testsuite);
-            } catch (\Exception $e) {
-                // TODO
+            if ($this->runTestsuite($testsuite)) {
+                $hasErrors = true;
             }
         }
 
