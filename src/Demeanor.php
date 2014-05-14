@@ -102,9 +102,7 @@ final class Demeanor
 
         $errors = false;
         foreach ($tests as $test) {
-            $this->emitter->emit(Events::BEFORERUN_TESTCASE, new TestCaseEvent($test));
             $result = $test->run($this->emitter);
-            $this->emitter->emit(Events::AFTERRUN_TESTCASE, new TestCaseEvent($test));
             if (!$result->successful() && !$result->skipped()) {
                 $errors = true;
             }
