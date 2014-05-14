@@ -47,7 +47,7 @@ abstract class AbstractTestCase implements TestCase
         try {
             $this->doBeforeCallbacks($context);
             $this->doRun($context, $result);
-            $this->doAfterCallbacks($context);
+            $this->doAfterCallbacks($context); // TODO figure out how to make these run every time
         } catch (TestFailed $e) {
             $result->fail();
         } catch (TestSkipped $e) {
