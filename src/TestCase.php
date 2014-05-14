@@ -62,4 +62,22 @@ interface TestCase
      * @return  void
      */
     public function setExpectedException($exceptionClass);
+
+    /**
+     * Add a callable that will be run before test execution.
+     *
+     * @since   0.1
+     * @param   callable $cb
+     * @return  void
+     */
+    public function before(callable $cb);
+
+    /**
+     * Add a callable that will be run after test execution.
+     *
+     * @since   0.1
+     * @param   callable $cb
+     * @return  void
+     */
+    public function after(callable $cb);
 }

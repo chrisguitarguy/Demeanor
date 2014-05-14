@@ -29,6 +29,8 @@ use Demeanor\Exception\TestSkipped;
 
 abstract class AbstractTestCase implements TestCase
 {
+    protected $before = array();
+    protected $after = array();
     protected $expectedException = null;
     protected $caughtException = null;
 
@@ -43,7 +45,9 @@ abstract class AbstractTestCase implements TestCase
         $emitter->emit(Events::BEFORE_TESTCASE, new TestCaseEvent($this, $context, $result));
 
         try {
+            $this->doBeforeCallbacks($context);
             $this->doRun($context, $result);
+            $this->doAfterCallbacks($context);
         } catch (TestFailed $e) {
             $result->fail();
         } catch (TestSkipped $e) {
@@ -80,6 +84,22 @@ abstract class AbstractTestCase implements TestCase
     public function setExpectedException($exceptionClass)
     {
         $this->expectedException = $exceptionClass;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function before(callable $cb)
+    {
+        $this->before[] = $cb;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function after(callable $cb)
+    {
+        $this->after[] = $cb;
     }
 
     /**
@@ -153,5 +173,28 @@ abstract class AbstractTestCase implements TestCase
             $file ?: 'UNKNOWN',
             $line ?: 'UNKNOWN'
         ));
+    }
+
+    protected function doBeforeCallbacks(TestContext $ctx)
+    {
+        foreach ($this->before as $cb) {
+            $this->doCallback($cb, $ctx);
+        }
+    }
+
+    protected function doAfterCallbacks(TestContext $ctx)
+    {
+        foreach ($this->after as $cb) {
+            $this->doCallback($cb, $ctx);
+        }
+    }
+
+    protected function doCallback(callable $cb, TestContext $ctx)
+    {
+        if ($cb instanceof \Closure) {
+            $cb = $cb->bindTo(null);
+        }
+
+        call_user_func($cb, $ctx);
     }
 }

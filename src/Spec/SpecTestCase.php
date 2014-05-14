@@ -33,16 +33,18 @@ use Demeanor\TestContext;
 class SpecTestCase extends AbstractTestCase
 {
     private $name;
-    private $before;
-    private $after;
     private $testClosure;
 
     public function __construct($name, \Closure $testClosure, array $before, array $after)
     {
         $this->name = $name;
         $this->testClosure = $testClosure;
-        $this->before = $before;
-        $this->after = $after;
+        foreach ($before as $cb) {
+            $this->before($cb);
+        }
+        foreach ($after as $cb) {
+            $this->after($cb);
+        }
     }
 
     /**
@@ -58,20 +60,6 @@ class SpecTestCase extends AbstractTestCase
      */
     protected function doRun(TestContext $ctx, TestResult $result)
     {
-        foreach ($this->before as $cb) {
-            $this->call($cb, $ctx);
-        }
-
-        $this->call($this->testClosure, $ctx);
-
-        foreach ($this->after as $cb) {
-            $this->call($cb, $ctx);
-        }
-    }
-
-    private function call(\Closure $cb, TestContext $ctx)
-    {
-        $cb = $cb->bindTo(null);
-        $cb($ctx);
+        $this->doCallback($this->testClosure, $ctx);
     }
 }
