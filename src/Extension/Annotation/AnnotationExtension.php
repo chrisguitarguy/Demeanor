@@ -34,11 +34,13 @@ class AnnotationExtension implements Subscriber
 {
     private $parser;
     private $collection;
+    private $cache;
 
     public function __construct(AnnotationCollectionInterface $collection=null, ParserInterface $parser=null)
     {
         $this->collection = $collection ?: $this->createCollection();
         $this->parser = $parser ?: new Parser();
+        $this->cache = new \SplObjectStorage();
     }
 
     /**
@@ -58,23 +60,34 @@ class AnnotationExtension implements Subscriber
             return;
         }
 
-        $toParse = [
-            'method'    => $testcase->getReflectionMethod(),
-            'class'     => $testcase->getReflectionClass(),
-        ];
-
-        $annotations = array();
-        foreach ($toParse as $ctxName => $ref) {
-            $annotations = array_merge($annotations, $this->parseDocblock($ref->getDocComment(), [
-                $ctxName => $ref,
-            ]));
-        }
+        $annotations = $this->testCaseAnnotations($testcase);
 
         $context = $event->getTestContext();
         $result = $event->getTestResult();
         foreach ($annotations as $annot) {
             $annot->attach($testcase, $context, $result);
         }
+    }
+
+    private function testCaseAnnotations(UnitTestCase $testcase)
+    {
+        if (!isset($this->cache[$testcase])) {
+            $toParse = [
+                'method'    => $testcase->getReflectionMethod(),
+                'class'     => $testcase->getReflectionClass(),
+            ];
+
+            $annotations = array();
+            foreach ($toParse as $ctxName => $ref) {
+                $annotations = array_merge($annotations, $this->parseDocblock($ref->getDocComment(), [
+                    $ctxName => $ref,
+                ]));
+            }
+
+            $this->cache[$testcase] = $annotations;
+        }
+
+        return $this->cache[$testcase];
     }
 
     private function parseDocblock($docblock, array $colContext)
