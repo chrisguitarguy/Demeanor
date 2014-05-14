@@ -16,4 +16,7 @@
             "Demeanor\\": "src/"
         }
     }
+    , "bin": [
+        "demeanor"
+    ]
 }
