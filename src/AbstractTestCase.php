@@ -44,6 +44,13 @@ abstract class AbstractTestCase implements TestCase
 
         $emitter->emit(Events::BEFORE_TESTCASE, new TestRunEvent($this, $context, $result));
 
+        // the listeners on `BEFORE_TESTCASE` might mark the test as something
+        // other than successful. If that's the case, we need not to continue
+        // the test, just return the result and be done.
+        if (!$result->successful()) {
+            return $result;
+        }
+
         try {
             $this->doBeforeCallbacks($context);
             $this->doRun($context, $result);
