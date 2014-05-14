@@ -22,33 +22,23 @@
 namespace Demeanor\Event;
 
 use Demeanor\TestCase;
-use Demeanor\TestContext;
-use Demeanor\TestResult;
 
 /**
- * An event that's aware of test cases along with their result and context
+ * An event that's aware of a test case.
  *
  * @since   0.1
  */
-class TestRunEvent extends TestCaseEvent
+class TestCaseEvent extends DefaultEvent
 {
-    private $context;
-    private $result;
+    private $testCase;
 
-    public function __construct(TestCase $testCase, TestContext $context, TestResult $result)
+    public function __construct(TestCase $testCase)
     {
-        parent::__construct($testCase);
-        $this->context = $context;
-        $this->result = $result;
+        $this->testCase = $testCase;
     }
 
-    public function getTestContext()
+    public function getTestCase()
     {
-        return $this->context;
-    }
-
-    public function getTestResult()
-    {
-        return $this->result;
+        return $this->testCase;
     }
 }
