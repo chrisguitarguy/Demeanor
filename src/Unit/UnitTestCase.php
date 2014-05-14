@@ -30,6 +30,7 @@ class UnitTestCase extends AbstractTestCase
     private $refClass;
     private $refMethod;
     private $name = null;
+    private $testObject = null;
 
     public function __construct(\ReflectionClass $class, \ReflectionMethod $method)
     {
@@ -52,12 +53,27 @@ class UnitTestCase extends AbstractTestCase
     }
 
     /**
+     * Get the object that will be used for the unit test. This will always
+     * return the same instance.
+     *
+     * @since   0.1
+     * @return  object
+     */
+    public function getTestObject()
+    {
+        if (null === $this->testObject) {
+            $this->testObject = $this->createObject();
+        }
+
+        return $this->testObject;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function doRun(TestContext $ctx, TestResult $res)
     {
-        $object = $this->createObject();
-        $this->refMethod->invoke($object, $ctx);
+        $this->refMethod->invoke($this->getTestObject(), $ctx);
     }
 
     /**
