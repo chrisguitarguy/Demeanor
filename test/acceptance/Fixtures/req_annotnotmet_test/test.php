@@ -19,13 +19,13 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-use Demeanor\TestContext;
-use Demeanor\Extension\Requirement\VersionRequirement;
-
-$this->before(function (TestContext $ctx) {
-    $ctx['requirements']->add(new VersionRequirement('4.0'));
-});
-
-$this->it('should be run', function () {
-
-});
+class AnnotationRequirementsNotMetTest
+{
+    /**
+     * @Require(php="10.0", extension="not_exists", os="/nope/u")
+     */
+    public function testWillNotBeRun()
+    {
+        
+    }
+}

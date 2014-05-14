@@ -19,13 +19,15 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-use Demeanor\TestContext;
-use Demeanor\Extension\Requirement\VersionRequirement;
+use Counterpart\Assert;
 
-$this->before(function (TestContext $ctx) {
-    $ctx['requirements']->add(new VersionRequirement('4.0'));
-});
-
-$this->it('should be run', function () {
-
-});
+class AnnotationRequirementsMetTest
+{
+    /**
+     * @Require(php="4.0")
+     */
+    public function testBeRun()
+    {
+        Assert::assertNull(null);
+    }
+}

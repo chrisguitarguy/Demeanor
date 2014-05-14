@@ -45,3 +45,25 @@ $this->describe('#InBefore', function () {
         Assert::assertThat(Matchers::stringDoesNotContain('Skipped'), $proc->getOutput());
     });
 });
+
+$this->describe('#Annotation', function () {
+    $this->it('should mark test as skipped when requirements as not met', function (TestContext $ctx) {
+        $proc = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/req_annotnotmet_test');
+        $proc->run();
+
+        $ctx->log(sprintf('STDOUT> %s', $proc->getOutput()));
+        $ctx->log(sprintf('STDERR> %s', $proc->getErrorOutput()));
+
+        Assert::assertStringContains('Skipped', $proc->getOutput());
+    });
+
+    $this->it('should not mark test as skipped when requirement are met', function (TestContext $ctx) {
+        $proc = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/req_annotmet_test');
+        $proc->run();
+
+        $ctx->log(sprintf('STDOUT> %s', $proc->getOutput()));
+        $ctx->log(sprintf('STDERR> %s', $proc->getErrorOutput()));
+
+        Assert::assertThat(Matchers::stringDoesNotContain('Skipped'), $proc->getOutput());
+    });
+});

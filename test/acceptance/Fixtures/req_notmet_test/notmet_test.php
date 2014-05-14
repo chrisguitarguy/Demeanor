@@ -26,6 +26,6 @@ $this->before(function (TestContext $ctx) {
     $ctx['requirements']->add(new VersionRequirement('10.0'));
 });
 
-$this->it('should be skipped', function () {
+$this->it('should not be run', function () {
 
 });
