@@ -37,6 +37,10 @@ final class Demeanor
     const VERSION   = '0.1';
     const NAME      = 'Demeanor';
 
+    const EXIT_SUCCESS      = 0;
+    const EXIT_TESTERROR    = 1;
+    const EXIT_ERROR        = 2;
+
     private $outputWriter;
     private $emitter;
     private $config;
@@ -54,7 +58,7 @@ final class Demeanor
             $this->config->initialize();
         } catch (ConfigurationException $e) {
             $this->outputWriter->writeln(sprintf('<error>%s</error>', $e->getMessage()));
-            return 1;
+            return self::EXIT_ERROR;
         }
 
         $this->addEventSubscribers();
@@ -68,7 +72,7 @@ final class Demeanor
             }
         }
 
-        return $hasErrors ? 1 : 0;
+        return $hasErrors ? self::EXIT_ERROR : self::EXIT_SUCCESS;
     }
 
     private function loadTestSuites()
