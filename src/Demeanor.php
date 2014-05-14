@@ -72,7 +72,7 @@ final class Demeanor
             }
         }
 
-        return $hasErrors ? self::EXIT_ERROR : self::EXIT_SUCCESS;
+        return $hasErrors ? self::EXIT_TESTERROR : self::EXIT_SUCCESS;
     }
 
     private function loadTestSuites()
