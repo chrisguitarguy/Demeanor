@@ -23,7 +23,7 @@ namespace Demeanor\Extension;
 
 use Demeanor\Events;
 use Demeanor\Event\Subscriber;
-use Demeanor\Event\TestCaseEvent;
+use Demeanor\Event\TestRunEvent;
 
 /**
  * A subscriber that adds a call to `Mockery::close` after tests are completed.
@@ -42,7 +42,7 @@ class MockeryExtension implements Subscriber
         ];
     }
 
-    public function closeMockery(TestCaseEvent $event)
+    public function closeMockery(TestRunEvent $event)
     {
         try {
             \Mockery::close();

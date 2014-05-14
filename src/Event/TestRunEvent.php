@@ -30,7 +30,7 @@ use Demeanor\TestResult;
  *
  * @since   0.1
  */
-class TestCaseEvent extends DefaultEvent
+class TestRunEvent extends DefaultEvent
 {
     private $testCase;
     private $context;

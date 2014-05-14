@@ -23,7 +23,7 @@ namespace Demeanor;
 
 use Counterpart\Exception\AssertionFailed;
 use Demeanor\Event\Emitter;
-use Demeanor\Event\TestCaseEvent;
+use Demeanor\Event\TestRunEvent;
 use Demeanor\Exception\TestFailed;
 use Demeanor\Exception\TestSkipped;
 
@@ -42,7 +42,7 @@ abstract class AbstractTestCase implements TestCase
         $result = new DefaultTestResult();
         $context = new DefaultTestContext($this, $result);
 
-        $emitter->emit(Events::BEFORE_TESTCASE, new TestCaseEvent($this, $context, $result));
+        $emitter->emit(Events::BEFORE_TESTCASE, new TestRunEvent($this, $context, $result));
 
         try {
             $this->doBeforeCallbacks($context);
@@ -60,7 +60,7 @@ abstract class AbstractTestCase implements TestCase
             if (!$this->isExpected($e)) {
                 $result->addMessage('error', $e->getMessage());
                 $result->error();
-                $emitter->emit(Events::EXCEPTION_TESTCASE, new TestCaseEvent($this, $context, $result));
+                $emitter->emit(Events::EXCEPTION_TESTCASE, new TestRunEvent($this, $context, $result));
             }
         }
 
@@ -73,7 +73,7 @@ abstract class AbstractTestCase implements TestCase
             ));
         }
 
-        $emitter->emit(Events::AFTER_TESTCASE, new TestCaseEvent($this, $context, $result));
+        $emitter->emit(Events::AFTER_TESTCASE, new TestRunEvent($this, $context, $result));
 
         return $result;
     }
