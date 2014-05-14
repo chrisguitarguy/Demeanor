@@ -26,9 +26,11 @@ use Demeanor\TestContext;
 
 class FileLoaderTest
 {
+    /**
+     * @Expect(exception="Demeanor\Exception\FileNotFoundException")
+     */
     public function testLoadWithBadFileThrowsException(TestContext $ctx)
     {
-        $ctx->expectException('Demeanor\\Exception\\FileNotFoundException');
         $loader = new FileLoader([__DIR__ . '/does/not/exist.php']);
         $loader->load();
     }
