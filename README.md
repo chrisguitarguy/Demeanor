@@ -1,5 +1,7 @@
 # Demeanor
 
+[![Build Status](https://travis-ci.org/chrisguitarguy/Demeanor.svg?branch=master)](https://travis-ci.org/chrisguitarguy/Demeanor)
+
 Demeanor is a multi-paradigm testing framework for PHP.
 
 Or rather, it will be, it's still in progress.
