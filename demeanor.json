@@ -9,10 +9,10 @@
                 "test/unit"
             ]
         }
-        , "integration": {
+        , "acceptance": {
             "type": "spec"
             , "directories": [
-                "test/integration"
+                "test/acceptance"
             ]
         }
     }

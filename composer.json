@@ -11,6 +11,9 @@
         , "mockery/mockery": "~0.9"
         , "chrisguitarguy/annotation": "dev-master"
     }
+    , "require-dev": {
+        "symfony/process": "~2.4"
+    }
     , "autoload": {
         "psr-4": {
             "Demeanor\\": "src/"
