@@ -14,8 +14,12 @@ $this->describe('#succesful', function () {
 });
 
 $this->describe('#failed', function () {
-    $this->it('Should should return false if `fail` was called', function (TestContext $ctx) {
+    $this->it('Should should return true if `fail` was called', function (TestContext $ctx) {
         $ctx['result']->fail();
         Assert::assertTrue($ctx['result']->failed());
+    });
+
+    $this->it('should return false if `fail` was not called', function (TestContext $ctx) {
+        Assert::assertFalse($ctx['result']->failed());
     });
 });
