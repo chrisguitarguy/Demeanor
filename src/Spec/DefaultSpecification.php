@@ -74,7 +74,7 @@ class DefaultSpecification implements Specification
     public function it($description, \Closure $it)
     {
         $this->collection->put(new SpecTestCase(
-            sprintf('%s - %s', $this->description, $description),
+            sprintf('[%s] %s', $this->description, $description),
             $it,
             $this->before,
             $this->after
