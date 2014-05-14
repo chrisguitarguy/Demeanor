@@ -23,6 +23,8 @@ namespace Demeanor;
 
 final class Events
 {
+    const BEFORERUN_TESTCASE    = 'testcase.beforerun';
+    const AFTERRUN_TESTCASE     = 'testcase.afterrun';
     const BEFORE_TESTCASE       = 'testcase.before';
     const AFTER_TESTCASE        = 'testcase.after';
     const EXCEPTION_TESTCASE    = 'testcase.exception';

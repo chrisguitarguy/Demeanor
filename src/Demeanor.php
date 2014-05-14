@@ -23,6 +23,7 @@ namespace Demeanor;
 
 use Demeanor\Event\Emitter;
 use Demeanor\Event\DefaultEmitter;
+use Demeanor\Event\TestCaseEvent;
 use Demeanor\Extension\MockeryExtension;
 use Demeanor\Config\Configuration;
 use Demeanor\Exception\ConfigurationException;
@@ -100,7 +101,9 @@ final class Demeanor
 
         $errors = false;
         foreach ($tests as $test) {
+            $this->emitter->emit(Events::BEFORERUN_TESTCASE, new TestCaseEvent($test));
             $result = $test->run($this->emitter);
+            $this->emitter->emit(Events::AFTERRUN_TESTCASE, new TestCaseEvent($test));
             if (!$result->successful() && !$result->skipped()) {
                 $errors = true;
             }
