@@ -69,11 +69,33 @@ class UnitTestCase extends AbstractTestCase
     }
 
     /**
+     * Get the reflection class for the test object.
+     *
+     * @since   0.1
+     * @return  ReflectionClass
+     */
+    public function getReflectionClass()
+    {
+        return $this->refClass;
+    }
+
+    /**
+     * Get the reflection method for the test case.
+     *
+     * @since   0.1
+     * @return  ReflectionMethod
+     */
+    public function getReflectionMethod()
+    {
+        return $this->refMethod;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function doRun(TestContext $ctx, TestResult $res)
     {
-        $this->refMethod->invoke($this->getTestObject(), $ctx);
+        $this->getReflectionMethod()->invoke($this->getTestObject(), $ctx);
     }
 
     /**
@@ -101,6 +123,6 @@ class UnitTestCase extends AbstractTestCase
      */
     private function createObject()
     {
-        return $this->refClass->newInstanceArgs([]);
+        return $this->getReflectionClass()->newInstanceArgs([]);
     }
 }
