@@ -93,9 +93,9 @@ class UnitTestCase extends AbstractTestCase
     /**
      * {@inheritdoc}
      */
-    protected function doRun(array $testArgs)
+    protected function doRun(TestContext $ctx, TestResult $res)
     {
-        $this->getReflectionMethod()->invokeArgs($this->getTestObject(), $testArgs);
+        $this->getReflectionMethod()->invoke($this->getTestObject(), $ctx);
     }
 
     /**

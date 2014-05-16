@@ -53,19 +53,12 @@ abstract class AbstractTestCase implements TestCase
             return $result;
         }
 
-        $argName = null;
         try {
-            if ($this->hasProvider()) {
-                foreach ($this->dataProvider as $argName => $testArgs) {
-                    if (!is_array($testArgs)) {
-                        $testArgs = [$testArgs];
-                    }
-                    array_unshift($testArgs, $context);
-                    $this->runTest($emitter, $context, $result, $testArgs);
-                }
-            } else {
-                $this->runTest($emitter, $context, $result, [$context]);
-            }
+            $this->doBeforeCallbacks($context);
+            $emitter->emit(Events::BEFORERUN_TESTCASE, new TestRunEvent($this, $context, $result));
+            $this->doRun($context, $result);
+            $emitter->emit(Events::AFTERRUN_TESTCASE, new TestRunEvent($this, $context, $result));
+            $this->doAfterCallbacks($context); // TODO figure out how to make these run every time
         } catch (TestFailed $e) {
             $result->fail();
         } catch (TestSkipped $e) {
@@ -148,25 +141,7 @@ abstract class AbstractTestCase implements TestCase
      * @param   TestResult $result
      * @return  void
      */
-    abstract protected function doRun(array $testArgs);
-
-    /**
-     * Invoke the do the before/after callbacks and call the `doRun` method with
-     * $testArgs
-     *
-     * @since   0.1
-     * @param   Emitter $emitter
-     * @param   array $testArgs
-     * @return  void
-     */
-    protected function runTest(Emitter $emitter, TestContext $context, TestResult $result, array $testArgs)
-    {
-        $this->doBeforeCallbacks($context);
-        $emitter->emit(Events::BEFORERUN_TESTCASE, new TestRunEvent($this, $context, $result));
-        $this->doRun($testArgs);
-        $emitter->emit(Events::AFTERRUN_TESTCASE, new TestRunEvent($this, $context, $result));
-        $this->doAfterCallbacks($context); // TODO figure out how to make these run every time
-    }
+    abstract protected function doRun(TestContext $ctx, TestResult $result);
 
     /**
      * Check whether an exception was expected or not.

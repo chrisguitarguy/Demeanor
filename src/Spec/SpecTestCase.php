@@ -58,8 +58,8 @@ class SpecTestCase extends AbstractTestCase
     /**
      * {@inheritdoc}
      */
-    protected function doRun(array $testArgs)
+    protected function doRun(TestContext $ctx, TestResult $result)
     {
-        call_user_func_array($this->testClosure->bindTo(null), $testArgs);
+        $this->doCallback($this->testClosure, $ctx);
     }
 }
