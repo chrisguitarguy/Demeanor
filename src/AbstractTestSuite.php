@@ -77,7 +77,11 @@ abstract class AbstractTestSuite implements TestSuite
 
             if ($test->hasProvider()) {
                 foreach ($test->getProvider() as $argsName => $testArgs) {
+                    if (!is_array($testArgs)) {
+                        $testArgs = [$testArgs];
+                    }
                     $test = clone $test;
+                    $test->addDescriptor('Data Set '.(is_int($argsName) ? "#{$argsName}" : $argsName));
                     $results[$test] = $this->runTestCase($test, $emitter, $output, $testArgs);
                 }
             } else {
