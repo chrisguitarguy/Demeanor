@@ -93,6 +93,6 @@ Data providers can be one of three types:
 
 ## The Test Context
 
-Notice the the [test context](03-test-context.md) is *always* the first argument
+Notice the the [test context](03-the-test-context.md) is *always* the first argument
 to test methods. In Demeanor the context object is important, and any data
 provider arguments will come after it.
