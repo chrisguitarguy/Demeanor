@@ -52,6 +52,6 @@ class Expect extends Annotation
             return;
         }
 
-        $testcase->setExpectedException($this->args['exception']);
+        $testcase->willThrow($this->args['exception']);
     }
 }

@@ -61,7 +61,7 @@ interface TestCase
      * @param   string $exceptionClass
      * @return  void
      */
-    public function setExpectedException($exceptionClass);
+    public function willThrow($exceptionClass);
 
     /**
      * Add a callable that will be run before test execution.

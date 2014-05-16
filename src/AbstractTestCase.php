@@ -90,7 +90,7 @@ abstract class AbstractTestCase implements TestCase
     /**
      * {@inheritdoc}
      */
-    public function setExpectedException($exceptionClass)
+    public function willThrow($exceptionClass)
     {
         $this->expectedException = $exceptionClass;
     }

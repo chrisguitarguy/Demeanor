@@ -66,7 +66,7 @@ class DefaultTestContext extends \ArrayObject implements TestContext
      */
     public function expectException($exceptionClass)
     {
-        $this->testcase->setExpectedException($exceptionClass);
+        $this->testcase->willThrow($exceptionClass);
     }
 
     private function addMessage($messageType, $message)
