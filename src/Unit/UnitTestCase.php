@@ -39,6 +39,19 @@ class UnitTestCase extends AbstractTestCase
     }
 
     /**
+     * Set the `testObject` to null so cloned instances don't share the same
+     * instance.
+     *
+     * @since   0.1
+     * @return  void
+     */
+    public function __clone()
+    {
+        $this->testObject = null;
+        $this->name = null;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getName()
