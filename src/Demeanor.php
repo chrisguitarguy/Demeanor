@@ -68,7 +68,7 @@ final class Demeanor
 
         $hasErrors = false;
         foreach ($this->loadTestSuites() as $testsuite) {
-            if ($this->runTestsuite($testsuite)) {
+            if ($testsuite->run($this->emitter, $this->outputWriter)) {
                 $hasErrors = true;
             }
         }
@@ -85,34 +85,6 @@ final class Demeanor
         }
 
         return $suites;
-    }
-
-    /**
-     * Run a single test suite.
-     *
-     * @since   0.1
-     * @param   TestSuite $suite
-     * @return  boolean True if errors were encountered.
-     */
-    private function runTestSuite(TestSuite $suite)
-    {
-        $this->outputWriter->writeln(sprintf('Running test suite "%s"', $suite->name()));
-
-        $suite->bootstrap();
-        $tests = $suite->load();
-
-        $errors = false;
-        foreach ($tests as $test) {
-            $result = $test->run($this->emitter);
-            if (!$result->successful() && !$result->skipped()) {
-                $errors = true;
-            }
-            $this->outputWriter->writeResult($test, $result);
-        }
-
-        $this->outputWriter->writeln('');
-
-        return $errors;
     }
 
     private function addEventSubscribers()

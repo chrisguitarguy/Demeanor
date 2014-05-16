@@ -38,7 +38,7 @@ class Requirement extends Annotation
     /**
      * {@inheritdoc}
      */
-    public function attach(UnitTestCase $testcase, TestContext $context, TestResult $result)
+    public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
     {
         if (!isset($context['requirements'])) {
             return;

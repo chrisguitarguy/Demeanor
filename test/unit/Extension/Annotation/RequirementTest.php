@@ -32,7 +32,7 @@ class RequirementTest extends AnnotationTestCase
             ->andReturn(false);
         $annot = new Requirement([]);
 
-        $annot->attach($this->testCaseMock(), $ctx, $this->testResultMock());
+        $annot->attachRun($this->testCaseMock(), $ctx, $this->testResultMock());
     }
 
     public function testAnnotationWithCorrectArgumentsAddsRequirements()
@@ -55,6 +55,6 @@ class RequirementTest extends AnnotationTestCase
             'extension' => 'spl',
         ]);
 
-        $annot->attach($this->testCaseMock(), $ctx, $this->testResultMock());
+        $annot->attachRun($this->testCaseMock(), $ctx, $this->testResultMock());
     }
 }

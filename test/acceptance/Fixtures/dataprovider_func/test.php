@@ -19,47 +19,24 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Spec;
-
-use Demeanor\AbstractTestCase;
-use Demeanor\TestResult;
 use Demeanor\TestContext;
+use Counterpart\Assert;
 
-/**
- * Represents a specification test case.
- *
- * @since   0.1
- */
-class SpecTestCase extends AbstractTestCase
+function acceptance_dataprovider_function()
 {
-    private $name;
-    private $testClosure;
+    return [
+        'one',
+        'two',
+    ];
+}
 
-    public function __construct($name, \Closure $testClosure, array $before, array $after)
-    {
-        $this->name = $name;
-        $this->testClosure = $testClosure;
-        foreach ($before as $cb) {
-            $this->before($cb);
-        }
-        foreach ($after as $cb) {
-            $this->after($cb);
-        }
-    }
-
+class DataProviderFunctionTest
+{
     /**
-     * {@inheritdoc}
+     * @Provider(function="acceptance_dataprovider_function")
      */
-    protected function doRun(array $testArgs)
+    public function testWithFunctionProvider(TestContext $ctx, $arg)
     {
-        call_user_func_array($this->testClosure->bindTo(null), $testArgs);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function generateName()
-    {
-        return $this->name;
+        Assert::assertType('string', $arg);
     }
 }

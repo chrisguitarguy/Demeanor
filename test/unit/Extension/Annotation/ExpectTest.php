@@ -30,7 +30,7 @@ class ExpectTest extends AnnotationTestCase
             ->never();
         $annot = new Expect([]);
 
-        $annot->attach($tc, $this->testContextMock(), $this->testResultMock());
+        $annot->attachRun($tc, $this->testContextMock(), $this->testResultMock());
     }
 
     public function testExceptionThatDoesNotExistErrorsTestAndLogsError()
@@ -45,10 +45,22 @@ class ExpectTest extends AnnotationTestCase
             ->once();
         $annot = new Expect(['exception' => 'IsNotAValidException']);
 
-        $annot->attach($tc, $this->testContextMock(), $tr);
+        $annot->attachRun($tc, $this->testContextMock(), $tr);
     }
 
-    public function testValidExceptionSetsExpectedExceptionOnTestCase()
+    public function testValidExceptionInterfaceSetsExpectedExceptionOnTestCase()
+    {
+        $tc = $this->testCaseMock();
+        $tc->shouldReceive('willThrow')
+            ->once()
+            ->with('Demeanor\\Exception\\DemeanorException');
+
+        $annot = new Expect(['exception' => 'Demeanor\\Exception\\DemeanorException']);
+
+        $annot->attachRun($tc, $this->testContextMock(), $this->testResultMock());
+    }
+
+    public function testValidExceptionClassSetsExpectedExceptionOnTestCase()
     {
         $tc = $this->testCaseMock();
         $tc->shouldReceive('willThrow')
@@ -56,6 +68,6 @@ class ExpectTest extends AnnotationTestCase
             ->with('Exception');
         $annot = new Expect(['exception' => 'Exception']);
 
-        $annot->attach($tc, $this->testContextMock(), $this->testResultMock());
+        $annot->attachRun($tc, $this->testContextMock(), $this->testResultMock());
     }
 }

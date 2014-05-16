@@ -35,7 +35,7 @@ class Expect extends Annotation
     /**
      * {@inheritdoc}
      */
-    public function attach(UnitTestCase $testcase, TestContext $context, TestResult $result)
+    public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
     {
         if (!isset($this->args['exception'])) {
             return;
@@ -43,7 +43,10 @@ class Expect extends Annotation
 
         $this->args['exception'] = $this->normalizeName($this->args['exception']);
 
-        if (!class_exists($this->args['exception'])) {
+        if (
+            !class_exists($this->args['exception']) &&
+            !interface_exists($this->args['exception'])
+        ) {
             $result->error();
             $result->addMessage('error', sprintf(
                 'Expected exception class "%s" does not exist',

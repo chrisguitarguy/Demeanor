@@ -21,41 +21,42 @@
 
 namespace Demeanor\Extension\Annotation;
 
-use Demeanor\TestContext;
-use Demeanor\TestResult;
 use Demeanor\Unit\UnitTestCase;
+use Demeanor\Exception\UnexpectedValueException;
 
 /**
- * ABC for "callback" annotation that add before/after callbacks to the testcase
+ * Set the data provider for a test case.
  *
  * @since   0.1
  */
-abstract class Callback extends Annotation
+class DataProvider extends Annotation
 {
     /**
      * {@inheritdoc}
      */
-    public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
+    public function attachSetup(UnitTestCase $testcase)
     {
-        $callable = null;
-        if ($this->hasValidMethod($testcase)) {
-            $callable = [$testcase->getTestObject(), $this->args['method']];
+        $data = null;
+        if ($this->hasValidMethod($testcase, true)) {
+            $data = $this->callMethod($testcase);
         } elseif ($this->hasValidFunction($testcase)) {
-            $callable = $this->normalizeName($this->args['function']);
+            $data = $this->callFunc($testcase);
+        } elseif (isset($this->args['data']) && is_array($this->args['data'])) {
+            $data = $this->args['data'];
         }
 
-        if ($callable) {
-            $this->attachCallable($testcase, $callable);
+        if ($data) {
+            $testcase->withProvider($data);
         }
     }
 
-    /**
-     * Actually attach the callback to the test case.
-     *
-     * @since   0.1
-     * @param   UnitTestCase $testcase
-     * @param   callable $callable
-     * @return  void
-     */
-    abstract protected function attachCallable(UnitTestCase $testcase, callable $callable);
+    private function callMethod(UnitTestCase $testcase)
+    {
+        return call_user_func([$testcase->getReflectionClass()->getName(), $this->args['method']]);
+    }
+
+    private function callFunc(UnitTestCase $testcase)
+    {
+        return call_user_func($this->args['function']);
+    }
 }

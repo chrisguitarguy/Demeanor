@@ -39,17 +39,16 @@ class UnitTestCase extends AbstractTestCase
     }
 
     /**
-     * {@inheritdoc}
+     * Set the `testObject` to null so cloned instances don't share the same
+     * instance.
+     *
+     * @since   0.1
+     * @return  void
      */
-    public function getName()
+    public function __clone()
     {
-        if (null !== $this->name) {
-            return $this->name;
-        }
-
-        $this->name = $this->prettifyName();
-
-        return $this->name;
+        $this->testObject = null;
+        $this->name = null;
     }
 
     /**
@@ -93,9 +92,23 @@ class UnitTestCase extends AbstractTestCase
     /**
      * {@inheritdoc}
      */
-    protected function doRun(TestContext $ctx, TestResult $res)
+    protected function doRun(array $testArgs)
     {
-        $this->getReflectionMethod()->invoke($this->getTestObject(), $ctx);
+        $this->getReflectionMethod()->invokeArgs($this->getTestObject(), $testArgs);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function generateName()
+    {
+        if (null !== $this->name) {
+            return $this->name;
+        }
+
+        $this->name = $this->prettifyName();
+
+        return $this->name;
     }
 
     /**

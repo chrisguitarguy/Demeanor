@@ -23,11 +23,50 @@ namespace Demeanor;
 
 final class Events
 {
+    /**
+     * Dispatched directly after the test method or callback is invoked, useful
+     * for checking post conditions on the test.
+     */
     const BEFORERUN_TESTCASE    = 'testcase.beforerun';
+
+    /**
+     * Dispatched directly before the test method or callback is invoked, useful
+     * for checking things directly before the test case run (ala Requirements).
+     */
     const AFTERRUN_TESTCASE     = 'testcase.afterrun';
+
+    /**
+     * Occurs directly after the `TestResult` and `TestContext` objects have
+     * been created.
+     */
     const BEFORE_TESTCASE       = 'testcase.before';
+
+    /**
+     * Dispatched after the test method/callback has been invoked, regardless of
+     * whether an exception has been throws.
+     */
     const AFTER_TESTCASE        = 'testcase.after';
+
+    /**
+     * Dispatched when an unexpected exception occurs.
+     */
     const EXCEPTION_TESTCASE    = 'testcase.exception';
+
+    /**
+     * Run from the TestSuite before TestCase::run is invoked. This can't be used
+     * to change the result of an individual test, but it's useful for doing
+     * things like modifying the test case before it's run (like setting up data
+     * providers, etc).
+     *
+     * Note that this is only run once for test cases that have data providers.
+     */
+    const SETUP_TESTCASE        = 'testcase.setup';
+
+    /**
+     * Run after the TestCase::run method is invoked. Can be used to do any
+     * teardown necessary after the `run` method.
+     */
+    const TEARDOWN_TESTCASE     = 'testcase.teardown';
 
     private function __construct() { }
 }

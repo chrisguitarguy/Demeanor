@@ -26,21 +26,25 @@ use Demeanor\Event\Emitter;
 use Demeanor\Event\TestRunEvent;
 use Demeanor\Exception\TestFailed;
 use Demeanor\Exception\TestSkipped;
+use Demeanor\Exception\InvalidArgumentException;
 
 abstract class AbstractTestCase implements TestCase
 {
     protected $before = array();
     protected $after = array();
+    protected $descriptors = array();
     protected $expectedException = null;
     protected $caughtException = null;
+    protected $dataProvider = null;
 
     /**
      * {@inheritdoc}
      */
-    public function run(Emitter $emitter)
+    public function run(Emitter $emitter, array $testArgs=array())
     {
         $result = new DefaultTestResult();
         $context = new DefaultTestContext($this, $result);
+        array_unshift($testArgs, $context);
 
         $emitter->emit(Events::BEFORE_TESTCASE, new TestRunEvent($this, $context, $result));
 
@@ -54,7 +58,7 @@ abstract class AbstractTestCase implements TestCase
         try {
             $this->doBeforeCallbacks($context);
             $emitter->emit(Events::BEFORERUN_TESTCASE, new TestRunEvent($this, $context, $result));
-            $this->doRun($context, $result);
+            $this->doRun($testArgs);
             $emitter->emit(Events::AFTERRUN_TESTCASE, new TestRunEvent($this, $context, $result));
             $this->doAfterCallbacks($context); // TODO figure out how to make these run every time
         } catch (TestFailed $e) {
@@ -90,9 +94,66 @@ abstract class AbstractTestCase implements TestCase
     /**
      * {@inheritdoc}
      */
+    public function getName()
+    {
+        $name = $this->generateName();
+        if ($this->descriptors) {
+            $name = sprintf('%s (%s)', $name, implode(', ', $this->descriptors));
+        }
+
+        return $name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addDescriptor($descriptor)
+    {
+        $this->descriptors[] = $descriptor;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescriptors()
+    {
+        return $this->descriptors;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function willThrow($exceptionClass)
     {
         $this->expectedException = $exceptionClass;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withProvider($provider)
+    {
+        if (!is_array($provider) && !$provider instanceof \Traversable) {
+            throw new InvalidArgumentException('Data providers must be arrays or Traversables');
+        }
+
+        $this->dataProvider = $provider;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasProvider()
+    {
+        return !empty($this->dataProvider);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProvider()
+    {
+        return $this->dataProvider;
     }
 
     /**
@@ -119,7 +180,15 @@ abstract class AbstractTestCase implements TestCase
      * @param   TestResult $result
      * @return  void
      */
-    abstract protected function doRun(TestContext $ctx, TestResult $result);
+    abstract protected function doRun(array $testArgs);
+
+    /**
+     * Generate the test name (to which descriptors will be added.
+     *
+     * @since   0.1
+     * @return  string
+     */
+    abstract protected function generateName();
 
     /**
      * Check whether an exception was expected or not.

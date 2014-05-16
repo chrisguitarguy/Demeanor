@@ -43,7 +43,7 @@ interface TestCase
      * @param   Emitter $emitter
      * @return  TestResult
      */
-    public function run(Emitter $emitter);
+    public function run(Emitter $emitter, array $testArgs=[]);
 
     /**
      * Get a pretty, printable version of the test's name.
@@ -54,6 +54,25 @@ interface TestCase
     public function getName();
 
     /**
+     * Adds a textual "descriptor" to the test case, which is used when the
+     * results are printed to the screen. These are things like "Data Set #0"
+     * or "risky" or other things like that.
+     *
+     * @since   0.1
+     * @param   string $descriptor
+     * @return  void
+     */
+    public function addDescriptor($descriptor);
+
+    /**
+     * Get the test cases descriptors.
+     *
+     * @since   0.1
+     * @return  string[]
+     */
+    public function getDescriptors();
+
+    /**
      * Set the expected exception that the TestCase will encounter along its
      * run.
      *
@@ -62,6 +81,31 @@ interface TestCase
      * @return  void
      */
     public function willThrow($exceptionClass);
+
+    /**
+     * Set the data provider for the testcase.
+     *
+     * @since   0.1
+     * @param   array|Traversable
+     * @return  void
+     */
+    public function withProvider($provider);
+
+    /**
+     * Check to see whether the test case has a data provider.
+     *
+     * @since   0.1
+     * @return  boolean
+     */
+    public function hasProvider();
+
+    /**
+     * Get the data provider.
+     *
+     * @since   0.1
+     * @return  array|Traversable|null
+     */
+    public function getProvider();
 
     /**
      * Add a callable that will be run before test execution.

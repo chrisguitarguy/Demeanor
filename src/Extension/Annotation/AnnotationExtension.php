@@ -28,6 +28,7 @@ use Chrisguitarguy\Annotation\AnnotationCollectionInterface;
 use Demeanor\Events;
 use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestRunEvent;
+use Demeanor\Event\TestCaseEvent;
 use Demeanor\Unit\UnitTestCase;
 
 class AnnotationExtension implements Subscriber
@@ -49,14 +50,15 @@ class AnnotationExtension implements Subscriber
     public function getSubscribedEvents()
     {
         return [
-            Events::BEFORE_TESTCASE => 'parseAnnotation',
+            Events::BEFORE_TESTCASE => 'attachRun',
+            Events::SETUP_TESTCASE  => 'attachSetup',
         ];
     }
 
-    public function parseAnnotation(TestRunEvent $event)
+    public function attachRun(TestRunEvent $event)
     {
         $testcase = $event->getTestCase();
-        if (!$testcase instanceof UnitTestCase) {
+        if (!$this->isUnitTest($testcase)) {
             return;
         }
 
@@ -65,8 +67,26 @@ class AnnotationExtension implements Subscriber
         $context = $event->getTestContext();
         $result = $event->getTestResult();
         foreach ($annotations as $annot) {
-            $annot->attach($testcase, $context, $result);
+            $annot->attachRun($testcase, $context, $result);
         }
+    }
+
+    public function attachSetup(TestCaseEvent $event)
+    {
+        $testcase = $event->getTestCase();
+        if (!$this->isUnitTest($testcase)) {
+            return;
+        }
+
+        $annotations = $this->testCaseAnnotations($testcase);
+        foreach ($annotations as $annot) {
+            $annot->attachSetup($testcase);
+        }
+    }
+
+    private function isUnitTest($tc)
+    {
+        return $tc instanceof UnitTestCase;
     }
 
     private function testCaseAnnotations(UnitTestCase $testcase)
@@ -120,6 +140,7 @@ class AnnotationExtension implements Subscriber
             'After'     => __NAMESPACE__ . '\\After',
             'Expect'    => __NAMESPACE__ . '\\Expect',
             'Require'   => __NAMESPACE__ . '\\Requirement',
+            'Provider'  => __NAMESPACE__ . '\\DataProvider',
         ]);
     }
 }
