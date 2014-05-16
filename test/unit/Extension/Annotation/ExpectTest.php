@@ -26,7 +26,7 @@ class ExpectTest extends AnnotationTestCase
     public function testNoExceptionInArgumentsDoesNotSetExpectedException()
     {
         $tc = $this->testCaseMock();
-        $tc->shouldReceive('setExpectedException')
+        $tc->shouldReceive('willThrow')
             ->never();
         $annot = new Expect([]);
 
@@ -36,7 +36,7 @@ class ExpectTest extends AnnotationTestCase
     public function testExceptionThatDoesNotExistErrorsTestAndLogsError()
     {
         $tc = $this->testCaseMock();
-        $tc->shouldReceive('setExpectedException')
+        $tc->shouldReceive('willThrow')
             ->never();
         $tr = $this->testResultMock();
         $tr->shouldReceive('error')
@@ -51,7 +51,7 @@ class ExpectTest extends AnnotationTestCase
     public function testValidExceptionSetsExpectedExceptionOnTestCase()
     {
         $tc = $this->testCaseMock();
-        $tc->shouldReceive('setExpectedException')
+        $tc->shouldReceive('willThrow')
             ->once()
             ->with('Exception');
         $annot = new Expect(['exception' => 'Exception']);
