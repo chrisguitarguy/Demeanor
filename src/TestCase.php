@@ -43,7 +43,7 @@ interface TestCase
      * @param   Emitter $emitter
      * @return  TestResult
      */
-    public function run(Emitter $emitter);
+    public function run(Emitter $emitter, array $testArgs=[]);
 
     /**
      * Get a pretty, printable version of the test's name.

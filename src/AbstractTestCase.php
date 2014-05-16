@@ -39,10 +39,11 @@ abstract class AbstractTestCase implements TestCase
     /**
      * {@inheritdoc}
      */
-    public function run(Emitter $emitter)
+    public function run(Emitter $emitter, array $testArgs=array())
     {
         $result = new DefaultTestResult();
         $context = new DefaultTestContext($this, $result);
+        array_unshift($testArgs, $context);
 
         $emitter->emit(Events::BEFORE_TESTCASE, new TestRunEvent($this, $context, $result));
 
@@ -56,7 +57,7 @@ abstract class AbstractTestCase implements TestCase
         try {
             $this->doBeforeCallbacks($context);
             $emitter->emit(Events::BEFORERUN_TESTCASE, new TestRunEvent($this, $context, $result));
-            $this->doRun($context, $result);
+            $this->doRun($testArgs);
             $emitter->emit(Events::AFTERRUN_TESTCASE, new TestRunEvent($this, $context, $result));
             $this->doAfterCallbacks($context); // TODO figure out how to make these run every time
         } catch (TestFailed $e) {
@@ -141,7 +142,7 @@ abstract class AbstractTestCase implements TestCase
      * @param   TestResult $result
      * @return  void
      */
-    abstract protected function doRun(TestContext $ctx, TestResult $result);
+    abstract protected function doRun(array $testArgs);
 
     /**
      * Check whether an exception was expected or not.
