@@ -52,20 +52,6 @@ class UnitTestCase extends AbstractTestCase
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        if (null !== $this->name) {
-            return $this->name;
-        }
-
-        $this->name = $this->prettifyName();
-
-        return $this->name;
-    }
-
-    /**
      * Get the object that will be used for the unit test. This will always
      * return the same instance.
      *
@@ -109,6 +95,20 @@ class UnitTestCase extends AbstractTestCase
     protected function doRun(array $testArgs)
     {
         $this->getReflectionMethod()->invokeArgs($this->getTestObject(), $testArgs);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function generateName()
+    {
+        if (null !== $this->name) {
+            return $this->name;
+        }
+
+        $this->name = $this->prettifyName();
+
+        return $this->name;
     }
 
     /**

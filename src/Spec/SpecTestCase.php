@@ -50,16 +50,16 @@ class SpecTestCase extends AbstractTestCase
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    protected function doRun(array $testArgs)
     {
-        return $this->name;
+        call_user_func_array($this->testClosure->bindTo(null), $testArgs);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doRun(array $testArgs)
+    protected function generateName()
     {
-        call_user_func_array($this->testClosure->bindTo(null), $testArgs);
+        return $this->name;
     }
 }

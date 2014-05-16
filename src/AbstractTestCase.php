@@ -94,6 +94,19 @@ abstract class AbstractTestCase implements TestCase
     /**
      * {@inheritdoc}
      */
+    public function getName()
+    {
+        $name = $this->generateName();
+        if ($this->descriptors) {
+            $name = sprintf('%s (%s)', $name, implode(', ', $this->descriptors));
+        }
+
+        return $name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addDescriptor($descriptor)
     {
         $this->descriptors[] = $descriptor;
@@ -168,6 +181,14 @@ abstract class AbstractTestCase implements TestCase
      * @return  void
      */
     abstract protected function doRun(array $testArgs);
+
+    /**
+     * Generate the test name (to which descriptors will be added.
+     *
+     * @since   0.1
+     * @return  string
+     */
+    abstract protected function generateName();
 
     /**
      * Check whether an exception was expected or not.

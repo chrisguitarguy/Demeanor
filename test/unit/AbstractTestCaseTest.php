@@ -29,7 +29,8 @@ class AbstractTestCaseTest
 
     public function __construct()
     {
-        $this->testcase = \Mockery::mock('Demeanor\\AbstractTestCase[getName,doRun]');
+        $this->testcase = \Mockery::mock('Demeanor\\AbstractTestCase[generateName,doRun]');
+        $this->testcase->shouldAllowMockingProtectedMethods();
     }
 
     /**
@@ -54,5 +55,16 @@ class AbstractTestCaseTest
         $this->testcase->addDescriptor('risky');
         Assert::assertCount(1, $this->testcase->getDescriptors());
         Assert::assertContains('risky', $this->testcase->getDescriptors());
+    }
+
+    public function testGetNameIncludesAddedDescriptors()
+    {
+        $this->testcase->shouldReceive('generateName')
+            ->once()
+            ->andReturn('a name');
+        $this->testcase->addDescriptor('desc');
+        $this->testcase->addDescriptor('again');
+
+        Assert::assertEquals('a name (desc, again)', $this->testcase->getName());
     }
 }
