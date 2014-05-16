@@ -22,6 +22,7 @@
 namespace Demeanor\Extension\Annotation;
 
 use Demeanor\Unit\UnitTestCase;
+use Demeanor\Exception\UnexpectedValueException;
 
 /**
  * Set the data provider for a test case.
@@ -35,6 +36,27 @@ class DataProvider extends Annotation
      */
     public function attachSetup(UnitTestCase $testcase)
     {
-        // todo
+        $data = null;
+        if ($this->hasValidMethod($testcase, true)) {
+            $data = $this->callMethod($testcase);
+        } elseif ($this->hasValidFunction($testcase)) {
+            $data = $this->callFunc($testcase);
+        } elseif (isset($this->args['data']) && is_array($this->args['data'])) {
+            $data = $this->args['data'];
+        }
+
+        if ($data) {
+            $testcase->withProvider($data);
+        }
+    }
+
+    private function callMethod(UnitTestCase $testcase)
+    {
+        return call_user_func([$testcase->getReflectionClass()->getName(), $this->args['method']]);
+    }
+
+    private function callFunc(UnitTestCase $testcase)
+    {
+        return call_user_func($this->args['function']);
     }
 }
