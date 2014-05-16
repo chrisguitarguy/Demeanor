@@ -43,7 +43,10 @@ class Expect extends Annotation
 
         $this->args['exception'] = $this->normalizeName($this->args['exception']);
 
-        if (!class_exists($this->args['exception'])) {
+        if (
+            !class_exists($this->args['exception']) &&
+            !interface_exists($this->args['exception'])
+        ) {
             $result->error();
             $result->addMessage('error', sprintf(
                 'Expected exception class "%s" does not exist',

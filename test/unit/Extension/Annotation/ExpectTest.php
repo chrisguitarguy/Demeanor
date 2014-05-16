@@ -48,7 +48,19 @@ class ExpectTest extends AnnotationTestCase
         $annot->attach($tc, $this->testContextMock(), $tr);
     }
 
-    public function testValidExceptionSetsExpectedExceptionOnTestCase()
+    public function testValidExceptionInterfaceSetsExpectedExceptionOnTestCase()
+    {
+        $tc = $this->testCaseMock();
+        $tc->shouldReceive('willThrow')
+            ->once()
+            ->with('Demeanor\\Exception\\DemeanorException');
+
+        $annot = new Expect(['exception' => 'Demeanor\\Exception\\DemeanorException']);
+
+        $annot->attach($tc, $this->testContextMock(), $this->testResultMock());
+    }
+
+    public function testValidExceptionClassSetsExpectedExceptionOnTestCase()
     {
         $tc = $this->testCaseMock();
         $tc->shouldReceive('willThrow')
