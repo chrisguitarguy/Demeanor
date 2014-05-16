@@ -35,7 +35,7 @@ abstract class Callback extends Annotation
     /**
      * {@inheritdoc}
      */
-    public function attach(UnitTestCase $testcase, TestContext $context, TestResult $result)
+    public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
     {
         $callable = null;
         if ($this->hasValidMethod($testcase)) {

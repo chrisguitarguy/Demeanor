@@ -49,11 +49,11 @@ class AnnotationExtension implements Subscriber
     public function getSubscribedEvents()
     {
         return [
-            Events::BEFORE_TESTCASE => 'parseAnnotation',
+            Events::BEFORE_TESTCASE => 'attachRun',
         ];
     }
 
-    public function parseAnnotation(TestRunEvent $event)
+    public function attachRun(TestRunEvent $event)
     {
         $testcase = $event->getTestCase();
         if (!$testcase instanceof UnitTestCase) {
@@ -65,7 +65,7 @@ class AnnotationExtension implements Subscriber
         $context = $event->getTestContext();
         $result = $event->getTestResult();
         foreach ($annotations as $annot) {
-            $annot->attach($testcase, $context, $result);
+            $annot->attachRun($testcase, $context, $result);
         }
     }
 

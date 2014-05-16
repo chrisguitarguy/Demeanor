@@ -33,7 +33,7 @@ class AfterTest extends AnnotationTestCase
             ->never();
         $annot = new After([]);
 
-        $annot->attach($testcase, $this->testContextMock(), $this->testResultMock());
+        $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
 
     public function testMethodWithPrivateMethodCallbackDoesNotAddBeforeCallback()
@@ -43,7 +43,7 @@ class AfterTest extends AnnotationTestCase
             ->never();
         $annot = new After(['method' => 'privateCb']);
 
-        $annot->attach($testcase, $this->testContextMock(), $this->testResultMock());
+        $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
 
     public function testMethodThatDoesNotExistDoesNotAddBeforeCallback()
@@ -53,7 +53,7 @@ class AfterTest extends AnnotationTestCase
             ->never();
         $annot = new After(['method' => 'methodDoesNotExist']);
 
-        $annot->attach($testcase, $this->testContextMock(), $this->testResultMock());
+        $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
 
     public function testValidMethodAddsBeforeCallback()
@@ -67,7 +67,7 @@ class AfterTest extends AnnotationTestCase
             ->with([$this, 'cb']);
         $annot = new After(['method' => 'cb']);
 
-        $annot->attach($testcase, $this->testContextMock(), $this->testResultMock());
+        $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
 
     public function testFunctionThatDoesNotExistDoesNotAddBeforeCallback()
@@ -77,7 +77,7 @@ class AfterTest extends AnnotationTestCase
             ->never();
         $annot = new After(['function' => 'function_does_not_exist']);
 
-        $annot->attach($testcase, $this->testContextMock(), $this->testResultMock());
+        $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
 
     public function testValidFuncionAddsBeforeCallback()
@@ -88,6 +88,6 @@ class AfterTest extends AnnotationTestCase
             ->with('is_array');
         $annot = new After(['function' => 'is_array']);
 
-        $annot->attach($testcase, $this->testContextMock(), $this->testResultMock());
+        $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
 }

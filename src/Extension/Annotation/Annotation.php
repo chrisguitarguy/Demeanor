@@ -47,14 +47,28 @@ abstract class Annotation
     }
 
     /**
-     * Do whatever the annotation is meant to do with the test case. This is
-     * called from a `TestRunEvent` that's aware of test results and contexts
+     * Attach actions to the test case on setup.
      *
      * @since   0.1
      * @param   TestCase $testcase
      * @return  void
      */
-    public function attach(UnitTestCase $testcase, TestContext $context, TestResult $result)
+    public function attachSetup(TestCase $testcase)
+    {
+
+    }
+
+    /**
+     * Do whatever the annotation is meant to do with the test case. This is
+     * called from a `TestRunEvent` that's aware of test results and contexts
+     *
+     * @since   0.1
+     * @param   TestCase $testcase
+     * @param   TestContext $context
+     * @param   TestResult $result
+     * @return  void
+     */
+    public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
     {
         // noop by default, subclasses can do their thing
     }
