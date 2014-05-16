@@ -32,6 +32,7 @@ abstract class AbstractTestCase implements TestCase
 {
     protected $before = array();
     protected $after = array();
+    protected $descriptors = array();
     protected $expectedException = null;
     protected $caughtException = null;
     protected $dataProvider = null;
@@ -88,6 +89,22 @@ abstract class AbstractTestCase implements TestCase
         $emitter->emit(Events::AFTER_TESTCASE, new TestRunEvent($this, $context, $result));
 
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addDescriptor($descriptor)
+    {
+        $this->descriptors[] = $descriptor;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescriptors()
+    {
+        return $this->descriptors;
     }
 
     /**

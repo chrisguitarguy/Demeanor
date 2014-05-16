@@ -48,4 +48,11 @@ class AbstractTestCaseTest
         Assert::assertTrue($this->testcase->hasProvider(), 'test case should have a provider after one is set');
         Assert::assertEquals($provider, $this->testcase->getProvider());
     }
+
+    public function testDescriptorsCanBeAddedAndFetchedFromTestCase()
+    {
+        $this->testcase->addDescriptor('risky');
+        Assert::assertCount(1, $this->testcase->getDescriptors());
+        Assert::assertContains('risky', $this->testcase->getDescriptors());
+    }
 }
