@@ -53,7 +53,7 @@ abstract class Annotation
      * @param   TestCase $testcase
      * @return  void
      */
-    public function attachSetup(TestCase $testcase)
+    public function attachSetup(UnitTestCase $testcase)
     {
 
     }
