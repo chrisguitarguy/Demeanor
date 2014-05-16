@@ -121,6 +121,14 @@ abstract class AbstractTestCase implements TestCase
     /**
      * {@inheritdoc}
      */
+    public function getProvider()
+    {
+        return $this->dataProvider;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function before(callable $cb)
     {
         $this->before[] = $cb;

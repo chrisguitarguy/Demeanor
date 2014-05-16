@@ -81,6 +81,14 @@ interface TestCase
     public function hasProvider();
 
     /**
+     * Get the data provider.
+     *
+     * @since   0.1
+     * @return  array|Traversable|null
+     */
+    public function getProvider();
+
+    /**
      * Add a callable that will be run before test execution.
      *
      * @since   0.1

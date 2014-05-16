@@ -42,8 +42,10 @@ class AbstractTestCaseTest
 
     public function testWithProviderMarksTheTestCaseHasHavingAProvider()
     {
+        $provider = ['one', 'two'];
         Assert::assertFalse($this->testcase->hasProvider(), 'test case should not have a provider before one is set');
-        $this->testcase->withProvider(['one', 'two']);
+        $this->testcase->withProvider($provider);
         Assert::assertTrue($this->testcase->hasProvider(), 'test case should have a provider after one is set');
+        Assert::assertEquals($provider, $this->testcase->getProvider());
     }
 }
