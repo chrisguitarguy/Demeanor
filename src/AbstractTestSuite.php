@@ -22,6 +22,7 @@
 namespace Demeanor;
 
 use Demeanor\Event\Emitter;
+use Demeanor\Event\TestCaseEvent;
 use Demeanor\Loader\Loader;
 
 /**
@@ -72,10 +73,15 @@ abstract class AbstractTestSuite implements TestSuite
 
         $errors = false;
         foreach ($tests as $test) {
+            $emitter->emit(Events::SETUP_TESTCASE, new TestCaseEvent($test));
+
             $result = $test->run($emitter);
             if (!$result->successful() && !$result->skipped()) {
                 $errors = true;
             }
+
+            $emitter->emit(Events::TEARDOWN_TESTCASE, new TestCaseEvent($test));
+
             $output->writeResult($test, $result);
         }
 
