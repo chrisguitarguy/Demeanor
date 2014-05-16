@@ -22,6 +22,7 @@
 namespace Demeanor\Event;
 
 use Counterpart\Assert;
+use Demeanor\TestContext;
 
 class DefaultEmitterTest
 {
@@ -64,36 +65,30 @@ class DefaultEmitterTest
         Assert::assertFalse($secondListener, "Emitter shouldn't have called the second listener");
     }
 
-    public function testAddSubscriberWithOnlyMethodNameAddsCorrectListener()
+    public static function subscriberReturnProvider()
     {
-        $em = $this->createEmitter();
-        $subscriber = $this->subscriberReturning([
-            self::EVENT     => 'onEvent',
-        ]);
-
-        $em->addSubscriber($subscriber);
+        return [
+            'methodOnly'        => ['onEvent'],
+            'methodAndPriority' => [['onEvent', 10]],
+            'multipleCallbacks' => [[
+                ['onEvent', 10]
+            ]],
+        ];
     }
 
-    public function testAddSubscriberWithMethodNameAndPriorityAddsCorrectListener()
+    /**
+     * @Provider(method="subscriberReturnProvider")
+     */
+    public function testAddSubscriberAddsCorrectListeners(TestContext $ctx, $listenerVal)
     {
         $em = $this->createEmitter();
         $subscriber = $this->subscriberReturning([
-            self::EVENT     => ['onEvent', 10],
+            self::EVENT     => $listenerVal,
         ]);
 
+        Assert::assertFalse($em->hasListeners(self::EVENT));
         $em->addSubscriber($subscriber);
-    }
-
-    public function testAddSubscriberWithMultipleCallbacksAddsCorrectListener()
-    {
-        $em = $this->createEmitter();
-        $subscriber = $this->subscriberReturning([
-            self::EVENT => [
-                ['onEvent', 100],
-            ]
-        ]);
-
-        $em->addSubscriber($subscriber);
+        Assert::assertTrue($em->hasListeners(self::EVENT));
     }
 
     private function createEmitter()
