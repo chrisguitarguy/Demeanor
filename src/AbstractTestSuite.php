@@ -71,21 +71,44 @@ abstract class AbstractTestSuite implements TestSuite
         $this->bootstrap();
         $tests = $this->load();
 
-        $errors = false;
+        $results = new \SplObjectStorage();
         foreach ($tests as $test) {
             $emitter->emit(Events::SETUP_TESTCASE, new TestCaseEvent($test));
 
-            $result = $test->run($emitter);
-            if (!$result->successful() && !$result->skipped()) {
-                $errors = true;
+            if ($test->hasProvider()) {
+                foreach ($test->getProvider() as $argsName => $testArgs) {
+                    $test = clone $test;
+                    $results[$test] = $this->runTestCase($test, $emitter, $output, $testArgs);
+                }
+            } else {
+                $results[$test] = $this->runTestCase($test, $emitter, $output);
             }
 
             $emitter->emit(Events::TEARDOWN_TESTCASE, new TestCaseEvent($test));
-
-            $output->writeResult($test, $result);
         }
 
         $output->writeln('');
+
+        return $this->hasErrors($results);
+    }
+
+    protected function runTestCase(TestCase $test, Emitter $emitter, OutputWriter $output, array $testArgs=[])
+    {
+        $result = $test->run($emitter, $testArgs);
+        $output->writeResult($test, $result);
+
+        return $result;
+    }
+
+    protected function hasErrors(\SplObjectStorage $results)
+    {
+        $errors = false;
+        foreach ($results as $test) {
+            if (!$results->getInfo()->successful() && !$results->getInfo()->skipped()) {
+                $errors = true;
+                break;
+            }
+        }
 
         return $errors;
     }
