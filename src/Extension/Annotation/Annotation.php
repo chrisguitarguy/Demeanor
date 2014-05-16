@@ -84,4 +84,43 @@ abstract class Annotation
     {
         return str_replace('\\\\', '\\', $ident);
     }
+
+    /**
+     * Check for the `method` argument in the `args` array, if it's there and
+     * test object has the method and it's public, this will return true.
+     *
+     * Otherwise, false.
+     *
+     * @since   0.1
+     * @param   UnitTestCase $testcase
+     * @param   boolean $requireStatic If true, the method will be checked to ensure
+     *          that it's static.
+     * @return  boolean|ReflectionMethod
+     */
+    protected function hasValidMethod(UnitTestCase $testcase, $requireStatic=false)
+    {
+        if (!isset($this->args['method'])) {
+            return false;
+        }
+
+        try {
+            $ref = $testcase->getReflectionClass()->getMethod($this->args['method']);
+        } catch (\ReflectionException $e) {
+            return false;
+        }
+
+        return $ref->isPublic() && (!$requireStatic || $ref->isStatic());
+    }
+
+    /**
+     * Check the function argument in the `args` array. If it exists and is an
+     * existing function, this will return true.
+     *
+     * @since   0.1
+     * @return  boolean
+     */
+    protected function hasValidFunction(UnitTestCase $testcase)
+    {
+        return isset($this->args['function']) && function_exists($this->args['function']);
+    }
 }

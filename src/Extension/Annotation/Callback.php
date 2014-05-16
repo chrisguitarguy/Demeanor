@@ -58,24 +58,4 @@ abstract class Callback extends Annotation
      * @return  void
      */
     abstract protected function attachCallable(UnitTestCase $testcase, callable $callable);
-
-    protected function hasValidMethod(UnitTestCase $testcase)
-    {
-        if (!isset($this->args['method'])) {
-            return false;
-        }
-
-        try {
-            $ref = $testcase->getReflectionClass()->getMethod($this->args['method']);
-        } catch (\ReflectionException $e) {
-            return false;
-        }
-
-        return $ref->isPublic();
-    }
-
-    protected function hasValidFunction(UnitTestCase $testcase)
-    {
-        return isset($this->args['function']) && function_exists($this->args['function']);
-    }
 }
