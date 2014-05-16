@@ -21,6 +21,7 @@
 
 namespace Demeanor;
 
+use Demeanor\Event\Emitter;
 use Demeanor\Loader\Loader;
 
 /**
@@ -57,5 +58,29 @@ abstract class AbstractTestSuite implements TestSuite
     public function name()
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function run(Emitter $emitter, OutputWriter $output)
+    {
+        $output->writeln(sprintf('Running test suite "%s"', $this->name()));
+
+        $this->bootstrap();
+        $tests = $this->load();
+
+        $errors = false;
+        foreach ($tests as $test) {
+            $result = $test->run($emitter);
+            if (!$result->successful() && !$result->skipped()) {
+                $errors = true;
+            }
+            $output->writeResult($test, $result);
+        }
+
+        $output->writeln('');
+
+        return $errors;
     }
 }
