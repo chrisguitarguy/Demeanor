@@ -26,6 +26,7 @@ use Demeanor\Event\Emitter;
 use Demeanor\Event\TestRunEvent;
 use Demeanor\Exception\TestFailed;
 use Demeanor\Exception\TestSkipped;
+use Demeanor\Exception\InvalidArgumentException;
 
 abstract class AbstractTestCase implements TestCase
 {
@@ -33,6 +34,7 @@ abstract class AbstractTestCase implements TestCase
     protected $after = array();
     protected $expectedException = null;
     protected $caughtException = null;
+    protected $dataProvider = null;
 
     /**
      * {@inheritdoc}
@@ -93,6 +95,26 @@ abstract class AbstractTestCase implements TestCase
     public function willThrow($exceptionClass)
     {
         $this->expectedException = $exceptionClass;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withProvider($provider)
+    {
+        if (!is_array($provider) && !$provider instanceof \Traversable) {
+            throw new InvalidArgumentException('Data providers must be arrays or Traversables');
+        }
+
+        $this->dataProvider = $provider;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasProvider()
+    {
+        return !empty($this->dataProvider);
     }
 
     /**

@@ -64,6 +64,23 @@ interface TestCase
     public function willThrow($exceptionClass);
 
     /**
+     * Set the data provider for the testcase.
+     *
+     * @since   0.1
+     * @param   array|Traversable
+     * @return  void
+     */
+    public function withProvider($provider);
+
+    /**
+     * Check to see whether the test case has a data provider.
+     *
+     * @since   0.1
+     * @return  boolean
+     */
+    public function hasProvider();
+
+    /**
      * Add a callable that will be run before test execution.
      *
      * @since   0.1
