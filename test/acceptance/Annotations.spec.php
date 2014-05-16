@@ -55,3 +55,27 @@ $this->describe('#Expect', function () {
         Assert::assertEquals(0, $proc->getExitCode());
     });
 });
+
+$this->describe('#Provider', function () {
+    $this->after(function (TestContext $ctx) {
+        $ctx->log(sprintf('STDOUT> %s', $ctx['proc']->getOutput()));
+        $ctx->log(sprintf('STDERR> %s', $ctx['proc']->getErrorOutput()));
+        Assert::assertEquals(0, $ctx['proc']->getExitCode());
+        Assert::assertStringContains('Data Set #', $ctx['proc']->getOutput());
+    });
+
+    $this->it('should set a valid provider with a static method and exit successfully', function (TestContext $ctx) {
+        $ctx['proc'] = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/dataprovider_method');
+        $ctx['proc']->run();
+    });
+
+    $this->it('should set a valid provider with a function and exit successfully', function (TestContext $ctx) {
+        $ctx['proc'] = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/dataprovider_func');
+        $ctx['proc']->run();
+    });
+
+    $this->it('should set a valid provider with inline data and exit successfully', function (TestContext $ctx) {
+        $ctx['proc'] = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/dataprovider_inline');
+        $ctx['proc']->run();
+    });
+});
