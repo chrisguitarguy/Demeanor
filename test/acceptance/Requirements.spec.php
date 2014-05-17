@@ -42,7 +42,7 @@ $this->describe('#InBefore', function () {
         $ctx->log(sprintf('STDOUT> %s', $proc->getOutput()));
         $ctx->log(sprintf('STDERR> %s', $proc->getErrorOutput()));
 
-        Assert::assertThat(Matchers::stringDoesNotContain('Skipped'), $proc->getOutput());
+        Assert::assertThat(Matchers::stringDoesNotContain(': Skipped'), $proc->getOutput());
     });
 });
 
@@ -64,6 +64,6 @@ $this->describe('#Annotation', function () {
         $ctx->log(sprintf('STDOUT> %s', $proc->getOutput()));
         $ctx->log(sprintf('STDERR> %s', $proc->getErrorOutput()));
 
-        Assert::assertThat(Matchers::stringDoesNotContain('Skipped'), $proc->getOutput());
+        Assert::assertThat(Matchers::stringDoesNotContain(': Skipped'), $proc->getOutput());
     });
 });
