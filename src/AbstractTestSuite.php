@@ -71,7 +71,7 @@ abstract class AbstractTestSuite implements TestSuite
         $this->bootstrap();
         $tests = $this->load();
 
-        $results = new \SplObjectStorage();
+        $results = new DefaultResultSet();
         foreach ($tests as $test) {
             $emitter->emit(Events::SETUP_TESTCASE, new TestCaseEvent($test));
 
@@ -82,10 +82,10 @@ abstract class AbstractTestSuite implements TestSuite
                     }
                     $_test = clone $test;
                     $_test->addDescriptor('Data Set '.(is_int($argsName) ? "#{$argsName}" : $argsName));
-                    $results[$_test] = $this->runTestCase($_test, $emitter, $output, $testArgs);
+                    $results->add($test, $this->runTestCase($_test, $emitter, $output, $testArgs));
                 }
             } else {
-                $results[$test] = $this->runTestCase($test, $emitter, $output);
+                $results->add($test, $this->runTestCase($test, $emitter, $output));
             }
 
             $emitter->emit(Events::TEARDOWN_TESTCASE, new TestCaseEvent($test));
@@ -93,7 +93,7 @@ abstract class AbstractTestSuite implements TestSuite
 
         $output->writeln('');
 
-        return $this->hasErrors($results);
+        return $results;
     }
 
     protected function runTestCase(TestCase $test, Emitter $emitter, OutputWriter $output, array $testArgs=[])
@@ -102,18 +102,5 @@ abstract class AbstractTestSuite implements TestSuite
         $output->writeResult($test, $result);
 
         return $result;
-    }
-
-    protected function hasErrors(\SplObjectStorage $results)
-    {
-        $errors = false;
-        foreach ($results as $test) {
-            if (!$results->getInfo()->successful() && !$results->getInfo()->skipped()) {
-                $errors = true;
-                break;
-            }
-        }
-
-        return $errors;
     }
 }

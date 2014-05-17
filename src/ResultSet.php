@@ -21,46 +21,60 @@
 
 namespace Demeanor;
 
-use Demeanor\Event\Emitter;
-
 /**
- * Represents a test suite (collection of test cases).
+ * A collection of `TestResult` object and their corresponeding tests.
  *
  * @since   0.1
  */
-interface TestSuite
+interface ResultSet extends \Countable
 {
     /**
-     * locate all the test files and turn them into `TestCase` instances.
+     * Add a test+result pair to the set.
      *
      * @since   0.1
-     * @return  TestCase[]
-     */
-    public function load();
-
-    /**
-     * Bootstrap the test suite (include all the files required for it).
-     *
-     * @since   0.1
+     * @param   TestCase $test
+     * @param   TestResult $result
      * @return  void
      */
-    public function bootstrap();
+    public function add(TestCase $test, TestResult $result);
 
     /**
-     * Get the name of the test suite.
+     * Get the count of error tests.
      *
      * @since   0.1
-     * @return  string
+     * @return  int
      */
-    public function name();
+    public function errorCount();
 
     /**
-     * Run the test suite, writting results to `OutputWriter`
+     * Get the count of failed tests.
      *
      * @since   0.1
-     * @param   Emitter $emitter
-     * @param   OutputWriter $output
-     * @return  ResultSet
+     * @return  int
      */
-    public function run(Emitter $emitter, OutputWriter $output);
+    public function failedCount();
+
+    /**
+     * Get teh count of skipped tests.
+     *
+     * @since   0.1
+     * @return  int
+     */
+    public function skippedCount();
+
+    /**
+     * Get the count of successful tests.
+     *
+     * @since   0.1
+     * @return  int
+     */
+    public function successCount();
+
+    /**
+     * Check to see if the result set is successful (has no errors and no failures).
+     *
+     * @since   0.1
+     * @return  boolean
+     */
+    public function successful();
 }
