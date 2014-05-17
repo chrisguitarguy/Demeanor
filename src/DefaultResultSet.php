@@ -89,6 +89,14 @@ class DefaultResultSet implements ResultSet
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function successful()
+    {
+        return $this->errorCount() === 0 && $this->failedCount() === 0;
+    }
+
+    /**
      * Return the total count of tests.
      *
      * @since   0.1

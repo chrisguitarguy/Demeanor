@@ -76,6 +76,38 @@ class DefaultResultSetTest
         Assert::assertCount(1, $set);
     }
 
+    public function testResultSetWithErroredTestsIsNotSuccessful()
+    {
+        $set = $this->createSet();
+        $result = $this->createResult();
+        $result->error();
+        $set->add($this->testcase(), $result);
+
+        Assert::assertFalse($set->successful());
+    }
+
+    public function testResultSetWithFailedTestsIsNotSuccessful()
+    {
+        $set = $this->createSet();
+        $result = $this->createResult();
+        $result->fail();
+        $set->add($this->testcase(), $result);
+
+        Assert::assertFalse($set->successful());
+    }
+
+    public function testResultSetWithSkippedAndSuccesfulTestsIsSuccessful()
+    {
+        $set = $this->createSet();
+        $result = $this->createResult();
+        $result2 = $this->createResult();
+        $result2->skip();
+        $set->add($this->testcase(), $result);
+        $set->add($this->testcase(), $result2);
+
+        Assert::assertTrue($set->successful());
+    }
+
     private function createSet()
     {
         return new DefaultResultSet();

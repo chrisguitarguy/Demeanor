@@ -69,4 +69,12 @@ interface ResultSet extends \Countable
      * @return  int
      */
     public function successCount();
+
+    /**
+     * Check to see if the result set is successful (has no errors and no failures).
+     *
+     * @since   0.1
+     * @return  boolean
+     */
+    public function successful();
 }
