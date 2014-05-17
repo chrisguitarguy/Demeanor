@@ -67,10 +67,10 @@ final class Demeanor
         $this->addEventSubscribers();
 
         $hasErrors = false;
-        foreach ($this->loadTestSuites() as $testsuite) {
-            if ($testsuite->run($this->emitter, $this->outputWriter)) {
-                $hasErrors = true;
-            }
+        $results = [];
+        foreach ($this->loadTestSuites() as $name => $testsuite) {
+            $results[$name] = $testsuite->run($this->emitter, $this->outputWriter);
+            $hasErrors = $hasErrors || !$results[$name]->successful();
         }
 
         return $hasErrors ? self::EXIT_TESTERROR : self::EXIT_SUCCESS;

@@ -60,7 +60,7 @@ interface TestSuite
      * @since   0.1
      * @param   Emitter $emitter
      * @param   OutputWriter $output
-     * @return  void
+     * @return  ResultSet
      */
     public function run(Emitter $emitter, OutputWriter $output);
 }
