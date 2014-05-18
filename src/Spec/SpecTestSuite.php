@@ -24,7 +24,7 @@ namespace Demeanor\Spec;
 use Demeanor\AbstractTestSuite;
 
 /**
- * A test suite implementation that represents a unit test suite
+ * A test suite implementation that represents a spec test suite
  *
  * @since   0.1
  */
