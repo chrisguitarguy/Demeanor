@@ -60,14 +60,17 @@ class ConsoleConfiguration implements Configuration
 
         $this->wrappedConfig->initialize();
 
-        if ($suiteName = $this->consoleInput->getOption('testsuite')) {
+        if ($suiteNames = $this->consoleInput->getOption('testsuite')) {
             if ($this->consoleInput->getOption('all')) {
                 throw new ConfigurationException('The --all option cannot be combined with --testsuite');
             }
 
-            $suites = $this->wrappedConfig->getTestSuites();
-            if (!isset($suites[$suiteName])) {
-                throw new ConfigurationException(sprintf('Test suite "%s" does not exist', $suiteName));
+            $invalid = array_diff($suiteNames, array_keys($this->wrappedConfig->getTestSuites()));
+            if ($invalid) {
+                throw new ConfigurationException(sprintf(
+                    'Invalid test suite name(s): %s',
+                    implode(', ', $invalid)
+                ));
             }
         }
     }
@@ -78,13 +81,6 @@ class ConsoleConfiguration implements Configuration
     public function getTestSuites()
     {
         return $this->wrappedConfig->getTestSuites();
-        if ($suiteName = $this->consoleInput->getOption('testsuite')) {
-            return [
-                $suiteName => $suites[$suiteName]
-            ];
-        }
-
-        return $suites;
     }
 
     /**
@@ -96,8 +92,8 @@ class ConsoleConfiguration implements Configuration
             return true;
         }
 
-        if ($sn = $this->consoleInput->getOption('testsuite')) {
-            return $sn === $suiteName;
+        if ($sns = $this->consoleInput->getOption('testsuite')) {
+            return in_array($suiteName, $sns, true);
         }
 
         return $this->wrappedConfig->suiteCanRun($suiteName);

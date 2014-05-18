@@ -48,7 +48,7 @@ class Command extends BaseCommand
         $this->addOption(
             'testsuite',
             's',
-            InputOption::VALUE_REQUIRED,
+            InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
             'The test suite to run'
         );
         $this->addOption(
