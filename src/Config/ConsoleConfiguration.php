@@ -61,6 +61,10 @@ class ConsoleConfiguration implements Configuration
         $this->wrappedConfig->initialize();
 
         if ($suiteName = $this->consoleInput->getOption('testsuite')) {
+            if ($this->consoleInput->getOption('all')) {
+                throw new ConfigurationException('The --all option cannot be combined with --testsuite');
+            }
+
             $suites = $this->wrappedConfig->getTestSuites();
             if (!isset($suites[$suiteName])) {
                 throw new ConfigurationException(sprintf('Test suite "%s" does not exist', $suiteName));
