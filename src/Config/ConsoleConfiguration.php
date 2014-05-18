@@ -73,7 +73,7 @@ class ConsoleConfiguration implements Configuration
      */
     public function getTestSuites()
     {
-        $suites = $this->wrappedConfig->getTestSuites();
+        return $this->wrappedConfig->getTestSuites();
         if ($suiteName = $this->consoleInput->getOption('testsuite')) {
             return [
                 $suiteName => $suites[$suiteName]
@@ -81,6 +81,18 @@ class ConsoleConfiguration implements Configuration
         }
 
         return $suites;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function suiteCanRun($suiteName)
+    {
+        if ($sn = $this->consoleInput->getOption('testsuite')) {
+            return $sn === $suiteName;
+        }
+
+        return $this->wrappedConfig->suiteCanRun($suiteName);
     }
 
     /**

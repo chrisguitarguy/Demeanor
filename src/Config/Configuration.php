@@ -59,6 +59,16 @@ interface Configuration
     public function getTestSuites();
 
     /**
+     * Check to see if the a test suite can run -- based on the configuation
+     * options.
+     *
+     * @since   0.1
+     * @param   string $suiteName
+     * @return  boolean
+     */
+    public function suiteCanRun($suiteName);
+
+    /**
      * Get the listeners to be added to the event emitter.
      *
      * @since   0.1

@@ -80,6 +80,14 @@ class JsonConfiguration implements Configuration
     /**
      * {@inheritdoc}
      */
+    public function suiteCanRun($suiteName)
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getEventSubscribers()
     {
         return $this->config['subscribers'];

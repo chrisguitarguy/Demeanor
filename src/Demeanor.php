@@ -69,6 +69,10 @@ final class Demeanor
         $hasErrors = false;
         $results = [];
         foreach ($this->loadTestSuites() as $name => $testsuite) {
+            if (!$this->config->suiteCanRun($name)) {
+                continue;
+            }
+
             $results[$name] = $testsuite->run($this->emitter, $this->outputWriter);
             $hasErrors = $hasErrors || !$results[$name]->successful();
         }
