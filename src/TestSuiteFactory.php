@@ -27,6 +27,7 @@ use Demeanor\Loader\FileLoader;
 use Demeanor\Loader\GlobLoader;
 use Demeanor\Unit\UnitTestSuite;
 use Demeanor\Spec\SpecTestSuite;
+use Demeanor\Phpt\PhptTestSuite;
 use Demeanor\Exception\InvalidTestSuiteException;
 
 /**
@@ -39,6 +40,7 @@ class TestSuiteFactory
     const TYPE_UNIT     = 'unit';
     const TYPE_SPEC     = 'spec';
     const TYPE_STORY    = 'story';
+    const TYPE_PHPT     = 'phpt';
 
     public function create($name, array $configuration)
     {
@@ -48,6 +50,9 @@ class TestSuiteFactory
                 break;
             case self::TYPE_SPEC:
                 $suite = $this->createSpecTestSuite($name, $configuration);
+                break;
+            case self:TYPE_PHPT:
+                $suite = $this->createPhptTestSuite($name, $configuration);
                 break;
             default:
                 throw new InvalidTestSuiteException("{$configuration['type']} is not a valid test suite type");
@@ -67,6 +72,12 @@ class TestSuiteFactory
     {
         $loader = $this->createLoader($configuration, 'spec.php');
         return new SpecTestSuite($name, $loader, $configuration['bootstrap']);
+    }
+
+    private function createPhptTestSuite($name, array $configuration)
+    {
+        $loader = $this->createLoader($configuration, '.phpt');
+        return new PhptTestSuite($name, $loader, $configuration['bootstrap']);
     }
 
     private function createLoader(array $configuration, $suffix=null)
