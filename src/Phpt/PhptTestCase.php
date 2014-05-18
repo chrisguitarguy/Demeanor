@@ -24,14 +24,19 @@ namespace Demeanor\Phpt;
 use Demeanor\AbstractTestCase;
 use Demeanor\TestResult;
 use Demeanor\TestContext;
+use Demeanor\Exception\UnexpectedValueException;
 
 class PhptTestCase extends AbstractTestCase
 {
     private $filename;
+    private $parser;
+    private $sections = null;
+    private $name = null;
 
-    public function __construct($filename)
+    public function __construct($filename, Parser $parser=null)
     {
         $this->filename = $filename;
+        $this->parser = $parser ?: new Parser();
     }
 
     /**
@@ -40,7 +45,7 @@ class PhptTestCase extends AbstractTestCase
      */
     protected function doRun(array $testArgs)
     {
-        // todo
+        $testCode = $this->getSection('FILE');
     }
 
     /**
@@ -48,10 +53,43 @@ class PhptTestCase extends AbstractTestCase
      */
     protected function generateName()
     {
-        if (null !== $this->name) {
-            return $this->name;
+        if (null === $this->name) {
+            try {
+                $name = trim($this->getSection('TEST'));
+            } catch (\Exception $e) {
+                $name = '';
+            }
+
+            $this->name = sprintf('[%s] %s', basename($this->filename), $name);
         }
 
-        // get the name from the sections
+        return $this->name;
+    }
+
+    private function parse()
+    {
+        if (null !== $this->sections) {
+            return;
+        }
+
+        $this->sections = $this->parser->parse(new \SplFileObject($this->filename));
+
+        if (!isset($this->sections['TEST'])) {
+            throw new UnexpectedValueException("{$this->filename} does not contains a --TEST-- section");
+        }
+
+        if (!isset($this->sections['FILE'])) {
+            throw new UnexpectedValueException("{$this->filename} does not contains a --FILE-- section");
+        }
+
+        if (!isset($this->section['EXPECT']) && !isset($this->sections['EXPECTF'])) {
+            throw new UnexpectedValueException("{$this->filename} does not contains an --EXPECT-- or --EXPECTF-- section");
+        }
+    }
+
+    private function getSection($section)
+    {
+        $this->parse();
+        return isset($this->sections[$section]) ? $this->sections[$section] : null;
     }
 }

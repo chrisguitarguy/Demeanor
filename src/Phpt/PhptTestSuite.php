@@ -43,9 +43,12 @@ class PhptTestSuite extends AbstractTestSuite
      */
     public function load()
     {
-        $files = $this->loader->load();
-        foreach ($files as $file) {
-            // todo
+        $parser = new Parser();
+        $cases = array();
+        foreach ($this->loader->load() as $file) {
+            $cases[] = new PhptTestCase($file, $parser);
         }
+
+        return $cases;
     }
 }
