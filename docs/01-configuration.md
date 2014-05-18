@@ -103,6 +103,20 @@ If a suite that doesn't exist is supplied, the `demeanor` CLI will fail.
         }
     }
 
+### How can I run other test suites then?
+
+Use the `--testuite` (or `-s) command line option.
+
+    shell> ./vendor/bin/demeanor --testsuite a_suite
+
+Or use a few of them.
+
+    shell> ./vendor/bin/demeanor -s a_suite -s another_suite
+
+Or use the `--all` (or `-a`) option to run all test suites.
+
+    shell> ./vendor/bin/demeanor --all
+
 ## Subscribers
 
 `subscribers` can be defined in `demeanor.json` to add event subscribers to that
