@@ -51,6 +51,12 @@ class Command extends BaseCommand
             InputOption::VALUE_REQUIRED,
             'The test suite to run'
         );
+        $this->addOption(
+            'all',
+            'a',
+            InputOption::VALUE_NONE,
+            'Run all the test suites'
+        );
     }
 
     /**

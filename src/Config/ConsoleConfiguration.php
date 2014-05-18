@@ -88,6 +88,10 @@ class ConsoleConfiguration implements Configuration
      */
     public function suiteCanRun($suiteName)
     {
+        if ($this->consoleInput->getOption('all')) {
+            return true;
+        }
+
         if ($sn = $this->consoleInput->getOption('testsuite')) {
             return $sn === $suiteName;
         }
