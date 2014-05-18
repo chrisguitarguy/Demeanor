@@ -31,7 +31,7 @@ foreach (['/vendor/autoload.php', '/../../autoload.php'] as $filename) {
 if (!$autoload) {
     fwrite(STDERR, 'Unable to locate autoload file'.PHP_EOL);
     fwrite(STDERR, 'Please install demeanor via composer'.PHP_EOL);
-    exit(1);
+    exit(3);
 }
 
 require $autoload;
