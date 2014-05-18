@@ -84,7 +84,31 @@ class JsonConfigurationTest
         }
     }
 
-    public function testConfiWithoutSubscribersReturnsEmptyArrayFromGetEventSubscribers()
+    public function testSuiteCanRunReturnsTrueWhenNoDefaultSuitesAreSet(TestContext $ctx)
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
+        $config->initialize();
+
+        Assert::assertTrue($config->suiteCanRun('aSuite'));
+    }
+
+    public function testInitializeThrowsWhenDefaultSuitesIncludesNonExistentTestSuite(TestContext $ctx)
+    {
+        $this->expect($ctx);
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/baddefault_config.json']);
+        $config->initialize();
+    }
+
+    public function testSuiteCanRunReturnsTrueWhenSuiteIsInDefaultSuites()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validdefault_config.json']);
+        $config->initialize();
+
+        Assert::assertTrue($config->suiteCanRun('a_suite'));
+        Assert::assertFalse($config->suiteCanRun('not_runnable'));
+    }
+
+    public function testConfigWithoutSubscribersReturnsEmptyArrayFromGetEventSubscribers()
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
         $config->initialize();

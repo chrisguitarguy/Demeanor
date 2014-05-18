@@ -1,5 +1,6 @@
 {
-    "testsuites": {
+    "default-suites": "unit"
+    , "testsuites": {
         "unit": {
             "type": "unit"
             , "bootstrap": [

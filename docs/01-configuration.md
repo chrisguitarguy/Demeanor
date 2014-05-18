@@ -51,6 +51,72 @@ Here's a complete example:
 - `glob` is a list of [`glob`](http://www.php.net/manual/en/function.glob.php)
   patterns that will be used to locate test files.
 
+## Default Test Suites
+
+There's a good chance you won't want to run all your test suites all the time.
+For instance, acceptance tests often take a long time -- they'll test your
+complete system end to end.
+
+That's where the `default-suites` configuration option comes in. When defined
+only the test suites defined in it's array (or string) will be run with the
+naked `demeanor` command.
+
+`default-suites` may be an array.
+
+    {
+        "default-suites": ["a_suite"],
+        "testsuites": {
+            "a_suite": {
+                "type": "spec",
+                "directories": [
+                    "test/spec"
+                ]
+            }
+        }
+    }
+
+Or it can just be a string.
+
+    {
+        "default-suites": "a_suite",
+        "testsuites": {
+            "a_suite": {
+                "type": "spec",
+                "directories": [
+                    "test/spec"
+                ]
+            }
+        }
+    }
+
+If a suite that doesn't exist is supplied, the `demeanor` CLI will fail.
+
+    {
+        "default-suites": "this-will-not-work",
+        "testsuites": {
+            "a_suite": {
+                "type": "spec",
+                "directories": [
+                    "test/spec"
+                ]
+            }
+        }
+    }
+
+### How can I run other test suites then?
+
+Use the `--testuite` (or `-s) command line option.
+
+    shell> ./vendor/bin/demeanor --testsuite a_suite
+
+Or use a few of them.
+
+    shell> ./vendor/bin/demeanor -s a_suite -s another_suite
+
+Or use the `--all` (or `-a`) option to run all test suites.
+
+    shell> ./vendor/bin/demeanor --all
+
 ## Subscribers
 
 `subscribers` can be defined in `demeanor.json` to add event subscribers to that

@@ -1,0 +1,11 @@
+{
+    "default-suites": "does-not-exist"
+    , "testsuites": {
+        "a_suite": {
+            "directories": "a_dir"
+            , "glob": "*.php"
+            , "files": "a_file.php"
+            , "bootstrap": "a_bootstrap.php"
+        }
+    }
+}
