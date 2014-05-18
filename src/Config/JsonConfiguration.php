@@ -66,6 +66,7 @@ class JsonConfiguration implements Configuration
     {
         $this->loadConfigFile();
         $this->validateTestSuites();
+        $this->validateDefaultSuites();
         $this->validateEventSubscribers();
     }
 
@@ -82,7 +83,11 @@ class JsonConfiguration implements Configuration
      */
     public function suiteCanRun($suiteName)
     {
-        return true;
+        if (empty($this->config['default-suites'])) {
+            return true;
+        }
+
+        return in_array($suiteName, $this->config['default-suites']);
     }
 
     /**
@@ -162,6 +167,27 @@ class JsonConfiguration implements Configuration
         }
 
         $this->config['testsuites'] = $testsuites;
+    }
+
+    private function validateDefaultSuites()
+    {
+        if (empty($this->config['default-suites'])) {
+            $this->config['default-suites'] = null;
+            return;
+        }
+
+        if (!is_array($this->config['default-suites'])) {
+            $this->config['default-suites'] = [$this->config['default-suites']];
+        }
+
+        foreach ($this->config['default-suites'] as $sn) {
+            if (!isset($this->config['testsuites'][$sn])) {
+                throw new ConfigurationException(sprintf(
+                    'Test suite "%s" in `default-suites` does not exist',
+                    $sn
+                ));
+            }
+        }
     }
 
     private function setSuiteDefaults(array $config)
