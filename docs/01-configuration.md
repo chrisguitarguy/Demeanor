@@ -51,6 +51,58 @@ Here's a complete example:
 - `glob` is a list of [`glob`](http://www.php.net/manual/en/function.glob.php)
   patterns that will be used to locate test files.
 
+## Default Test Suites
+
+There's a good chance you won't want to run all your test suites all the time.
+For instance, acceptance tests often take a long time -- they'll test your
+complete system end to end.
+
+That's where the `default-suites` configuration option comes in. When defined
+only the test suites defined in it's array (or string) will be run with the
+naked `demeanor` command.
+
+`default-suites` may be an array.
+
+    {
+        "default-suites": ["a_suite"],
+        "testsuites": {
+            "a_suite": {
+                "type": "spec",
+                "directories": [
+                    "test/spec"
+                ]
+            }
+        }
+    }
+
+Or it can just be a string.
+
+    {
+        "default-suites": "a_suite",
+        "testsuites": {
+            "a_suite": {
+                "type": "spec",
+                "directories": [
+                    "test/spec"
+                ]
+            }
+        }
+    }
+
+If a suite that doesn't exist is supplied, the `demeanor` CLI will fail.
+
+    {
+        "default-suites": "this-will-not-work",
+        "testsuites": {
+            "a_suite": {
+                "type": "spec",
+                "directories": [
+                    "test/spec"
+                ]
+            }
+        }
+    }
+
 ## Subscribers
 
 `subscribers` can be defined in `demeanor.json` to add event subscribers to that
