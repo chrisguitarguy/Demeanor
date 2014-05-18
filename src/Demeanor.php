@@ -66,6 +66,8 @@ final class Demeanor
 
         $this->addEventSubscribers();
 
+        set_error_handler([$this, 'errorException']);
+
         $hasErrors = false;
         $results = [];
         foreach ($this->loadTestSuites() as $name => $testsuite) {
@@ -93,7 +95,14 @@ final class Demeanor
         $this->outputWriter->writeln(sprintf('Errors: %s', $errors));
         $this->outputWriter->writeln(sprintf('Failures: %s', $failed));
 
+        restore_error_handler();
+
         return $hasErrors ? self::EXIT_TESTERROR : self::EXIT_SUCCESS;
+    }
+
+    public function errorException($errno, $errstr, $errfile, $errline)
+    {
+        throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
     private function loadTestSuites()
