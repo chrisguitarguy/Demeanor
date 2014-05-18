@@ -2,12 +2,7 @@
 
 [![Build Status](https://travis-ci.org/chrisguitarguy/Demeanor.svg?branch=master)](https://travis-ci.org/chrisguitarguy/Demeanor)
 
-Demeanor is a multi-paradigm testing framework for PHP.
-
-Or rather, it will be, it's still in progress.
-
-*Multi-paradigm* means that it will, eventually, let you write standard unit
-tests along with Spec and Story BDD tests.
+Demeanor is a unit and spec testing framework for PHP.
 
 ## Configuration
 
