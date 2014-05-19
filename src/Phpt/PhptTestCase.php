@@ -22,8 +22,6 @@
 namespace Demeanor\Phpt;
 
 use Demeanor\AbstractTestCase;
-use Demeanor\TestResult;
-use Demeanor\TestContext;
 use Demeanor\Exception\UnexpectedValueException;
 
 class PhptTestCase extends AbstractTestCase
@@ -74,15 +72,15 @@ class PhptTestCase extends AbstractTestCase
 
         $this->sections = $this->parser->parse(new \SplFileObject($this->filename));
 
-        if (!isset($this->sections['TEST'])) {
+        if (empty($this->sections['TEST'])) {
             throw new UnexpectedValueException("{$this->filename} does not contains a --TEST-- section");
         }
 
-        if (!isset($this->sections['FILE'])) {
+        if (empty($this->sections['FILE'])) {
             throw new UnexpectedValueException("{$this->filename} does not contains a --FILE-- section");
         }
 
-        if (!isset($this->section['EXPECT']) && !isset($this->sections['EXPECTF'])) {
+        if (empty($this->sections['EXPECT']) && empty($this->sections['EXPECTF'])) {
             throw new UnexpectedValueException("{$this->filename} does not contains an --EXPECT-- or --EXPECTF-- section");
         }
     }
