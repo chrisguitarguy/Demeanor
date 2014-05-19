@@ -121,8 +121,6 @@ class PhptTestCase extends AbstractTestCase
     /**
      * Put $code into a file and run it.
      *
-     * TODO this should probably be it's own class
-     *
      * @since   0.1
      * @param   string $code
      * @return  array|false [$stdout, $stderr]
