@@ -87,4 +87,13 @@ class ParserTest
             'Traversable'   => new \SplFileObject($fn),
         ];
     }
+
+    public function testParseTurnsEnvSectionIntoAssociativeArray()
+    {
+        $sections = $this->parser->parse(new \SplFileObject(__DIR__.'/../Fixtures/env_example.phpt'));
+
+        Assert::assertArrayHasKey('ENV', $sections);
+        Assert::assertType('array', $sections['ENV']);
+        Assert::assertCount(2, $sections['ENV']);
+    }
 }

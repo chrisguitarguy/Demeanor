@@ -47,10 +47,33 @@ use Demeanor\Exception\UnexpectedValueException;
  *
  * The parser doesn't care about whether the sections are valid or usable.
  *
+ * Certain section (ENV and INI by default) are parsed into associative arrays.
+ * For example:
+ *
+ *      --ENV--
+ *      ONE=1
+ *      TWO=2
+ *
+ * Would be turned into:
+ *
+ *      [
+ *          "ONE"   => "1",
+ *          "TWO"   => "2",
+ *      ]
+ *
+ * Lines with an `=` sign in associative array sections will be ignored.
+ *
  * @since   0.1
  */
 class Parser
 {
+    private $arraySections;
+
+    public function __construct(array $arraySections=null)
+    {
+        $this->arraySections = $arraySections ?: ['ENV', 'INI'];
+    }
+
     /**
      * Parse the file.
      *
@@ -85,6 +108,28 @@ class Parser
             $sections[$section] .= $line;
         }
 
+        foreach ($this->arraySections as $sec) {
+            if (!isset($sections[$sec])) {
+                continue;
+            }
+            $sections[$sec] = $this->parseAssoc($sections[$sec]);
+        }
+
         return $sections;
+    }
+
+    private function parseAssoc($section)
+    {
+        $result = array();
+        $lines = preg_split('/\r\n|\r|\n/u', trim($section));
+        foreach ($lines as $line) {
+            $parts = explode('=', $line, 2);
+            if (count($parts) < 2) {
+                continue;
+            }
+            $result[trim($parts[0])] = trim($parts[1]);
+        }
+
+        return $result;
     }
 }
