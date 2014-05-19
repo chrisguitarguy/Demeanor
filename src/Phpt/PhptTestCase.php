@@ -44,6 +44,17 @@ class PhptTestCase extends AbstractTestCase
     protected function doRun(array $testArgs)
     {
         $testCode = $this->getSection('FILE');
+        $skipCode = $this->getSection('SKIPIF');
+        $cleanCode = $this->getSection('CLEAN');
+        $expectCode = $this->getSection('EXPECTF') ?: $this->getSection('EXPECT');
+
+        if ($skipReason = $this->shouldSkip($skipCode)) {
+            return $testArgs[0]->skip($skipReason); // $args[0] is ALWAYS the TestContext
+        }
+
+        list($stdout, $stderr) = $this->runCode($testCode);
+
+        // todo actually test stuff
     }
 
     /**
@@ -89,5 +100,54 @@ class PhptTestCase extends AbstractTestCase
     {
         $this->parse();
         return isset($this->sections[$section]) ? $this->sections[$section] : null;
+    }
+
+    private function shouldSkip($skipCode)
+    {
+        if (!$skipCode) {
+            return false;
+        }
+
+        list($stdout, $stderr) = $this->runCode($skipCode);
+        if (preg_match('/^skip\s+(.*)$/ui', $stdout, $matches)) {
+            return $matches[1];
+        }
+
+        return false;
+    }
+
+    /**
+     * Put $code into a file and run it.
+     *
+     * TODO this should probably be it's own class
+     *
+     * @since   0.1
+     * @param   string $code
+     * @return  array|false [$stdout, $stderr]
+     */
+    private function runCode($code, array $env=null)
+    {
+        $proc = proc_open(PHP_BINARY, [
+            0   => ['pipe', 'r'],
+            1   => ['pipe', 'w'],
+            2   => ['pipe', 'w'],
+        ], $pipes, $env);
+
+        if (!is_resource($proc)) {
+            throw new UnexpectedValueException('Call to proc_open failed');
+        }
+
+        fwrite($pipes[0], $code);
+        fclose($pipes[0]);
+
+        $stdout = stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
+
+        $stderr = stream_get_contents($pipes[2]);
+        fclose($pipes[2]);
+
+        proc_close($proc);
+
+        return [$stdout, $stderr];
     }
 }

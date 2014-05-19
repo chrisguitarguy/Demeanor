@@ -57,6 +57,14 @@ class PhptTestCaseTest
         Assert::assertTrue($result->errored());
     }
 
+    public function testPhptWithSuccessfulSkipCodeMarksTestAsSkipped()
+    {
+        $tc = new PhptTestCase(__DIR__.'/../Fixtures/skipped.phpt');
+        $result = $this->runTest($tc);
+
+        Assert::assertTrue($result->skipped());
+    }
+
     private function runTest(PhptTestCase $tc)
     {
         return $tc->run($this->emitter);
