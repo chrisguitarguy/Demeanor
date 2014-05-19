@@ -31,11 +31,12 @@ class PhptTestCaseTest
     public function __construct()
     {
         $this->emitter = new DefaultEmitter();
+        $this->executor = \Mockery::mock('Demeanor\\Phpt\\Executor[execute]');
     }
 
     public function testPhptFileWithoutTestSectionCreatesErroredResult()
     {
-        $tc = new PhptTestCase(__DIR__.'/../Fixtures/notest.phpt');
+        $tc = $this->createTestCase(__DIR__.'/../Fixtures/notest.phpt');
         $result = $this->runTest($tc);
 
         Assert::assertTrue($result->errored());
@@ -43,7 +44,7 @@ class PhptTestCaseTest
 
     public function testPhptWithoutFileSectionCreatesErroredResult()
     {
-        $tc = new PhptTestCase(__DIR__.'/../Fixtures/nofile.phpt');
+        $tc = $this->createTestCase(__DIR__.'/../Fixtures/nofile.phpt');
         $result = $this->runTest($tc);
 
         Assert::assertTrue($result->errored());
@@ -51,7 +52,7 @@ class PhptTestCaseTest
 
     public function testPhptWithoutExpectAndExpectfCreatesErroredResult()
     {
-        $tc = new PhptTestCase(__DIR__.'/../Fixtures/noexpect.phpt');
+        $tc = $this->createTestCase(__DIR__.'/../Fixtures/noexpect.phpt');
         $result = $this->runTest($tc);
 
         Assert::assertTrue($result->errored());
@@ -59,7 +60,8 @@ class PhptTestCaseTest
 
     public function testPhptWithSuccessfulSkipCodeMarksTestAsSkipped()
     {
-        $tc = new PhptTestCase(__DIR__.'/../Fixtures/skipped.phpt');
+        $tc = $this->createTestCase(__DIR__.'/../Fixtures/skipped.phpt');
+        $this->executorReturns('Skip here is the skip reason', '');
         $result = $this->runTest($tc);
 
         Assert::assertTrue($result->skipped());
@@ -68,5 +70,17 @@ class PhptTestCaseTest
     private function runTest(PhptTestCase $tc)
     {
         return $tc->run($this->emitter);
+    }
+
+    private function executorReturns($stdin, $stdout, $index=0)
+    {
+        $this->executor->shouldReceive('execute')
+            ->atLeast(1)
+            ->andReturn([$stdin, $stdout]);
+    }
+
+    private function createTestCase($filename)
+    {
+        return new PhptTestCase($filename, $this->executor);
     }
 }

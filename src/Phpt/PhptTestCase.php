@@ -28,12 +28,14 @@ class PhptTestCase extends AbstractTestCase
 {
     private $filename;
     private $parser;
+    private $executor;
     private $sections = null;
     private $name = null;
 
-    public function __construct($filename, Parser $parser=null)
+    public function __construct($filename, Executor $executor, Parser $parser=null)
     {
         $this->filename = $filename;
+        $this->executor = $executor;
         $this->parser = $parser ?: new Parser();
     }
 
@@ -127,29 +129,6 @@ class PhptTestCase extends AbstractTestCase
      */
     private function runCode($code)
     {
-        $env = $this->getSection('ENV') ?: null;
-
-        $proc = proc_open(PHP_BINARY, [
-            0   => ['pipe', 'r'],
-            1   => ['pipe', 'w'],
-            2   => ['pipe', 'w'],
-        ], $pipes, $env);
-
-        if (!is_resource($proc)) {
-            throw new UnexpectedValueException('Call to proc_open failed');
-        }
-
-        fwrite($pipes[0], $code);
-        fclose($pipes[0]);
-
-        $stdout = stream_get_contents($pipes[1]);
-        fclose($pipes[1]);
-
-        $stderr = stream_get_contents($pipes[2]);
-        fclose($pipes[2]);
-
-        proc_close($proc);
-
-        return [$stdout, $stderr];
+        return $this->executor->execute($code, $this->getSection('ENV') ?: array());
     }
 }
