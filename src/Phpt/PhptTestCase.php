@@ -125,8 +125,10 @@ class PhptTestCase extends AbstractTestCase
      * @param   string $code
      * @return  array|false [$stdout, $stderr]
      */
-    private function runCode($code, array $env=null)
+    private function runCode($code)
     {
+        $env = $this->getSection('ENV') ?: null;
+
         $proc = proc_open(PHP_BINARY, [
             0   => ['pipe', 'r'],
             1   => ['pipe', 'w'],
