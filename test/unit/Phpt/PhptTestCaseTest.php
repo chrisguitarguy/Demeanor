@@ -85,6 +85,18 @@ class PhptTestCaseTest
         Assert::assertTrue($result->failed());
     }
 
+    public function testPhptWithCleanCallsExecutorMoreThanOnce()
+    {
+        $tc = $this->createTestCase(__DIR__.'/../Fixtures/clean.phpt');
+        $this->executor->shouldReceive('execute')
+            ->atLeast(2)
+            ->andReturn(['here', '']);
+
+        $result = $this->runTest($tc);
+
+        Assert::assertTrue($result->successful());
+    }
+
     private function runTest(PhptTestCase $tc)
     {
         return $tc->run($this->emitter);

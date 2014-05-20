@@ -58,10 +58,19 @@ class PhptTestCase extends AbstractTestCase
         list($stdout, $stderr) = $this->runCode($testCode);
 
         $stdout = trim($stdout);
-        if ($expectf = $this->getSection('EXPECTF')) {
-            Assert::assertMatchesPhptFormat($expectf, $stdout);
-        } else {
-            Assert::assertEquals($this->getSection('EXPECT'), $stdout);
+        $thrown = null;
+        try {
+            $this->checkResult($stdout);
+        } catch (\Exception $thrown) {
+            // we'll deal with thrown below
+        }
+
+        if ($clean = $this->getSection('CLEAN')) {
+            $this->runCode($clean);
+        }
+
+        if ($thrown) {
+            throw $thrown;
         }
     }
 
@@ -140,5 +149,21 @@ class PhptTestCase extends AbstractTestCase
         );
 
         return $this->executor->execute($code, $this->getSection('ENV') ?: array());
+    }
+
+    /**
+     * Compare the result to either the `EXPECTF` or `EXPECT` sections.
+     *
+     * @since   0.1
+     * @param   string $stdout The standard output from the process
+     * @return  void No throw means success
+     */
+    private function checkResult($stdout)
+    {
+        if ($expectf = $this->getSection('EXPECTF')) {
+            Assert::assertMatchesPhptFormat($expectf, $stdout);
+        } else {
+            Assert::assertEquals($this->getSection('EXPECT'), $stdout);
+        }
     }
 }
