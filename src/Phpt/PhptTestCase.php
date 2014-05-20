@@ -132,6 +132,12 @@ class PhptTestCase extends AbstractTestCase
      */
     private function runCode($code)
     {
+        $code = str_replace(
+            ['__DIR__', '__FILE__'],
+            ['"'.dirname($this->filename).'"', '"'.$this->filename.'"'],
+            $code
+        );
+
         return $this->executor->execute($code, $this->getSection('ENV') ?: array());
     }
 }
