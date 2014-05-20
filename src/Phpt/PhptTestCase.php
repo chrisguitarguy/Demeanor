@@ -57,6 +57,7 @@ class PhptTestCase extends AbstractTestCase
 
         list($stdout, $stderr) = $this->runCode($testCode);
 
+        $stdout = trim($stdout);
         if ($expectf = $this->getSection('EXPECTF')) {
             Assert::assertMatchesPhptFormat($expectf, $stdout);
         } else {
