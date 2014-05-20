@@ -21,35 +21,23 @@
 
 namespace Demeanor\Phpt;
 
-use Demeanor\AbstractTestSuite;
+use Symfony\Component\Process\PhpProcess;
 
 /**
- * A test suite implementation that represents a phpt test suite
+ * Uses Symfony's process component to run PHP code.
  *
  * @since   0.1
  */
-class PhptTestSuite extends AbstractTestSuite
+class SymfonyExecutor implements Executor
 {
     /**
      * {@inheritdoc}
      */
-    public function bootstrap()
+    public function execute($code, array $env)
     {
-        // phpt test suites don't bootstrap
-    }
+        $proc = new PhpProcess($code, null, $env);
+        $proc->run();
 
-    /**
-     * {@inheritdoc}
-     */
-    public function load()
-    {
-        $parser = new Parser();
-        $executor = new SymfonyExecutor();
-        $cases = array();
-        foreach ($this->loader->load() as $file) {
-            $cases[] = new PhptTestCase($file, $executor, $parser);
-        }
-
-        return $cases;
+        return [$proc->getOutput(), $proc->getErrorOutput()];
     }
 }
