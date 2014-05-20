@@ -23,6 +23,7 @@ namespace Demeanor\Phpt;
 
 use Demeanor\AbstractTestCase;
 use Demeanor\Exception\UnexpectedValueException;
+use Demeanor\Exception\TestSkipped;
 
 class PhptTestCase extends AbstractTestCase
 {
@@ -51,7 +52,7 @@ class PhptTestCase extends AbstractTestCase
         $expectCode = $this->getSection('EXPECTF') ?: $this->getSection('EXPECT');
 
         if ($skipReason = $this->shouldSkip($skipCode)) {
-            return $testArgs[0]->skip($skipReason); // $args[0] is ALWAYS the TestContext
+            throw new TestSkipped($skipReason);
         }
 
         list($stdout, $stderr) = $this->runCode($testCode);
