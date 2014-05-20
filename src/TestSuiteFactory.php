@@ -51,7 +51,7 @@ class TestSuiteFactory
             case self::TYPE_SPEC:
                 $suite = $this->createSpecTestSuite($name, $configuration);
                 break;
-            case self:TYPE_PHPT:
+            case self::TYPE_PHPT:
                 $suite = $this->createPhptTestSuite($name, $configuration);
                 break;
             default:
