@@ -67,6 +67,24 @@ class PhptTestCaseTest
         Assert::assertTrue($result->skipped());
     }
 
+    public function testPhptWithUmatchingExpectfMarksTestAsFailed()
+    {
+        $tc = $this->createTestCase(__DIR__.'/../Fixtures/expectf.phpt');
+        $this->executorReturns('not here', '');
+        $result = $this->runTest($tc);
+
+        Assert::assertTrue($result->failed());
+    }
+
+    public function testPhptWithUnmatchingExpectMarksTestAsFailed()
+    {
+        $tc = $this->createTestCase(__DIR__.'/../Fixtures/expect.phpt');
+        $this->executorReturns('not here', '');
+        $result = $this->runTest($tc);
+
+        Assert::assertTrue($result->failed());
+    }
+
     private function runTest(PhptTestCase $tc)
     {
         return $tc->run($this->emitter);

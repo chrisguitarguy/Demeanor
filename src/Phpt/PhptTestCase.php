@@ -21,6 +21,7 @@
 
 namespace Demeanor\Phpt;
 
+use Counterpart\Assert;
 use Demeanor\AbstractTestCase;
 use Demeanor\Exception\UnexpectedValueException;
 use Demeanor\Exception\TestSkipped;
@@ -49,7 +50,6 @@ class PhptTestCase extends AbstractTestCase
         $testCode = $this->getSection('FILE');
         $skipCode = $this->getSection('SKIPIF');
         $cleanCode = $this->getSection('CLEAN');
-        $expectCode = $this->getSection('EXPECTF') ?: $this->getSection('EXPECT');
 
         if ($skipReason = $this->shouldSkip($skipCode)) {
             throw new TestSkipped($skipReason);
@@ -57,7 +57,11 @@ class PhptTestCase extends AbstractTestCase
 
         list($stdout, $stderr) = $this->runCode($testCode);
 
-        // todo actually test stuff
+        if ($expectf = $this->getSection('EXPECTF')) {
+            Assert::assertMatchesPhptFormat($expectf, $stdout);
+        } else {
+            Assert::assertEquals($this->getSection('EXPECT'), $stdout);
+        }
     }
 
     /**
