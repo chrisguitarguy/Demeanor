@@ -22,6 +22,7 @@
 namespace Demeanor\Phpt;
 
 use Symfony\Component\Process\PhpProcess;
+use Demeanor\Exception\ProcessException;
 
 /**
  * Uses Symfony's process component to run PHP code.
@@ -35,9 +36,12 @@ class SymfonyExecutor implements Executor
      */
     public function execute($code, array $env)
     {
-        $proc = new PhpProcess($code, null, $env);
-        $proc->run();
-
-        return [$proc->getOutput(), $proc->getErrorOutput()];
+        try {
+            $proc = new PhpProcess($code, null, $env);
+            $proc->run();
+            return [$proc->getOutput(), $proc->getErrorOutput()];
+        } catch (\Exception $e) {
+            throw new ProcessException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }
