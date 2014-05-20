@@ -7,7 +7,7 @@
     , "require": {
         "php": ">=5.4"
         , "symfony/console": "~2.4"
-        , "counterpart/counterpart": "~1.1"
+        , "counterpart/counterpart": "~1.2"
         , "mockery/mockery": "~0.9"
         , "chrisguitarguy/annotation": "dev-master"
         , "symfony/process": "~2.4"
