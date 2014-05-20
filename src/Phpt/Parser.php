@@ -108,14 +108,19 @@ class Parser
             $sections[$section] .= $line;
         }
 
-        foreach ($this->arraySections as $sec) {
-            if (!isset($sections[$sec])) {
-                continue;
-            }
-            $sections[$sec] = $this->parseAssoc($sections[$sec]);
+        $_sections = array();
+        foreach ($sections as $name => $section) {
+            $_sections[$name] = trim($section);
         }
 
-        return $sections;
+        foreach ($this->arraySections as $sec) {
+            if (!isset($_sections[$sec])) {
+                continue;
+            }
+            $_sections[$sec] = $this->parseAssoc($_sections[$sec]);
+        }
+
+        return $_sections;
     }
 
     private function parseAssoc($section)
