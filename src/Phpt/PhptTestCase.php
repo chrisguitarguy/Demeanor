@@ -117,8 +117,8 @@ class PhptTestCase extends AbstractTestCase
         }
 
         list($stdout, $stderr) = $this->runCode($skipCode);
-        if (preg_match('/^skip\s+(.*)$/ui', $stdout, $matches)) {
-            return $matches[1];
+        if (preg_match('/^skip(.*)$/ui', $stdout, $matches)) {
+            return trim($matches[1]);
         }
 
         return false;
