@@ -99,18 +99,6 @@ class PhptTestCase extends AbstractTestCase
         }
 
         $this->sections = $this->parser->parse(new \SplFileObject($this->filename));
-
-        if (empty($this->sections['TEST'])) {
-            throw new UnexpectedValueException("{$this->filename} does not contains a --TEST-- section");
-        }
-
-        if (empty($this->sections['FILE'])) {
-            throw new UnexpectedValueException("{$this->filename} does not contains a --FILE-- section");
-        }
-
-        if (empty($this->sections['EXPECT']) && empty($this->sections['EXPECTF'])) {
-            throw new UnexpectedValueException("{$this->filename} does not contains an --EXPECT-- or --EXPECTF-- section");
-        }
     }
 
     private function getSection($section)

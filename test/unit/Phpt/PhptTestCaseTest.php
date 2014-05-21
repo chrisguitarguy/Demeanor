@@ -32,30 +32,7 @@ class PhptTestCaseTest
     {
         $this->emitter = new DefaultEmitter();
         $this->executor = \Mockery::mock('Demeanor\\Phpt\\Executor[execute]');
-    }
-
-    public function testPhptFileWithoutTestSectionCreatesErroredResult()
-    {
-        $tc = $this->createTestCase(__DIR__.'/../Fixtures/notest.phpt');
-        $result = $this->runTest($tc);
-
-        Assert::assertTrue($result->errored());
-    }
-
-    public function testPhptWithoutFileSectionCreatesErroredResult()
-    {
-        $tc = $this->createTestCase(__DIR__.'/../Fixtures/nofile.phpt');
-        $result = $this->runTest($tc);
-
-        Assert::assertTrue($result->errored());
-    }
-
-    public function testPhptWithoutExpectAndExpectfCreatesErroredResult()
-    {
-        $tc = $this->createTestCase(__DIR__.'/../Fixtures/noexpect.phpt');
-        $result = $this->runTest($tc);
-
-        Assert::assertTrue($result->errored());
+        $this->parser = \Mockery::mock('Demeanor\\Phpt\\Parser');
     }
 
     public function testPhptWithSuccessfulSkipCodeMarksTestAsSkipped()

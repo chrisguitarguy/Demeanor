@@ -42,7 +42,7 @@ class ParserTest
     }
 
     /**
-     * @Expect(exception="Demeanor\Exception\UnexpectedValueException")
+     * @Expect(exception="Demeanor\Exception\InvalidPhptException")
      */
     public function testParseThrowsWhenTheFileDoesNotStartWithASection()
     {
@@ -54,7 +54,7 @@ class ParserTest
     }
 
     /**
-     * @Expect(exception="Demeanor\Exception\UnexpectedValueException")
+     * @Expect(exception="Demeanor\Exception\InvalidPhptException")
      */
     public function testParseThrowsWhenTheSameSectionIsEncounteredTwice()
     {
@@ -64,6 +64,30 @@ class ParserTest
             '--NAME--',
             'in the same section again',
         ]);
+    }
+
+    /**
+     * @Expect(exception="Demeanor\Exception\InvalidPhptException")
+     */
+    public function testPhptFileWithoutTestSectionThrowsException()
+    {
+        $this->parser->parse(new \SplFileObject(__DIR__.'/../Fixtures/notest.phpt'));
+    }
+
+    /**
+     * @Expect(exception="Demeanor\Exception\InvalidPhptException")
+     */
+    public function testPhptWithoutFileSectionThrowsException()
+    {
+        $this->parser->parse(new \SplFileObject(__DIR__.'/../Fixtures/nofile.phpt'));
+    }
+
+    /**
+     * @Expect(exception="Demeanor\Exception\InvalidPhptException")
+     */
+    public function testPhptWithoutExpectAndExpectfThrowsException()
+    {
+        $this->parser->parse(new \SplFileObject(__DIR__.'/../Fixtures/noexpect.phpt'));
     }
 
     /**
