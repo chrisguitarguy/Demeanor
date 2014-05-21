@@ -37,7 +37,13 @@ class PhptTestCaseTest
 
     public function testPhptWithSuccessfulSkipCodeMarksTestAsSkipped()
     {
-        $tc = $this->createTestCase(__DIR__.'/../Fixtures/skipped.phpt');
+        $tc = $this->createTestCase();
+        $this->parserReturns([
+            'SKIPIF'    => 'skip section present',
+            'FILE'      => '..',
+            'CLEAN'     => '..',
+            'EXPECT'    => 'here',
+        ]);
         $this->executorReturns('Skip here is the skip reason', '');
         $result = $this->runTest($tc);
 
@@ -46,8 +52,13 @@ class PhptTestCaseTest
 
     public function testPhptWithUmatchingExpectfMarksTestAsFailed()
     {
-        $tc = $this->createTestCase(__DIR__.'/../Fixtures/expectf.phpt');
+        $tc = $this->createTestCase();
         $this->executorReturns('not here', '');
+        $this->parserReturns([
+            'FILE'      => '..',
+            'CLEAN'     => '..',
+            'EXPECTF'   => 'here %d',
+        ]);
         $result = $this->runTest($tc);
 
         Assert::assertTrue($result->failed());
@@ -55,7 +66,12 @@ class PhptTestCaseTest
 
     public function testPhptWithUnmatchingExpectMarksTestAsFailed()
     {
-        $tc = $this->createTestCase(__DIR__.'/../Fixtures/expect.phpt');
+        $tc = $this->createTestCase();
+        $this->parserReturns([
+            'FILE'      => '..',
+            'CLEAN'     => '..',
+            'EXPECT'    => 'here',
+        ]);
         $this->executorReturns('not here', '');
         $result = $this->runTest($tc);
 
@@ -64,7 +80,12 @@ class PhptTestCaseTest
 
     public function testPhptWithCleanCallsExecutorMoreThanOnce()
     {
-        $tc = $this->createTestCase(__DIR__.'/../Fixtures/clean.phpt');
+        $tc = $this->createTestCase();
+        $this->parserReturns([
+            'FILE'      => '..',
+            'CLEAN'     => '..',
+            'EXPECT'    => 'here',
+        ]);
         $this->executor->shouldReceive('execute')
             ->atLeast(2)
             ->andReturn(['here', '']);
@@ -86,8 +107,16 @@ class PhptTestCaseTest
             ->andReturn([$stdin, $stdout]);
     }
 
-    private function createTestCase($filename)
+    private function parserReturns(array $sections)
     {
-        return new PhptTestCase($filename, $this->executor);
+        $sections['TEST'] = 'In Test Case';
+        $this->parser->shouldReceive('parse')
+            ->atLeast(1)
+            ->andReturn($sections);
+    }
+
+    private function createTestCase()
+    {
+        return new PhptTestCase(__DIR__.'/../Fixtures/sample.phpt', $this->executor, $this->parser);
     }
 }
