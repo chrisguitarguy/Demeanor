@@ -41,3 +41,11 @@ $this->it('should exit with a success code when all phpt tests pass', function (
 
     Assert::assertEquals(0, $ctx['proc']->getExitCode());
 });
+
+$this->it('should exit with a success code when test are skipped and others pase', function (TestContext $ctx) {
+    $ctx['proc'] = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/phpt_skipped');
+    $ctx['proc']->run();
+
+    Assert::assertEquals(0, $ctx['proc']->getExitCode());
+    Assert::assertStringContains('Skipped: 1', $ctx['proc']->getOutput());
+});
