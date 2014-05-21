@@ -1,0 +1,10 @@
+--TEST--
+..
+--FILE--
+..
+--EXPECT--
+..
+--ENV--
+ONE=1
+TWO
+FOUR=4

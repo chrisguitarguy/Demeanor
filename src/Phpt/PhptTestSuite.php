@@ -19,43 +19,37 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Spec;
+namespace Demeanor\Phpt;
 
 use Demeanor\AbstractTestSuite;
 
 /**
- * A test suite implementation that represents a spec test suite
+ * A test suite implementation that represents a phpt test suite
  *
  * @since   0.1
  */
-class SpecTestSuite extends AbstractTestSuite
+class PhptTestSuite extends AbstractTestSuite
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function bootstrap()
+    {
+        // phpt test suites don't bootstrap
+    }
+
     /**
      * {@inheritdoc}
      */
     public function load()
     {
-        $collection = new TestCaseCollection();
-
-        $files = $this->loader->load();
-        foreach ($files as $file) {
-            new DefaultSpecification(
-                $collection,
-                $this->filenameDescription($file),
-                function () use ($file) {
-                    include_once $file;
-                }
-            );
+        $parser = new Parser();
+        $executor = new SymfonyExecutor();
+        $cases = array();
+        foreach ($this->loader->load() as $file) {
+            $cases[] = new PhptTestCase($file, $executor, $parser);
         }
 
-        return $collection->all();
-    }
-
-    private function filenameDescription($filename)
-    {
-        $filename = basename($filename, '.php');
-        $parts = explode('.', $filename, 2);
-        $name = array_shift($parts);
-        return str_replace('_', ' ', $name);
+        return $cases;
     }
 }

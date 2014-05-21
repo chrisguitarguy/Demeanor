@@ -19,43 +19,29 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Spec;
+namespace Demeanor\Phpt;
 
-use Demeanor\AbstractTestSuite;
+use Symfony\Component\Process\PhpProcess;
+use Demeanor\Exception\ProcessException;
 
 /**
- * A test suite implementation that represents a spec test suite
+ * Uses Symfony's process component to run PHP code.
  *
  * @since   0.1
  */
-class SpecTestSuite extends AbstractTestSuite
+class SymfonyExecutor implements Executor
 {
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function execute($code, array $env)
     {
-        $collection = new TestCaseCollection();
-
-        $files = $this->loader->load();
-        foreach ($files as $file) {
-            new DefaultSpecification(
-                $collection,
-                $this->filenameDescription($file),
-                function () use ($file) {
-                    include_once $file;
-                }
-            );
+        try {
+            $proc = new PhpProcess($code, null, $env);
+            $proc->run();
+            return [$proc->getOutput(), $proc->getErrorOutput()];
+        } catch (\Exception $e) {
+            throw new ProcessException($e->getMessage(), $e->getCode(), $e);
         }
-
-        return $collection->all();
-    }
-
-    private function filenameDescription($filename)
-    {
-        $filename = basename($filename, '.php');
-        $parts = explode('.', $filename, 2);
-        $name = array_shift($parts);
-        return str_replace('_', ' ', $name);
     }
 }
