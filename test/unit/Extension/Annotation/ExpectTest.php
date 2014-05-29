@@ -28,7 +28,7 @@ class ExpectTest extends AnnotationTestCase
         $tc = $this->testCaseMock();
         $tc->shouldReceive('willThrow')
             ->never();
-        $annot = new Expect([]);
+        $annot = new Expect([], []);
 
         $annot->attachRun($tc, $this->testContextMock(), $this->testResultMock());
     }
@@ -43,7 +43,7 @@ class ExpectTest extends AnnotationTestCase
             ->once();
         $tr->shouldReceive('addMessage')
             ->once();
-        $annot = new Expect(['exception' => 'IsNotAValidException']);
+        $annot = new Expect([], ['exception' => 'IsNotAValidException']);
 
         $annot->attachRun($tc, $this->testContextMock(), $tr);
     }
@@ -55,7 +55,7 @@ class ExpectTest extends AnnotationTestCase
             ->once()
             ->with('Demeanor\\Exception\\DemeanorException');
 
-        $annot = new Expect(['exception' => 'Demeanor\\Exception\\DemeanorException']);
+        $annot = new Expect([], ['exception' => 'Demeanor\\Exception\\DemeanorException']);
 
         $annot->attachRun($tc, $this->testContextMock(), $this->testResultMock());
     }
@@ -66,7 +66,7 @@ class ExpectTest extends AnnotationTestCase
         $tc->shouldReceive('willThrow')
             ->once()
             ->with('Exception');
-        $annot = new Expect(['exception' => 'Exception']);
+        $annot = new Expect([], ['exception' => 'Exception']);
 
         $annot->attachRun($tc, $this->testContextMock(), $this->testResultMock());
     }

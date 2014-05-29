@@ -36,7 +36,7 @@ class DataProviderTest extends AnnotationTestCase
     public function testNonStaticMethodsAreNotTreatedAsValidProviders()
     {
         $testcase = $this->testCaseMock();
-        $annot = new DataProvider(['method' => 'notStatic']);
+        $annot = new DataProvider([], ['method' => 'notStatic']);
         $this->willNotHaveProvider($testcase);
 
         $annot->attachSetup($testcase);
@@ -46,7 +46,7 @@ class DataProviderTest extends AnnotationTestCase
     {
         $testcase = $this->testCaseMock();
         $this->willHaveProvider($testcase);
-        $annot = new DataProvider(['method' => 'isStatic']);
+        $annot = new DataProvider([], ['method' => 'isStatic']);
 
         $annot->attachSetup($testcase);
     }
@@ -55,7 +55,7 @@ class DataProviderTest extends AnnotationTestCase
     {
         $testcase = $this->testCaseMock();
         $this->willNotHaveProvider($testcase);
-        $annot = new DataProvider(['function' => __NAMESPACE__.'\\does_not_exist_as_a_function']);
+        $annot = new DataProvider([], ['function' => __NAMESPACE__.'\\does_not_exist_as_a_function']);
 
         $annot->attachSetup($testcase);
     }
@@ -64,7 +64,7 @@ class DataProviderTest extends AnnotationTestCase
     {
         $testcase = $this->testCaseMock();
         $this->willHaveProvider($testcase);
-        $annot = new DataProvider(['function' => __NAMESPACE__.'\\_dp_test_return']);
+        $annot = new DataProvider([], ['function' => __NAMESPACE__.'\\_dp_test_return']);
 
         $annot->attachSetup($testcase);
     }
@@ -73,7 +73,7 @@ class DataProviderTest extends AnnotationTestCase
     {
         $testcase = $this->testCaseMock();
         $this->willNotHaveProvider($testcase);
-        $annot = new DataProvider(['data' => 'not an array']);
+        $annot = new DataProvider([], ['data' => 'not an array']);
 
         $annot->attachSetup($testcase);
     }
@@ -82,7 +82,7 @@ class DataProviderTest extends AnnotationTestCase
     {
         $testcase = $this->testCaseMock();
         $this->willHaveProvider($testcase);
-        $annot = new DataProvider(['data' => ['one', ['two']]]);
+        $annot = new DataProvider([], ['data' => ['one', ['two']]]);
 
         $annot->attachSetup($testcase);
     }

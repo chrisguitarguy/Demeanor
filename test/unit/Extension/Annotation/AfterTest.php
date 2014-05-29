@@ -31,7 +31,7 @@ class AfterTest extends AnnotationTestCase
         $testcase = $this->testCaseMock();
         $testcase->shouldReceive('after')
             ->never();
-        $annot = new After([]);
+        $annot = new After([], []);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -41,7 +41,7 @@ class AfterTest extends AnnotationTestCase
         $testcase = $this->testCaseMock();
         $testcase->shouldReceive('after')
             ->never();
-        $annot = new After(['method' => 'privateCb']);
+        $annot = new After([], ['method' => 'privateCb']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -51,7 +51,7 @@ class AfterTest extends AnnotationTestCase
         $testcase = $this->testCaseMock();
         $testcase->shouldReceive('after')
             ->never();
-        $annot = new After(['method' => 'methodDoesNotExist']);
+        $annot = new After([], ['method' => 'methodDoesNotExist']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -65,7 +65,7 @@ class AfterTest extends AnnotationTestCase
         $testcase->shouldReceive('after')
             ->once()
             ->with([$this, 'cb']);
-        $annot = new After(['method' => 'cb']);
+        $annot = new After([], ['method' => 'cb']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -75,7 +75,7 @@ class AfterTest extends AnnotationTestCase
         $testcase = $this->testCaseMock();
         $testcase->shouldReceive('after')
             ->never();
-        $annot = new After(['function' => 'function_does_not_exist']);
+        $annot = new After([], ['function' => 'function_does_not_exist']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -86,7 +86,7 @@ class AfterTest extends AnnotationTestCase
         $testcase->shouldReceive('after')
             ->once()
             ->with('is_array');
-        $annot = new After(['function' => 'is_array']);
+        $annot = new After([], ['function' => 'is_array']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }

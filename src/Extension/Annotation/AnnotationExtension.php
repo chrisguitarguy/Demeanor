@@ -124,8 +124,8 @@ class AnnotationExtension implements Subscriber
         }
 
         foreach ($found as $foundAnnotation) {
-            list($name, $arguments) = $foundAnnotation;
-            if ($annot = $this->collection->create($name, $arguments, $colContext)) {
+            list($name, $positional, $arguments) = $foundAnnotation;
+            if ($annot = $this->collection->create($name, $positional, $arguments, $colContext)) {
                 $annotations[] = $annot;
             }
         }

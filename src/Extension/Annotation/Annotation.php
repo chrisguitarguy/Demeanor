@@ -33,6 +33,7 @@ use Demeanor\Unit\UnitTestCase;
  */
 abstract class Annotation
 {
+    protected $positional = array();
     protected $args = array();
 
     /**
@@ -41,8 +42,9 @@ abstract class Annotation
      * @since   0.1
      * @param   array $args
      */
-    public function __construct(array $args)
+    public function __construct(array $positional, array $args)
     {
+        $this->positional = $positional;
         $this->args = $args;
     }
 

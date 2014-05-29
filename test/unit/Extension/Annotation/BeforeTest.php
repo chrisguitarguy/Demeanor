@@ -31,7 +31,7 @@ class BeforeTest extends AnnotationTestCase
         $testcase = $this->testCaseMock();
         $testcase->shouldReceive('before')
             ->never();
-        $annot = new Before([]);
+        $annot = new Before([], []);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -41,7 +41,7 @@ class BeforeTest extends AnnotationTestCase
         $testcase = $this->testCaseMock();
         $testcase->shouldReceive('before')
             ->never();
-        $annot = new Before(['method' => 'privateCb']);
+        $annot = new Before([], ['method' => 'privateCb']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -51,7 +51,7 @@ class BeforeTest extends AnnotationTestCase
         $testcase = $this->testCaseMock();
         $testcase->shouldReceive('before')
             ->never();
-        $annot = new Before(['method' => 'methodDoesNotExist']);
+        $annot = new Before([], ['method' => 'methodDoesNotExist']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -64,7 +64,7 @@ class BeforeTest extends AnnotationTestCase
             ->andReturn($this);
         $testcase->shouldReceive('before')
             ->once()
-            ->with([$this, 'cb']);
+            ->with([], [$this, 'cb']);
         $annot = new Before(['method' => 'cb']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
@@ -75,7 +75,7 @@ class BeforeTest extends AnnotationTestCase
         $testcase = $this->testCaseMock();
         $testcase->shouldReceive('before')
             ->never();
-        $annot = new Before(['function' => 'function_does_not_exist']);
+        $annot = new Before([], ['function' => 'function_does_not_exist']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -86,7 +86,7 @@ class BeforeTest extends AnnotationTestCase
         $testcase->shouldReceive('before')
             ->once()
             ->with('is_array');
-        $annot = new Before(['function' => 'is_array']);
+        $annot = new Before([], ['function' => 'is_array']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }

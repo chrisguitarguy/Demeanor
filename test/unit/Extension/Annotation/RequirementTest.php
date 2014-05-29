@@ -30,7 +30,7 @@ class RequirementTest extends AnnotationTestCase
             ->once()
             ->with('requirements')
             ->andReturn(false);
-        $annot = new Requirement([]);
+        $annot = new Requirement([], []);
 
         $annot->attachRun($this->testCaseMock(), $ctx, $this->testResultMock());
     }
@@ -49,7 +49,7 @@ class RequirementTest extends AnnotationTestCase
         $ctx->shouldReceive('offsetGet')
             ->atLeast(1)
             ->andReturn($reqs);
-        $annot = new Requirement([
+        $annot = new Requirement([], [
             'php'       => '4.0',
             'os'        => '/darwin/ui',
             'extension' => 'spl',
