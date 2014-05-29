@@ -70,4 +70,15 @@ class ExpectTest extends AnnotationTestCase
 
         $annot->attachRun($tc, $this->testContextMock(), $this->testResultMock());
     }
+
+    public function testExpectWithPositionalArgumentTreatsItAsExpected()
+    {
+        $tc = $this->testCaseMock();
+        $tc->shouldReceive('willThrow')
+            ->once()
+            ->with('Exception');
+        $annot = new Expect(['Exception'], []);
+
+        $annot->attachRun($tc, $this->testContextMock(), $this->testResultMock());
+    }
 }

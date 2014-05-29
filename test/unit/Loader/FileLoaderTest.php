@@ -27,7 +27,7 @@ use Demeanor\TestContext;
 class FileLoaderTest
 {
     /**
-     * @Expect(exception="Demeanor\Exception\FileNotFoundException")
+     * @Expect("Demeanor\Exception\FileNotFoundException")
      */
     public function testLoadWithBadFileThrowsException(TestContext $ctx)
     {

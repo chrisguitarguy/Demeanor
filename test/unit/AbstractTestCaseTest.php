@@ -34,7 +34,7 @@ class AbstractTestCaseTest
     }
 
     /**
-     * @Expect(exception="Demeanor\Exception\DemeanorException")
+     * @Expect("Demeanor\Exception\DemeanorException")
      */
     public function testWithProviderThrowsExceptionWhenGivenANonArrayOrTraversable()
     {

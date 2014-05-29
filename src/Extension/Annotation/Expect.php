@@ -37,6 +37,10 @@ class Expect extends Annotation
      */
     public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
     {
+        if (isset($this->positional[0])) {
+            $this->args['exception'] = $this->positional[0];
+        }
+
         if (!isset($this->args['exception'])) {
             return;
         }

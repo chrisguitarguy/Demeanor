@@ -27,7 +27,7 @@ use Demeanor\TestContext;
 class DirectoryLoaderTest
 {
     /**
-     * @Expect(exception="Demeanor\\Exception\\FileNotFoundException")
+     * @Expect("Demeanor\\Exception\\FileNotFoundException")
      */
     public function testLoadWithInvalidDirectoryThrowsException(TestContext $ctx)
     {
