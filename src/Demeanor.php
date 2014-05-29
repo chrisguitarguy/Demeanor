@@ -24,7 +24,7 @@ namespace Demeanor;
 use Demeanor\Event\Emitter;
 use Demeanor\Event\DefaultEmitter;
 use Demeanor\Event\TestCaseEvent;
-use Demeanor\Extension\MockeryExtension;
+use Demeanor\Subscriber\MockerySubscriber;
 use Demeanor\Extension\Annotation\AnnotationExtension;
 use Demeanor\Extension\Requirement\RequirementExtension;
 use Demeanor\Config\Configuration;
@@ -119,7 +119,7 @@ final class Demeanor
     private function addEventSubscribers()
     {
         $subscribers = array_merge([
-            new MockeryExtension(),
+            new MockerySubscriber(),
             new AnnotationExtension(),
             new RequirementExtension(),
         ], $this->config->getEventSubscribers());

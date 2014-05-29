@@ -19,7 +19,7 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension;
+namespace Demeanor\Subscriber;
 
 use Demeanor\Events;
 use Demeanor\Event\Subscriber;
@@ -30,7 +30,7 @@ use Demeanor\Event\TestRunEvent;
  *
  * @since   0.1
  */
-class MockeryExtension implements Subscriber
+class MockerySubscriber implements Subscriber
 {
     /**
      * {@inheritdoc}
