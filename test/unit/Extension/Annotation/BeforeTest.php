@@ -64,8 +64,8 @@ class BeforeTest extends AnnotationTestCase
             ->andReturn($this);
         $testcase->shouldReceive('before')
             ->once()
-            ->with([], [$this, 'cb']);
-        $annot = new Before(['method' => 'cb']);
+            ->with([$this, 'cb']);
+        $annot = new Before([], ['method' => 'cb']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
