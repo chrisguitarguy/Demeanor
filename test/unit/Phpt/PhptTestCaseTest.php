@@ -95,6 +95,16 @@ class PhptTestCaseTest
         Assert::assertTrue($result->successful());
     }
 
+    public function testFilenameReturnsTheRealpathedVersionOfThePhptFile()
+    {
+        Assert::assertEquals(realpath($this->getTestFile()), $this->createTestCase()->filename());
+    }
+
+    public function testLinenoAlwaysReturnsOne()
+    {
+        Assert::assertEquals(1, $this->createTestCase()->lineno());
+    }
+
     private function runTest(PhptTestCase $tc)
     {
         return $tc->run($this->emitter);
@@ -115,8 +125,13 @@ class PhptTestCaseTest
             ->andReturn($sections);
     }
 
+    private function getTestFile()
+    {
+        return __DIR__.'/../Fixtures/sample.phpt';
+    }
+
     private function createTestCase()
     {
-        return new PhptTestCase(__DIR__.'/../Fixtures/sample.phpt', $this->executor, $this->parser);
+        return new PhptTestCase($this->getTestFile(), $this->executor, $this->parser);
     }
 }

@@ -34,6 +34,7 @@ class SpecTestCase extends AbstractTestCase
 {
     private $name;
     private $testClosure;
+    private $reflection = null;
 
     public function __construct($name, \Closure $testClosure, array $before, array $after)
     {
@@ -45,6 +46,36 @@ class SpecTestCase extends AbstractTestCase
         foreach ($after as $cb) {
             $this->after($cb);
         }
+    }
+
+    /**
+     * Get the reflection function for the test closure itself.
+     *
+     * @since   0.2
+     * @return  ReflectionFunction
+     */
+    public function getReflectionFunction()
+    {
+        if (null === $this->reflection) {
+            $this->reflection = new \ReflectionFunction($this->testClosure);
+        }
+        return $this->reflection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function filename()
+    {
+        return $this->getReflectionFunction()->getFilename();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function lineno()
+    {
+        return $this->getReflectionFunction()->getStartLine();
     }
 
     /**

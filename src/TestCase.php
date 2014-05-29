@@ -124,4 +124,20 @@ interface TestCase
      * @return  void
      */
     public function after(callable $cb);
+
+    /**
+     * Get the absolute path of the file in which the test resides.
+     *
+     * @since   0.2
+     * @return  string
+     */
+    public function filename();
+
+    /**
+     * Get the line on which the test case is defined.
+     *
+     * @since   0.2
+     * @return  int
+     */
+    public function lineno();
 }

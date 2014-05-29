@@ -92,6 +92,22 @@ class UnitTestCase extends AbstractTestCase
     /**
      * {@inheritdoc}
      */
+    public function filename()
+    {
+        return $this->getReflectionMethod()->getFilename();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function lineno()
+    {
+        return $this->getReflectionMethod()->getStartLine();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function doRun(array $testArgs)
     {
         $this->getReflectionMethod()->invokeArgs($this->getTestObject(), $testArgs);

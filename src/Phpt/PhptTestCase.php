@@ -43,6 +43,22 @@ class PhptTestCase extends AbstractTestCase
 
     /**
      * {@inheritdoc}
+     */
+    public function filename()
+    {
+        return realpath($this->filename);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function lineno()
+    {
+        return 1; // PHPT tests are the whole file
+    }
+
+    /**
+     * {@inheritdoc}
      * Note: phpt tests don't use `$testArgs`
      */
     protected function doRun(array $testArgs)
