@@ -51,6 +51,24 @@ class DataProviderTest extends AnnotationTestCase
         $annot->attachSetup($testcase);
     }
 
+    public function testFirstPositionalArgumentIsTreatedAsMethodDataProvider()
+    {
+        $testcase = $this->testCaseMock();
+        $this->willHaveProvider($testcase);
+        $annot = new DataProvider(['isStatic'], []);
+
+        $annot->attachSetup($testcase);
+    }
+
+    public function testPositionalArgumentWillNotAddMethodIfItsInvalid()
+    {
+        $testcase = $this->testCaseMock();
+        $annot = new DataProvider(['notStatic'], []);
+        $this->willNotHaveProvider($testcase);
+
+        $annot->attachSetup($testcase);
+    }
+
     public function testInvalidFunctionIsNotTreatedAsAValidDataProvider()
     {
         $testcase = $this->testCaseMock();

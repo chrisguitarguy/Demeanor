@@ -77,7 +77,7 @@ class DefaultEmitterTest
     }
 
     /**
-     * @Provider(method="subscriberReturnProvider")
+     * @Provider("subscriberReturnProvider")
      */
     public function testAddSubscriberAddsCorrectListeners(TestContext $ctx, $listenerVal)
     {

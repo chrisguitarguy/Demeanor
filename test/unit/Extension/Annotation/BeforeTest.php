@@ -70,6 +70,30 @@ class BeforeTest extends AnnotationTestCase
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
 
+    public function testBeforeWithPositionalArgumentTreatsItHasMethod()
+    {
+        $testcase = $this->testCaseMock();
+        $testcase->shouldReceive('getTestObject')
+            ->once()
+            ->andReturn($this);
+        $testcase->shouldReceive('before')
+            ->once()
+            ->with([$this, 'cb']);
+        $annot = new Before(['cb'], []);
+
+        $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
+    }
+
+    public function testPositionalArgumentOfAMethodThatDoesNotExistDoesNotAddCallback()
+    {
+        $testcase = $this->testCaseMock();
+        $testcase->shouldReceive('before')
+            ->never();
+        $annot = new Before(['methodDoesNotExist'], []);
+
+        $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
+    }
+
     public function testFunctionThatDoesNotExistDoesNotAddBeforeCallback()
     {
         $testcase = $this->testCaseMock();

@@ -101,12 +101,20 @@ abstract class Annotation
      */
     protected function hasValidMethod(UnitTestCase $testcase, $requireStatic=false)
     {
-        if (!isset($this->args['method'])) {
+        $method = null;
+        if (isset($this->positional[0])) {
+            $method = $this->positional[0];
+            $this->args['method'] = $method;
+        } elseif (isset($this->args['method'])) {
+            $method = $this->args['method'];
+        }
+
+        if (!$method) {
             return false;
         }
 
         try {
-            $ref = $testcase->getReflectionClass()->getMethod($this->args['method']);
+            $ref = $testcase->getReflectionClass()->getMethod($method);
         } catch (\ReflectionException $e) {
             return false;
         }

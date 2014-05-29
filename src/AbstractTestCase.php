@@ -72,6 +72,7 @@ abstract class AbstractTestCase implements TestCase
             $this->caughtException($e);
             if (!$this->isExpected($e)) {
                 $result->addMessage('error', $e->getMessage());
+                $result->addMessage('error', $e->getTraceAsString());
                 $result->error();
                 $emitter->emit(Events::EXCEPTION_TESTCASE, new TestRunEvent($this, $context, $result));
             }

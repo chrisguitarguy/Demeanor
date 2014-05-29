@@ -70,6 +70,30 @@ class AfterTest extends AnnotationTestCase
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
 
+    public function testAfterWithPositionalArgumentTreatsItLikeMethodCallback()
+    {
+        $testcase = $this->testCaseMock();
+        $testcase->shouldReceive('getTestObject')
+            ->once()
+            ->andReturn($this);
+        $testcase->shouldReceive('after')
+            ->once()
+            ->with([$this, 'cb']);
+        $annot = new After(['cb'], []);
+
+        $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
+    }
+
+    public function testPositionalArgumentOfAMethodThatDoesNotExistDoesNotAddCallback()
+    {
+        $testcase = $this->testCaseMock();
+        $testcase->shouldReceive('after')
+            ->never();
+        $annot = new After(['methodDoesNotExist'], []);
+
+        $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
+    }
+
     public function testFunctionThatDoesNotExistDoesNotAddBeforeCallback()
     {
         $testcase = $this->testCaseMock();
