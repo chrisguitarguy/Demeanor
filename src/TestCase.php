@@ -32,6 +32,9 @@ use Demeanor\Event\Emitter;
  *     of its nested `describe` calls.
  *  3. A StoryTestCase might be a single scenario
  *
+ * Test cases know to run themselves and return a result. They also act as
+ * containers for metadata about the test.
+ *
  * @since   0.1
  */
 interface TestCase
