@@ -46,7 +46,10 @@ class or some function before and after each test case.
         }
 
         /**
+         * These two are the same:
          * @Before(method="setUp")
+         * @Before("setUp")
+         *
          * @Before(function="run_before_example")
          */
         public function testStuff()
@@ -77,6 +80,8 @@ in the test method. `Expect` requires the `exception` argument to work.
     class ExpectTest
     {
         /**
+         * These two are the same:
+         * @Expect("InvalidArgumentException")
          * @Expect(exception="InvalidArgumentException")
          */
         public function testDoingSomethingThrowsException(TestContext $ctx)

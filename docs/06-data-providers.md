@@ -10,7 +10,8 @@ Data providers are set on unit tests using the `@Provider` annotation.
 
 Data providers can be one of three types:
 
-1. A static method on the test class -- `@Provider(method="someMethod")`
+1. A static method on the test class -- `@Provider(method="someMethod")` or
+   `@Provider("someMethod")`
 2. A function -- `@Provider(function="a_provider_function")`
 3. Inline
     - `@Provider(data=["one", "two"])`
@@ -33,6 +34,8 @@ Data providers can be one of three types:
         }
 
         /**
+         * These two are the same:
+         * @Provider("aProvider")
          * @Provider(method="aProvider")
          */
         public function testWithMethodProvider(TestContext $ctx, $arg)
