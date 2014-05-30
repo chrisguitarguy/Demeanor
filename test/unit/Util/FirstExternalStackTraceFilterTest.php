@@ -33,7 +33,7 @@ class FirstExternalStackTraceFilterTest
         new FirstExternalStackTraceFilter(__NAMESPACE__.'\\ThisClassDoesNotExist');
     }
 
-    public function testFilterStackReturnsOnlyOnceFrame()
+    public function testFilterStackReturnsOnlyOneFrame()
     {
         $except = $this->createException();
         $result = $this->createFilter()->filterTrace($except);
@@ -43,7 +43,7 @@ class FirstExternalStackTraceFilterTest
         Assert::assertEquals(__FILE__, $result[0]['file']);
     }
 
-    public function testTraceToStringReturnsLineContainingExpectedFiledName()
+    public function testTraceToStringReturnsLineContainingExpectedFileName()
     {
         $except = $this->createException();
         $result = $this->createFilter()->traceToString($except);
