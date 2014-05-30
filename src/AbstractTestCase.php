@@ -24,6 +24,7 @@ namespace Demeanor;
 use Counterpart\Exception\AssertionFailed;
 use Demeanor\Event\Emitter;
 use Demeanor\Event\TestRunEvent;
+use Demeanor\Event\TestExceptionEvent;
 use Demeanor\Exception\TestFailed;
 use Demeanor\Exception\TestSkipped;
 use Demeanor\Exception\InvalidArgumentException;
@@ -67,14 +68,12 @@ abstract class AbstractTestCase implements TestCase
             $result->skip();
         } catch (AssertionFailed $e) {
             $result->fail();
-            $this->addAssertMessage($result, $e);
+            $emitter->emit(Events::ASSERTION_TESTCASE, new TestExceptionEvent($this, $context, $result, $e));
         } catch (\Exception $e) {
             $this->caughtException($e);
             if (!$this->isExpected($e)) {
-                $result->addMessage('error', $e->getMessage());
-                $result->addMessage('error', $e->getTraceAsString());
                 $result->error();
-                $emitter->emit(Events::EXCEPTION_TESTCASE, new TestRunEvent($this, $context, $result));
+                $emitter->emit(Events::EXCEPTION_TESTCASE, new TestExceptionEvent($this, $context, $result, $e));
             }
         }
 
@@ -232,26 +231,6 @@ abstract class AbstractTestCase implements TestCase
         }
 
         return $this->caughtException && $this->isExpected($this->caughtException);
-    }
-
-    protected function addAssertMessage(TestResult $result, AssertionFailed $e)
-    {
-        $trace = $e->getTrace();
-        array_shift($trace); // first item is always Counterpart\Assert::assertThat
-        $where = array_shift($trace);
-        if (!$where) {
-            return $result->addMessage('fail', $e->getMessage());
-        }
-
-        $file = isset($where['file']) ? $where['file'] : null;
-        $line = isset($where['line']) ? $where['line'] : null;
-
-        $result->addMessage('fail', sprintf(
-            '%s in %s, line %s',
-            $e->getMessage(),
-            $file ?: 'UNKNOWN',
-            $line ?: 'UNKNOWN'
-        ));
     }
 
     protected function doBeforeCallbacks(TestContext $ctx)
