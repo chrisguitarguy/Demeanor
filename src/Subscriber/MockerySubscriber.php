@@ -19,24 +19,37 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Requirement;
+namespace Demeanor\Subscriber;
 
-interface Requirement
+use Demeanor\Events;
+use Demeanor\Event\Subscriber;
+use Demeanor\Event\TestRunEvent;
+
+/**
+ * A subscriber that adds a call to `Mockery::close` after tests are completed.
+ *
+ * @since   0.1
+ */
+class MockerySubscriber implements Subscriber
 {
     /**
-     * Check to see if the requirement is met.
-     *
-     * @since   0.1
-     * @return  boolean
+     * {@inheritdoc}
      */
-    public function met();
+    public function getSubscribedEvents()
+    {
+        return [
+            Events::AFTER_TESTCASE  => 'closeMockery',
+        ];
+    }
 
-    /**
-     * Get a textual description of the requirement -- used to tell why a test
-     * was skipped if a requirement isn't met.
-     *
-     * @since   0.1
-     * @return  string
-     */
-    public function __toString();
+    public function closeMockery(TestRunEvent $event)
+    {
+        try {
+            \Mockery::close();
+        } catch (\Exception $e) {
+            $result = $event->getTestResult();
+            $result->fail();
+            $result->addMessage('fail', $e->getMessage());
+        }
+    }
 }

@@ -19,46 +19,43 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Annotation;
+namespace Demeanor\Annotation;
 
 use Demeanor\TestContext;
 use Demeanor\TestResult;
 use Demeanor\Unit\UnitTestCase;
 
 /**
- * Set the expected exeception for the test case.
+ * ABC for "callback" annotation that add before/after callbacks to the testcase
  *
  * @since   0.1
  */
-class Expect extends Annotation
+abstract class Callback extends Annotation
 {
     /**
      * {@inheritdoc}
      */
     public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
     {
-        if (isset($this->positional[0])) {
-            $this->args['exception'] = $this->positional[0];
+        $callable = null;
+        if ($this->hasValidMethod($testcase)) {
+            $callable = [$testcase->getTestObject(), $this->args['method']];
+        } elseif ($this->hasValidFunction($testcase)) {
+            $callable = $this->normalizeName($this->args['function']);
         }
 
-        if (!isset($this->args['exception'])) {
-            return;
+        if ($callable) {
+            $this->attachCallable($testcase, $callable);
         }
-
-        $this->args['exception'] = $this->normalizeName($this->args['exception']);
-
-        if (
-            !class_exists($this->args['exception']) &&
-            !interface_exists($this->args['exception'])
-        ) {
-            $result->error();
-            $result->addMessage('error', sprintf(
-                'Expected exception class "%s" does not exist',
-                $this->args['exception']
-            ));
-            return;
-        }
-
-        $testcase->willThrow($this->args['exception']);
     }
+
+    /**
+     * Actually attach the callback to the test case.
+     *
+     * @since   0.1
+     * @param   UnitTestCase $testcase
+     * @param   callable $callable
+     * @return  void
+     */
+    abstract protected function attachCallable(UnitTestCase $testcase, callable $callable);
 }

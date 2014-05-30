@@ -19,15 +19,19 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Requirement;
+namespace Demeanor\Requirement;
 
-class ExtensionRequirement implements Requirement
+class VersionRequirement implements Requirement
 {
-    private $extensionName;
+    private $requiredVersion;
+    private $foundVersion;
+    private $softwareName;
 
-    public function __construct($extensionName)
+    public function __construct($requiredVersion, $foundVersion=null, $softwareName=null)
     {
-        $this->extensionName = $extensionName;
+        $this->requiredVersion = $requiredVersion;
+        $this->foundVersion = $foundVersion ?: phpversion();
+        $this->softwareName = $softwareName ?: 'PHP';
     }
 
     /**
@@ -35,7 +39,7 @@ class ExtensionRequirement implements Requirement
      */
     public function met()
     {
-        return extension_loaded($this->extensionName);
+        return version_compare($this->foundVersion, $this->requiredVersion, '>=');
     }
 
     /**
@@ -43,6 +47,6 @@ class ExtensionRequirement implements Requirement
      */
     public function __toString()
     {
-        return sprintf('extension %s is required', $this->extensionName);
+        return sprintf('%s >= %s required', $this->softwareName, $this->requiredVersion);
     }
 }

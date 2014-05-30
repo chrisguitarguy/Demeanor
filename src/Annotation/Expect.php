@@ -19,41 +19,46 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Annotation;
+namespace Demeanor\Annotation;
 
 use Demeanor\TestContext;
 use Demeanor\TestResult;
 use Demeanor\Unit\UnitTestCase;
-use Demeanor\Extension\Requirement\VersionRequirement;
-use Demeanor\Extension\Requirement\RegexRequirement;
-use Demeanor\Extension\Requirement\ExtensionRequirement;
 
 /**
  * Set the expected exeception for the test case.
  *
  * @since   0.1
  */
-class Requirement extends Annotation
+class Expect extends Annotation
 {
     /**
      * {@inheritdoc}
      */
     public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
     {
-        if (!isset($context['requirements'])) {
+        if (isset($this->positional[0])) {
+            $this->args['exception'] = $this->positional[0];
+        }
+
+        if (!isset($this->args['exception'])) {
             return;
         }
 
-        if (isset($this->args['php'])) {
-            $context['requirements']->add(new VersionRequirement($this->args['php']));
+        $this->args['exception'] = $this->normalizeName($this->args['exception']);
+
+        if (
+            !class_exists($this->args['exception']) &&
+            !interface_exists($this->args['exception'])
+        ) {
+            $result->error();
+            $result->addMessage('error', sprintf(
+                'Expected exception class "%s" does not exist',
+                $this->args['exception']
+            ));
+            return;
         }
 
-        if (isset($this->args['os'])) {
-            $context['requirements']->add(new RegexRequirement($this->args['os'], PHP_OS, 'operating system'));
-        }
-
-        if (isset($this->args['extension'])) {
-            $context['requirements']->add(new ExtensionRequirement($this->args['extension']));
-        }
+        $testcase->willThrow($this->args['exception']);
     }
 }

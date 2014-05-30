@@ -19,7 +19,7 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Annotation;
+namespace Demeanor\Annotation;
 
 class RequirementTest extends AnnotationTestCase
 {
@@ -37,10 +37,10 @@ class RequirementTest extends AnnotationTestCase
 
     public function testAnnotationWithCorrectArgumentsAddsRequirements()
     {
-        $reqs = \Mockery::mock('Demeanor\\Extension\\Requirement\\Requirements')->makePartial();
+        $reqs = \Mockery::mock('Demeanor\\Requirement\\Requirements')->makePartial();
         $reqs->shouldReceive('add')
             ->atLeast(1)
-            ->with(\Mockery::type('Demeanor\\Extension\\Requirement\\Requirement'));
+            ->with(\Mockery::type('Demeanor\\Requirement\\Requirement'));
         $ctx = $this->testContextMock();
         $ctx->shouldReceive('offsetExists')
             ->once()

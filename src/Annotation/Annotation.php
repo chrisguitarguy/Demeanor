@@ -19,7 +19,7 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Annotation;
+namespace Demeanor\Annotation;
 
 use Demeanor\TestContext;
 use Demeanor\TestResult;

@@ -19,29 +19,40 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Requirement;
+namespace Demeanor\Annotation;
 
-use Counterpart\Assert;
-
-class ExtensionRequirementTest
+abstract class AnnotationTestCase
 {
-    public function testMetReturnsFalseWhenRequiredExtensionIsNotLoaded()
+    protected function testCaseMock()
     {
-        $req = new ExtensionRequirement('does_not_exist');
-        Assert::assertFalse($req->met());
+        return \Mockery::mock('Demeanor\\Unit\\UnitTestCase')
+            ->shouldReceive('getReflectionClass')
+            ->andReturn($this->reflectionClass())
+            ->getMock();
     }
 
-    public function testMetReturnsTrueWhenRequiredExtensionIsLoaded()
+    protected function testContextMock()
     {
-        $req = new ExtensionRequirement('spl');
-        Assert::assertTrue($req->met());
+        return \Mockery::mock('Demeanor\\TestContext');
     }
 
-    public function testDescriptionContainsInformationAboutTheRequiredExtension()
+    protected function testResultMock()
     {
-        $req = new ExtensionRequirement('nope');
-        $desc = (string)$req;
+        return \Mockery::mock('Demeanor\\TestResult');
+    }
 
-        Assert::assertStringContains('extension nope', $desc, 'requirement description should contain extension name');
+    protected function reflectionClass()
+    {
+        return new \ReflectionClass($this);
+    }
+
+    public function cb()
+    {
+        
+    }
+
+    private function privateCb()
+    {
+        
     }
 }

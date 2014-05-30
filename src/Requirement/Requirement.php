@@ -19,40 +19,24 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Annotation;
+namespace Demeanor\Requirement;
 
-abstract class AnnotationTestCase
+interface Requirement
 {
-    protected function testCaseMock()
-    {
-        return \Mockery::mock('Demeanor\\Unit\\UnitTestCase')
-            ->shouldReceive('getReflectionClass')
-            ->andReturn($this->reflectionClass())
-            ->getMock();
-    }
+    /**
+     * Check to see if the requirement is met.
+     *
+     * @since   0.1
+     * @return  boolean
+     */
+    public function met();
 
-    protected function testContextMock()
-    {
-        return \Mockery::mock('Demeanor\\TestContext');
-    }
-
-    protected function testResultMock()
-    {
-        return \Mockery::mock('Demeanor\\TestResult');
-    }
-
-    protected function reflectionClass()
-    {
-        return new \ReflectionClass($this);
-    }
-
-    public function cb()
-    {
-        
-    }
-
-    private function privateCb()
-    {
-        
-    }
+    /**
+     * Get a textual description of the requirement -- used to tell why a test
+     * was skipped if a requirement isn't met.
+     *
+     * @since   0.1
+     * @return  string
+     */
+    public function __toString();
 }

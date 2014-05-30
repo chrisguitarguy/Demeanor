@@ -19,34 +19,29 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Requirement;
+namespace Demeanor\Requirement;
 
-class VersionRequirement implements Requirement
+use Counterpart\Assert;
+
+class ExtensionRequirementTest
 {
-    private $requiredVersion;
-    private $foundVersion;
-    private $softwareName;
-
-    public function __construct($requiredVersion, $foundVersion=null, $softwareName=null)
+    public function testMetReturnsFalseWhenRequiredExtensionIsNotLoaded()
     {
-        $this->requiredVersion = $requiredVersion;
-        $this->foundVersion = $foundVersion ?: phpversion();
-        $this->softwareName = $softwareName ?: 'PHP';
+        $req = new ExtensionRequirement('does_not_exist');
+        Assert::assertFalse($req->met());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function met()
+    public function testMetReturnsTrueWhenRequiredExtensionIsLoaded()
     {
-        return version_compare($this->foundVersion, $this->requiredVersion, '>=');
+        $req = new ExtensionRequirement('spl');
+        Assert::assertTrue($req->met());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
+    public function testDescriptionContainsInformationAboutTheRequiredExtension()
     {
-        return sprintf('%s >= %s required', $this->softwareName, $this->requiredVersion);
+        $req = new ExtensionRequirement('nope');
+        $desc = (string)$req;
+
+        Assert::assertStringContains('extension nope', $desc, 'requirement description should contain extension name');
     }
 }
