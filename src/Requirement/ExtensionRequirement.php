@@ -19,24 +19,30 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Requirement;
+namespace Demeanor\Requirement;
 
-interface Requirement
+class ExtensionRequirement implements Requirement
 {
-    /**
-     * Check to see if the requirement is met.
-     *
-     * @since   0.1
-     * @return  boolean
-     */
-    public function met();
+    private $extensionName;
+
+    public function __construct($extensionName)
+    {
+        $this->extensionName = $extensionName;
+    }
 
     /**
-     * Get a textual description of the requirement -- used to tell why a test
-     * was skipped if a requirement isn't met.
-     *
-     * @since   0.1
-     * @return  string
+     * {@inheritdoc}
      */
-    public function __toString();
+    public function met()
+    {
+        return extension_loaded($this->extensionName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return sprintf('extension %s is required', $this->extensionName);
+    }
 }

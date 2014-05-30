@@ -19,7 +19,7 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Requirement;
+namespace Demeanor\Requirement;
 
 use Counterpart\Assert;
 
@@ -67,12 +67,12 @@ class RequirementsTest
         $reqs->add($req);
 
         foreach ($reqs as $r) {
-            Assert::assertInstanceOf('Demeanor\\Extension\\Requirement\\Requirement', $r);
+            Assert::assertInstanceOf('Demeanor\\Requirement\\Requirement', $r);
         }
     }
 
     private function requirement()
     {
-        return \Mockery::mock('Demeanor\\Extension\\Requirement\\Requirement');
+        return \Mockery::mock('Demeanor\\Requirement\\Requirement');
     }
 }

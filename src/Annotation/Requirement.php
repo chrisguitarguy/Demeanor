@@ -24,9 +24,9 @@ namespace Demeanor\Annotation;
 use Demeanor\TestContext;
 use Demeanor\TestResult;
 use Demeanor\Unit\UnitTestCase;
-use Demeanor\Extension\Requirement\VersionRequirement;
-use Demeanor\Extension\Requirement\RegexRequirement;
-use Demeanor\Extension\Requirement\ExtensionRequirement;
+use Demeanor\Requirement\VersionRequirement;
+use Demeanor\Requirement\RegexRequirement;
+use Demeanor\Requirement\ExtensionRequirement;
 
 /**
  * Set the expected exeception for the test case.

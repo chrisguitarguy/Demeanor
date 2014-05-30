@@ -26,7 +26,7 @@ use Demeanor\Event\DefaultEmitter;
 use Demeanor\Event\TestCaseEvent;
 use Demeanor\Subscriber\MockerySubscriber;
 use Demeanor\Subscriber\AnnotationSubscriber;
-use Demeanor\Extension\Requirement\RequirementExtension;
+use Demeanor\Subscriber\RequirementSubscriber;
 use Demeanor\Config\Configuration;
 use Demeanor\Exception\ConfigurationException;
 
@@ -121,7 +121,7 @@ final class Demeanor
         $subscribers = array_merge([
             new MockerySubscriber(),
             new AnnotationSubscriber(),
-            new RequirementExtension(),
+            new RequirementSubscriber(),
         ], $this->config->getEventSubscribers());
 
         foreach ($subscribers as $sub) {

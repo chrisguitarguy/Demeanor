@@ -19,34 +19,24 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Requirement;
+namespace Demeanor\Requirement;
 
-class RegexRequirement implements Requirement
+interface Requirement
 {
-    private $regexPattern;
-    private $toCheck;
-    private $what;
-
-    public function __construct($regexPattern, $toCheck, $what)
-    {
-        $this->regexPattern = $regexPattern;
-        $this->toCheck = $toCheck;
-        $this->what = $what;
-    }
+    /**
+     * Check to see if the requirement is met.
+     *
+     * @since   0.1
+     * @return  boolean
+     */
+    public function met();
 
     /**
-     * {@inheritdoc}
+     * Get a textual description of the requirement -- used to tell why a test
+     * was skipped if a requirement isn't met.
+     *
+     * @since   0.1
+     * @return  string
      */
-    public function met()
-    {
-        return (bool)preg_match($this->regexPattern, $this->toCheck);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return sprintf('%s matching %s is required', $this->what, $this->regexPattern);
-    }
+    public function __toString();
 }

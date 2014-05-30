@@ -19,14 +19,15 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Requirement;
+namespace Demeanor\Subscriber;
 
 use Demeanor\TestCase;
 use Demeanor\Events;
 use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestRunEvent;
+use Demeanor\Requirement\Requirements;
 
-class RequirementExtension implements Subscriber
+class RequirementSubscriber implements Subscriber
 {
     /**
      * {@inheritdoc}

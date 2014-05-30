@@ -19,29 +19,34 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Requirement;
+namespace Demeanor\Requirement;
 
-use Counterpart\Assert;
-
-class ExtensionRequirementTest
+class RegexRequirement implements Requirement
 {
-    public function testMetReturnsFalseWhenRequiredExtensionIsNotLoaded()
+    private $regexPattern;
+    private $toCheck;
+    private $what;
+
+    public function __construct($regexPattern, $toCheck, $what)
     {
-        $req = new ExtensionRequirement('does_not_exist');
-        Assert::assertFalse($req->met());
+        $this->regexPattern = $regexPattern;
+        $this->toCheck = $toCheck;
+        $this->what = $what;
     }
 
-    public function testMetReturnsTrueWhenRequiredExtensionIsLoaded()
+    /**
+     * {@inheritdoc}
+     */
+    public function met()
     {
-        $req = new ExtensionRequirement('spl');
-        Assert::assertTrue($req->met());
+        return (bool)preg_match($this->regexPattern, $this->toCheck);
     }
 
-    public function testDescriptionContainsInformationAboutTheRequiredExtension()
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
     {
-        $req = new ExtensionRequirement('nope');
-        $desc = (string)$req;
-
-        Assert::assertStringContains('extension nope', $desc, 'requirement description should contain extension name');
+        return sprintf('%s matching %s is required', $this->what, $this->regexPattern);
     }
 }
