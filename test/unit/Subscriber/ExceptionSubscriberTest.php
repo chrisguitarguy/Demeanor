@@ -54,7 +54,13 @@ class ExceptionSubscriberTest
 
     public function testOnAssertionErrorAddsMessagesToTestResult()
     {
-        $event = $this->createEvent();
+        try {
+            Assert::assertFalse(true);
+        } catch (\Exception $e) {
+            // pass
+        }
+
+        $event = $this->createEvent($e);
         $result = $event->getTestResult();
 
         $this->subscriber->onAssertionError($event);
@@ -64,7 +70,7 @@ class ExceptionSubscriberTest
         Assert::assertGreaterThan(0, count($msg['fail']));
     }
 
-    private function createEvent()
+    private function createEvent(\Exception $e=null)
     {
         $tc = $this->createTestCase();
         $result = new DefaultTestResult();
@@ -72,7 +78,7 @@ class ExceptionSubscriberTest
             $tc,
             new DefaultTestContext($tc, $result),
             $result,
-            new \Exception('broken')
+            $e ?: new \Exception('broken')
         );
     }
 
