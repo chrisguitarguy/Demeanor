@@ -24,6 +24,8 @@ namespace Demeanor\Subscriber;
 use Demeanor\Events;
 use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestExceptionEvent;
+use Demeanor\Util\StackTraceFilter;
+use Demeanor\Util\FirstExternalStackTraceFilter;
 
 /**
  * Listens in for assertion failures and unexpected exceptions and adds pretty
@@ -34,6 +36,20 @@ use Demeanor\Event\TestExceptionEvent;
 class ExceptionSubscriber implements Subscriber
 {
     private $assertReflect = null;
+
+    private $assertionFilter;
+
+    /**
+     * Constructor. Optionally set up StackTraceFilter objects.
+     *
+     * @since   0.2
+     * @param   StackTraceFilter $assertionFilter
+     * @return  void
+     */
+    public function __construct(StackTraceFilter $assertionFilter=null)
+    {
+        $this->assertionFilter = $assertionFilter ?: new FirstExternalStackTraceFilter('Counterpart\\Assert');
+    }
 
     /**
      * {@inheritdoc}
@@ -62,35 +78,10 @@ class ExceptionSubscriber implements Subscriber
     {
         $except = $event->getException();
         $result = $event->getTestResult();
-        $where = $this->locateAssertion($except);
         $result->addMessage('fail', sprintf(
             '%s, %s',
             $except->getMessage(),
-            $where ?: 'Unknown Location'
+            $this->assertionFilter->traceToString($except) ?: 'Unknown Location'
         ));
-    }
-
-    private function locateAssertion(\Exception $e)
-    {
-        $fn = dirname($this->getCounterpartReflection()->getFileName());
-
-        $loc = null;
-        foreach ($e->getTrace() as $frame) {
-            if (isset($frame['line']) && isset($frame['file']) && dirname($frame['file']) != $fn) {
-                $loc = sprintf('%s:%s', $frame['file'], $frame['line']);
-                break;
-            }
-        }
-
-        return $loc;
-    }
-
-    private function getCounterpartReflection()
-    {
-        if (null === $this->assertReflect) {
-            $this->assertReflect = new \ReflectionClass('Counterpart\\Assert');
-        }
-
-        return $this->assertReflect;
     }
 }
