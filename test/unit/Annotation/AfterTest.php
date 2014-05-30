@@ -19,19 +19,19 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Annotation;
+namespace Demeanor\Annotation;
 
 /**
- * TODO whenever data providers happen this and AfterTest can be combined
+ * TODO whenever data providers happen this and BeforeTest can be combined
  */
-class BeforeTest extends AnnotationTestCase
+class AfterTest extends AnnotationTestCase
 {
     public function testNoValidCallablesDoesNotAttachBeforeCallback()
     {
         $testcase = $this->testCaseMock();
-        $testcase->shouldReceive('before')
+        $testcase->shouldReceive('after')
             ->never();
-        $annot = new Before([], []);
+        $annot = new After([], []);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -39,9 +39,9 @@ class BeforeTest extends AnnotationTestCase
     public function testMethodWithPrivateMethodCallbackDoesNotAddBeforeCallback()
     {
         $testcase = $this->testCaseMock();
-        $testcase->shouldReceive('before')
+        $testcase->shouldReceive('after')
             ->never();
-        $annot = new Before([], ['method' => 'privateCb']);
+        $annot = new After([], ['method' => 'privateCb']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -49,9 +49,9 @@ class BeforeTest extends AnnotationTestCase
     public function testMethodThatDoesNotExistDoesNotAddBeforeCallback()
     {
         $testcase = $this->testCaseMock();
-        $testcase->shouldReceive('before')
+        $testcase->shouldReceive('after')
             ->never();
-        $annot = new Before([], ['method' => 'methodDoesNotExist']);
+        $annot = new After([], ['method' => 'methodDoesNotExist']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -62,24 +62,24 @@ class BeforeTest extends AnnotationTestCase
         $testcase->shouldReceive('getTestObject')
             ->once()
             ->andReturn($this);
-        $testcase->shouldReceive('before')
+        $testcase->shouldReceive('after')
             ->once()
             ->with([$this, 'cb']);
-        $annot = new Before([], ['method' => 'cb']);
+        $annot = new After([], ['method' => 'cb']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
 
-    public function testBeforeWithPositionalArgumentTreatsItHasMethod()
+    public function testAfterWithPositionalArgumentTreatsItLikeMethodCallback()
     {
         $testcase = $this->testCaseMock();
         $testcase->shouldReceive('getTestObject')
             ->once()
             ->andReturn($this);
-        $testcase->shouldReceive('before')
+        $testcase->shouldReceive('after')
             ->once()
             ->with([$this, 'cb']);
-        $annot = new Before(['cb'], []);
+        $annot = new After(['cb'], []);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -87,9 +87,9 @@ class BeforeTest extends AnnotationTestCase
     public function testPositionalArgumentOfAMethodThatDoesNotExistDoesNotAddCallback()
     {
         $testcase = $this->testCaseMock();
-        $testcase->shouldReceive('before')
+        $testcase->shouldReceive('after')
             ->never();
-        $annot = new Before(['methodDoesNotExist'], []);
+        $annot = new After(['methodDoesNotExist'], []);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -97,9 +97,9 @@ class BeforeTest extends AnnotationTestCase
     public function testFunctionThatDoesNotExistDoesNotAddBeforeCallback()
     {
         $testcase = $this->testCaseMock();
-        $testcase->shouldReceive('before')
+        $testcase->shouldReceive('after')
             ->never();
-        $annot = new Before([], ['function' => 'function_does_not_exist']);
+        $annot = new After([], ['function' => 'function_does_not_exist']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }
@@ -107,10 +107,10 @@ class BeforeTest extends AnnotationTestCase
     public function testValidFuncionAddsBeforeCallback()
     {
         $testcase = $this->testCaseMock();
-        $testcase->shouldReceive('before')
+        $testcase->shouldReceive('after')
             ->once()
             ->with('is_array');
-        $annot = new Before([], ['function' => 'is_array']);
+        $annot = new After([], ['function' => 'is_array']);
 
         $annot->attachRun($testcase, $this->testContextMock(), $this->testResultMock());
     }

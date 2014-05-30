@@ -19,41 +19,43 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Annotation;
+namespace Demeanor\Annotation;
 
 use Demeanor\TestContext;
 use Demeanor\TestResult;
 use Demeanor\Unit\UnitTestCase;
-use Demeanor\Extension\Requirement\VersionRequirement;
-use Demeanor\Extension\Requirement\RegexRequirement;
-use Demeanor\Extension\Requirement\ExtensionRequirement;
 
 /**
- * Set the expected exeception for the test case.
+ * ABC for "callback" annotation that add before/after callbacks to the testcase
  *
  * @since   0.1
  */
-class Requirement extends Annotation
+abstract class Callback extends Annotation
 {
     /**
      * {@inheritdoc}
      */
     public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
     {
-        if (!isset($context['requirements'])) {
-            return;
+        $callable = null;
+        if ($this->hasValidMethod($testcase)) {
+            $callable = [$testcase->getTestObject(), $this->args['method']];
+        } elseif ($this->hasValidFunction($testcase)) {
+            $callable = $this->normalizeName($this->args['function']);
         }
 
-        if (isset($this->args['php'])) {
-            $context['requirements']->add(new VersionRequirement($this->args['php']));
-        }
-
-        if (isset($this->args['os'])) {
-            $context['requirements']->add(new RegexRequirement($this->args['os'], PHP_OS, 'operating system'));
-        }
-
-        if (isset($this->args['extension'])) {
-            $context['requirements']->add(new ExtensionRequirement($this->args['extension']));
+        if ($callable) {
+            $this->attachCallable($testcase, $callable);
         }
     }
+
+    /**
+     * Actually attach the callback to the test case.
+     *
+     * @since   0.1
+     * @param   UnitTestCase $testcase
+     * @param   callable $callable
+     * @return  void
+     */
+    abstract protected function attachCallable(UnitTestCase $testcase, callable $callable);
 }

@@ -19,40 +19,22 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Annotation;
+namespace Demeanor\Annotation;
 
-abstract class AnnotationTestCase
+use Demeanor\Unit\UnitTestCase;
+
+/**
+ * Adds before callbacks to a test case.
+ *
+ * @since   0.1
+ */
+class Before extends Callback
 {
-    protected function testCaseMock()
+    /**
+     * {@inheritdoc}
+     */
+    protected function attachCallable(UnitTestCase $testcase, callable $callable)
     {
-        return \Mockery::mock('Demeanor\\Unit\\UnitTestCase')
-            ->shouldReceive('getReflectionClass')
-            ->andReturn($this->reflectionClass())
-            ->getMock();
-    }
-
-    protected function testContextMock()
-    {
-        return \Mockery::mock('Demeanor\\TestContext');
-    }
-
-    protected function testResultMock()
-    {
-        return \Mockery::mock('Demeanor\\TestResult');
-    }
-
-    protected function reflectionClass()
-    {
-        return new \ReflectionClass($this);
-    }
-
-    public function cb()
-    {
-        
-    }
-
-    private function privateCb()
-    {
-        
+        $testcase->before($callable);
     }
 }

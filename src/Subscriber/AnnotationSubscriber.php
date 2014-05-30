@@ -19,7 +19,7 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Annotation;
+namespace Demeanor\Subscriber;
 
 use Chrisguitarguy\Annotation\Parser;
 use Chrisguitarguy\Annotation\ParserInterface;
@@ -31,7 +31,7 @@ use Demeanor\Event\TestRunEvent;
 use Demeanor\Event\TestCaseEvent;
 use Demeanor\Unit\UnitTestCase;
 
-class AnnotationExtension implements Subscriber
+class AnnotationSubscriber implements Subscriber
 {
     private $parser;
     private $collection;
@@ -135,12 +135,13 @@ class AnnotationExtension implements Subscriber
 
     private function createCollection()
     {
+        $ns = 'Demeanor\\Annotation\\';
         return new AnnotationCollection([
-            'Before'    => __NAMESPACE__ . '\\Before',
-            'After'     => __NAMESPACE__ . '\\After',
-            'Expect'    => __NAMESPACE__ . '\\Expect',
-            'Require'   => __NAMESPACE__ . '\\Requirement',
-            'Provider'  => __NAMESPACE__ . '\\DataProvider',
+            'Before'    => "{$ns}Before",
+            'After'     => "{$ns}After",
+            'Expect'    => "{$ns}Expect",
+            'Require'   => "{$ns}Requirement",
+            'Provider'  => "{$ns}DataProvider",
         ]);
     }
 }

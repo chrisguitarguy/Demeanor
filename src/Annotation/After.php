@@ -19,7 +19,7 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Extension\Annotation;
+namespace Demeanor\Annotation;
 
 use Demeanor\Unit\UnitTestCase;
 
@@ -28,13 +28,13 @@ use Demeanor\Unit\UnitTestCase;
  *
  * @since   0.1
  */
-class Before extends Callback
+class After extends Callback
 {
     /**
      * {@inheritdoc}
      */
     protected function attachCallable(UnitTestCase $testcase, callable $callable)
     {
-        $testcase->before($callable);
+        $testcase->after($callable);
     }
 }
