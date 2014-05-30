@@ -45,10 +45,10 @@ class AbstractStackTraceFilterTest
     /**
      * @Expect("Demeanor\Exception\DemeanorException")
      */
-    public function testTraceAsStringThrowsWhenGivenNonArrayOrException()
+    public function testTraceToStringThrowsWhenGivenNonArrayOrException()
     {
         $this->shouldNotFilter();
-        $this->filter->traceAsString('not an array');
+        $this->filter->traceToString('not an array');
     }
 
     public function testFilterTraceWithArrayProxiesToDoFilter()
@@ -65,19 +65,19 @@ class AbstractStackTraceFilterTest
         Assert::assertType('array', $this->filter->filterTrace(new \Exception('broken')));
     }
 
-    public function testTraceAsStringWithArrayReturnsString()
+    public function testTraceToStringWithArrayReturnsString()
     {
         $this->shouldFilter();
-        Assert::assertType('string', $this->filter->traceAsString([
+        Assert::assertType('string', $this->filter->traceToString([
             ['function' => 'is_array'],
             ['file' => 'one']
         ]));
     }
 
-    public function testTraceAsStringWithExceptionReturnsString()
+    public function testTraceToStringWithExceptionReturnsString()
     {
         $this->shouldFilter();
-        Assert::assertType('string', $this->filter->traceAsString(new \Exception('broken')));
+        Assert::assertType('string', $this->filter->traceToString(new \Exception('broken')));
     }
 
     private function shouldFilter()

@@ -41,7 +41,7 @@ abstract class AbstractStackTraceFilter implements StackTraceFilter
     /**
      * {@inheritdoc}
      */
-    public function traceAsString($trace, $eol=PHP_EOL)
+    public function traceToString($trace, $eol=PHP_EOL)
     {
         $rv = '';
         foreach ($this->filterTrace($trace) as $frame) {
@@ -57,7 +57,7 @@ abstract class AbstractStackTraceFilter implements StackTraceFilter
             );
         }
 
-        return $rv;
+        return trim($rv);
     }
 
     /**
