@@ -26,6 +26,7 @@ use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestExceptionEvent;
 use Demeanor\Util\StackTraceFilter;
 use Demeanor\Util\FirstExternalStackTraceFilter;
+use Demeanor\Util\FileStackTraceFilter;
 
 /**
  * Listens in for assertion failures and unexpected exceptions and adds pretty
@@ -38,6 +39,7 @@ class ExceptionSubscriber implements Subscriber
     private $assertReflect = null;
 
     private $assertionFilter;
+    private $exceptionFilter;
 
     /**
      * Constructor. Optionally set up StackTraceFilter objects.
@@ -46,9 +48,10 @@ class ExceptionSubscriber implements Subscriber
      * @param   StackTraceFilter $assertionFilter
      * @return  void
      */
-    public function __construct(StackTraceFilter $assertionFilter=null)
+    public function __construct(StackTraceFilter $assertionFilter=null, StackTraceFilter $exceptionFilter=null)
     {
         $this->assertionFilter = $assertionFilter ?: new FirstExternalStackTraceFilter('Counterpart\\Assert');
+        $this->exceptionFilter = $exceptionFilter ?: new FileStackTraceFilter();
     }
 
     /**
@@ -71,7 +74,7 @@ class ExceptionSubscriber implements Subscriber
             get_class($except),
             $except->getMessage()
         ));
-        $result->addMessage('error', $except->getTraceAsString());
+        $result->addMessage('error', $this->exceptionFilter->traceToString($except));
     }
 
     public function onAssertionError(TestExceptionEvent $event)
