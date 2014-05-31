@@ -53,6 +53,11 @@ final class Events
     const EXCEPTION_TESTCASE    = 'testcase.exception';
 
     /**
+     * Dispatched when assertion failed exception occurs.
+     */
+    const ASSERTION_TESTCASE    = 'testcase.assertion';
+
+    /**
      * Run from the TestSuite before TestCase::run is invoked. This can't be used
      * to change the result of an individual test, but it's useful for doing
      * things like modifying the test case before it's run (like setting up data
