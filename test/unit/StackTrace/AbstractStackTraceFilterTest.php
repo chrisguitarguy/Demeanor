@@ -19,7 +19,7 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Util;
+namespace Demeanor\StackTrace;
 
 use Counterpart\Assert;
 
@@ -29,7 +29,7 @@ class AbstractStackTraceFilterTest
 
     public function __construct()
     {
-        $this->filter = \Mockery::mock('Demeanor\\Util\\AbstractStackTraceFilter[doFilter]');
+        $this->filter = \Mockery::mock('Demeanor\\StackTrace\\AbstractStackTraceFilter[doFilter]');
         $this->filter->shouldAllowMockingProtectedMethods();
     }
 

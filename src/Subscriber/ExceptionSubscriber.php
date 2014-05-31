@@ -24,9 +24,9 @@ namespace Demeanor\Subscriber;
 use Demeanor\Events;
 use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestExceptionEvent;
-use Demeanor\Util\StackTraceFilter;
-use Demeanor\Util\FirstExternalStackTraceFilter;
-use Demeanor\Util\FileStackTraceFilter;
+use Demeanor\StackTrace\StackTraceFilter;
+use Demeanor\StackTrace\FirstExternalStackTraceFilter;
+use Demeanor\StackTrace\FileStackTraceFilter;
 
 /**
  * Listens in for assertion failures and unexpected exceptions and adds pretty

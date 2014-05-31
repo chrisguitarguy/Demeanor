@@ -19,7 +19,7 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Util;
+namespace Demeanor\StackTrace;
 
 /**
  * Allows filtering of a stack trace (from an exception debug_backtrace) into
