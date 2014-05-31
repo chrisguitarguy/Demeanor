@@ -70,8 +70,9 @@ class ExceptionSubscriber implements Subscriber
         $except = $event->getException();
         $result = $event->getTestResult();
         $result->addMessage('error', sprintf(
-            'Caught unexpected %s exception: %s',
+            'Caught unexpected %s(%s): %s',
             get_class($except),
+            $except->getCode(),
             $except->getMessage()
         ));
         $result->addMessage('error', $this->exceptionFilter->traceToString($except));
