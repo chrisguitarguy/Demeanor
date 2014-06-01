@@ -25,7 +25,6 @@ use Demeanor\Event\Emitter;
 use Demeanor\Event\TestCaseEvent;
 use Demeanor\Event\TestSuiteEvent;
 use Demeanor\Loader\Loader;
-use Demeanor\Output\OutputWriter;
 
 /**
  * ABC for test suites.
@@ -66,7 +65,7 @@ abstract class AbstractTestSuite implements TestSuite
     /**
      * {@inheritdoc}
      */
-    public function run(Emitter $emitter, OutputWriter $output)
+    public function run(Emitter $emitter)
     {
         $this->bootstrap();
         $tests = $this->load();

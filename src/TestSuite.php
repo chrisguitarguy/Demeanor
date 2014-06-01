@@ -22,7 +22,6 @@
 namespace Demeanor;
 
 use Demeanor\Event\Emitter;
-use Demeanor\Output\OutputWriter;
 
 /**
  * Represents a test suite (collection of test cases).
@@ -63,5 +62,5 @@ interface TestSuite
      * @param   OutputWriter $output
      * @return  ResultSet
      */
-    public function run(Emitter $emitter, OutputWriter $output);
+    public function run(Emitter $emitter);
 }
