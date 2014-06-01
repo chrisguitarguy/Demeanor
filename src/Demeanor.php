@@ -28,6 +28,7 @@ use Demeanor\Subscriber\MockerySubscriber;
 use Demeanor\Subscriber\AnnotationSubscriber;
 use Demeanor\Subscriber\RequirementSubscriber;
 use Demeanor\Subscriber\ExceptionSubscriber;
+use Demeanor\Subscriber\ResultWritingSubscriber;
 use Demeanor\Config\Configuration;
 use Demeanor\Output\OutputWriter;
 use Demeanor\Exception\ConfigurationException;
@@ -125,6 +126,7 @@ final class Demeanor
             new AnnotationSubscriber(),
             new RequirementSubscriber(),
             new ExceptionSubscriber(),
+            new ResultWritingSubscriber($this->outputWriter),
         ], $this->config->getEventSubscribers());
 
         foreach ($subscribers as $sub) {

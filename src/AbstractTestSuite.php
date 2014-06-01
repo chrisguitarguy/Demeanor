@@ -68,8 +68,6 @@ abstract class AbstractTestSuite implements TestSuite
      */
     public function run(Emitter $emitter, OutputWriter $output)
     {
-        $output->writeln(sprintf('Running test suite "%s"', $this->name()));
-
         $this->bootstrap();
         $tests = $this->load();
 
@@ -97,15 +95,12 @@ abstract class AbstractTestSuite implements TestSuite
 
         $emitter->emit(Events::AFTER_TESTSUITE, new TestSuiteEVent($this, $results));
 
-        $output->writeln('');
-
         return $results;
     }
 
     protected function runTestCase(TestCase $test, Emitter $emitter, OutputWriter $output, array $testArgs=[])
     {
         $result = $test->run($emitter, $testArgs);
-        $output->writeResult($test, $result);
 
         return $result;
     }
