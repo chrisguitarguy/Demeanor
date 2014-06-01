@@ -24,6 +24,16 @@ namespace Demeanor;
 final class Events
 {
     /**
+     * Dispatched before any tests in a suite are run but after they are loaded.
+     */
+    const BEFORE_TESTSUITE      = 'testsuite.before';
+
+    /**
+     * Dispatched after all tests in a suite are run. Includes a result set.
+     */
+    const AFTER_TESTSUITE       = 'testsuite.after';
+
+    /**
      * Dispatched directly after the test method or callback is invoked, useful
      * for checking post conditions on the test.
      */

@@ -23,6 +23,7 @@ namespace Demeanor;
 
 use Demeanor\Event\Emitter;
 use Demeanor\Event\TestCaseEvent;
+use Demeanor\Event\TestSuiteEvent;
 use Demeanor\Loader\Loader;
 use Demeanor\Output\OutputWriter;
 
@@ -72,6 +73,8 @@ abstract class AbstractTestSuite implements TestSuite
         $this->bootstrap();
         $tests = $this->load();
 
+        $emitter->emit(Events::BEFORE_TESTSUITE, new TestSuiteEvent($this));
+
         $results = new DefaultResultSet();
         foreach ($tests as $test) {
             $emitter->emit(Events::SETUP_TESTCASE, new TestCaseEvent($test));
@@ -91,6 +94,8 @@ abstract class AbstractTestSuite implements TestSuite
 
             $emitter->emit(Events::TEARDOWN_TESTCASE, new TestCaseEvent($test));
         }
+
+        $emitter->emit(Events::AFTER_TESTSUITE, new TestSuiteEVent($this, $results));
 
         $output->writeln('');
 
