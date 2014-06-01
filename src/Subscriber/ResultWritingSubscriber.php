@@ -74,6 +74,8 @@ class ResultWritingSubscriber implements Subscriber
     public function writeSuiteSummary(TestSuiteEvent $event)
     {
         $this->outputWriter->writeln('');
+        $this->outputWriter->writeSummary($event->getTestSuite(), $event->getResults());
+        $this->outputWriter->writeln('');
     }
 
     public function writeResult(TestRunEvent $event)

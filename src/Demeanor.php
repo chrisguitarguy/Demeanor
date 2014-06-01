@@ -82,22 +82,6 @@ final class Demeanor
             $hasErrors = $hasErrors || !$results[$name]->successful();
         }
 
-        $total = $success = $failed = $skipped = $errors = 0;
-        foreach ($results as $rs) {
-            $total += count($rs);
-            $failed += $rs->failedCount();
-            $skipped += $rs->skippedCount();
-            $errors += $rs->errorCount();
-            $success += $rs->successCount();
-        }
-
-        $this->outputWriter->writeln('<info>Summary</info>');
-        $this->outputWriter->writeln(sprintf('Total: %s', $total));
-        $this->outputWriter->writeln(sprintf('Successful: %s', $success));
-        $this->outputWriter->writeln(sprintf('Skipped: %s', $skipped));
-        $this->outputWriter->writeln(sprintf('Errors: %s', $errors));
-        $this->outputWriter->writeln(sprintf('Failures: %s', $failed));
-
         restore_error_handler();
 
         return $hasErrors ? self::EXIT_TESTERROR : self::EXIT_SUCCESS;
