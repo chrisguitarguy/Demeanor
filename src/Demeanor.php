@@ -38,7 +38,7 @@ use Demeanor\Exception\ConfigurationException;
  */
 final class Demeanor
 {
-    const VERSION   = '0.1';
+    const VERSION   = '0.2';
     const NAME      = 'Demeanor';
 
     const EXIT_SUCCESS      = 0;
