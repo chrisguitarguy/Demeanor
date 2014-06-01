@@ -23,6 +23,7 @@ namespace Demeanor;
 
 use Demeanor\Event\Emitter;
 use Demeanor\Event\TestCaseEvent;
+use Demeanor\Event\TestSuiteEvent;
 use Demeanor\Loader\Loader;
 
 /**
@@ -64,12 +65,12 @@ abstract class AbstractTestSuite implements TestSuite
     /**
      * {@inheritdoc}
      */
-    public function run(Emitter $emitter, OutputWriter $output)
+    public function run(Emitter $emitter)
     {
-        $output->writeln(sprintf('Running test suite "%s"', $this->name()));
-
         $this->bootstrap();
         $tests = $this->load();
+
+        $emitter->emit(Events::BEFORE_TESTSUITE, new TestSuiteEvent($this));
 
         $results = new DefaultResultSet();
         foreach ($tests as $test) {
@@ -82,25 +83,17 @@ abstract class AbstractTestSuite implements TestSuite
                     }
                     $_test = clone $test;
                     $_test->addDescriptor('Data Set '.(is_int($argsName) ? "#{$argsName}" : $argsName));
-                    $results->add($test, $this->runTestCase($_test, $emitter, $output, $testArgs));
+                    $results->add($test, $_test->run($emitter, $testArgs));
                 }
             } else {
-                $results->add($test, $this->runTestCase($test, $emitter, $output));
+                $results->add($test, $test->run($emitter));
             }
 
             $emitter->emit(Events::TEARDOWN_TESTCASE, new TestCaseEvent($test));
         }
 
-        $output->writeln('');
+        $emitter->emit(Events::AFTER_TESTSUITE, new TestSuiteEVent($this, $results));
 
         return $results;
-    }
-
-    protected function runTestCase(TestCase $test, Emitter $emitter, OutputWriter $output, array $testArgs=[])
-    {
-        $result = $test->run($emitter, $testArgs);
-        $output->writeResult($test, $result);
-
-        return $result;
     }
 }

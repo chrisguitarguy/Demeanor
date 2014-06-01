@@ -47,12 +47,28 @@ interface ResultSet extends \Countable
     public function errorCount();
 
     /**
+     * Get all the tests with errors.
+     *
+     * @since   0.2
+     * @return  SplObjectStorage with test cases as "keys"
+     */
+    public function errors();
+
+    /**
      * Get the count of failed tests.
      *
      * @since   0.1
      * @return  int
      */
     public function failedCount();
+
+    /**
+     * Get all the tests that failed.
+     *
+     * @since   0.2
+     * @return  SplObjectStorage with test cases as "keys"
+     */
+    public function failures();
 
     /**
      * Get teh count of skipped tests.

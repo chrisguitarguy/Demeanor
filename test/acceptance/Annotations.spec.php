@@ -65,17 +65,17 @@ $this->describe('#Provider', function () {
     });
 
     $this->it('should set a valid provider with a static method and exit successfully', function (TestContext $ctx) {
-        $ctx['proc'] = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/dataprovider_method');
+        $ctx['proc'] = new Process(DEMEANOR_BINARY.' -vv', __DIR__.'/Fixtures/dataprovider_method');
         $ctx['proc']->run();
     });
 
     $this->it('should set a valid provider with a function and exit successfully', function (TestContext $ctx) {
-        $ctx['proc'] = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/dataprovider_func');
+        $ctx['proc'] = new Process(DEMEANOR_BINARY.' -vv', __DIR__.'/Fixtures/dataprovider_func');
         $ctx['proc']->run();
     });
 
     $this->it('should set a valid provider with inline data and exit successfully', function (TestContext $ctx) {
-        $ctx['proc'] = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/dataprovider_inline');
+        $ctx['proc'] = new Process(DEMEANOR_BINARY.' -vv', __DIR__.'/Fixtures/dataprovider_inline');
         $ctx['proc']->run();
     });
 });

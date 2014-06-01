@@ -19,7 +19,12 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor;
+namespace Demeanor\Output;
+
+use Demeanor\TestCase;
+use Demeanor\TestSuite;
+use Demeanor\TestResult;
+use Demeanor\ResultSet;
 
 /**
  * Takes care of printing stuff to the screen.
@@ -28,10 +33,6 @@ namespace Demeanor;
  */
 interface OutputWriter
 {
-    const VERBOSITY_QUIET   = 0; // no logs, error, or skip messages, just results
-    const VERBOSITY_NORMAL  = 1; // only print error/skip messages and result
-    const VERBOSITY_VERBOSE = 2; // print everything
-
     /**
      * Print $message to the screen followed by a new line.
      *
@@ -40,7 +41,7 @@ interface OutputWriter
      * @param   int $verbosity level of the message
      * @return  void
      */
-    public function writeln($message, $verbosity=self::VERBOSITY_NORMAL);
+    public function writeln($message);
 
     /**
      * Write a test result to the screen.
@@ -51,4 +52,14 @@ interface OutputWriter
      * @return  void
      */
     public function writeResult(TestCase $testcase, TestResult $result);
+
+    /**
+     * Write a test suite summary to the screen.
+     *
+     * @since   0.1
+     * @param   TestSuite $suite
+     * @param   ResultSet $results
+     * @return  void
+     */
+    public function writeSummary(TestSuite $suite, ResultSet $results);
 }
