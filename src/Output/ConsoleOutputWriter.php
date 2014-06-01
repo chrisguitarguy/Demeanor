@@ -57,11 +57,33 @@ class ConsoleOutputWriter implements OutputWriter
      */
     public function writeResult(TestCase $testcase, TestResult $result)
     {
+        switch ($this->getVerbosity()) {
+            case OutputInterface::VERBOSITY_QUIET:
+            case OutputInterface::VERBOSITY_NORMAL:
+                $this->writeQuietResult($result);
+                break;
+            default:
+                $this->writeNoisyResult($testcase, $result);
+                break;
+        }
+    }
+
+    private function writeQuietResult(TestResult $result)
+    {
+        $this->consoleOutput->write($this->getResultStatus($result, true));
+    }
+
+    private function writeNoisyResult(TestCase $testcase, TestResult $result)
+    {
         $this->writeln(sprintf(
             '%s: %s',
             $testcase->getName(),
             $this->getResultStatus($result)
         ));
+
+        if ($this->isVerbosity(OutputInterface::VERBOSITY_DEBUG)) {
+            $this->consoleOutput->writeln(sprintf('Location: %s:%d', $testcase->filename(), $testcase->lineno()));
+        }
 
         foreach ($result->getMessages() as $messageType => $messages) {
             $verbosity = $this->getVerbosityForMessageType($messageType, $result);
@@ -73,12 +95,14 @@ class ConsoleOutputWriter implements OutputWriter
                 $this->consoleOutput->writeln($msg);
             }
         }
+
+        $this->writeln('');
     }
 
-    private function getResultStatus(TestResult $result)
+    private function getResultStatus(TestResult $result, $short=false)
     {
-        $tag = 'info';
-        $status = 'Passed';
+        $tag = $short ? false : 'info';
+        $status = $short ? '.' : 'Passed';
         if ($result->errored()) {
             $tag = 'error';
             $status = 'Error';
@@ -90,12 +114,26 @@ class ConsoleOutputWriter implements OutputWriter
             $status = 'Failed';
         }
 
-        return sprintf('<%1$s>%2$s</%1$s>', $tag, $status);
+        if ($tag) {
+            return sprintf('<%1$s>%2$s</%1$s>', $tag, $short ? $status[0] : $status);
+        } else {
+            return $short ? $status[0] : $status;
+        }
     }
 
     private function canWrite($verbosity)
     {
-        return $verbosity <= $this->consoleOutput->getVerbosity();
+        return $verbosity <= $this->getVerbosity();
+    }
+
+    private function isVerbosity($verbosity)
+    {
+        return $verbosity === $this->getVerbosity();
+    }
+
+    private function getVerbosity()
+    {
+        return $this->consoleOutput->getVerbosity();
     }
 
     private function getVerbosityForMessageType($messageType, TestResult $result)
@@ -107,13 +145,13 @@ class ConsoleOutputWriter implements OutputWriter
 
         switch (strtolower($messageType)) {
             case 'log':
-                return OutputInterface::VERBOSITY_VERBOSE;
+                return OutputInterface::VERBOSITY_VERY_VERBOSE;
                 break;
             case 'skip':
             case 'error':
             case 'fail':
             default:
-                return OutputInterface::VERBOSITY_NORMAL;
+                return OutputInterface::VERBOSITY_VERBOSE;
                 break;
         }
     }
