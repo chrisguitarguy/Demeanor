@@ -43,9 +43,9 @@ class ConsoleOutputWriter implements OutputWriter
     /**
      * {@inheritdoc}
      */
-    public function writeln($message, $verbosity=self::VERBOSITY_NORMAL)
+    public function writeln($message)
     {
-        if (!$this->canWrite($verbosity)) {
+        if (!$this->canWrite(OutputInterface::VERBOSITY_NORMAL)) {
             return;
         }
 
@@ -61,12 +61,16 @@ class ConsoleOutputWriter implements OutputWriter
             '%s: %s',
             $testcase->getName(),
             $this->getResultStatus($result)
-        ), self::VERBOSITY_QUIET);
+        ));
 
         foreach ($result->getMessages() as $messageType => $messages) {
             $verbosity = $this->getVerbosityForMessageType($messageType, $result);
+            if (!$this->canWrite($verbosity)) {
+                continue;
+            }
+
             foreach ($messages as $msg) {
-                $this->writeln("  {$msg}", $verbosity);
+                $this->consoleOutput->writeln($msg);
             }
         }
     }
@@ -98,18 +102,18 @@ class ConsoleOutputWriter implements OutputWriter
     {
         // if we didn't get a successful result, we want to print everything
         if (!$result->successful()) {
-            return self::VERBOSITY_NORMAL;
+            return OutputInterface::VERBOSITY_NORMAL;
         }
 
         switch (strtolower($messageType)) {
             case 'log':
-                return self::VERBOSITY_VERBOSE;
+                return OutputInterface::VERBOSITY_VERBOSE;
                 break;
             case 'skip':
             case 'error':
             case 'fail':
             default:
-                return self::VERBOSITY_NORMAL;
+                return OutputInterface::VERBOSITY_NORMAL;
                 break;
         }
     }

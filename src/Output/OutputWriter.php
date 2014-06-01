@@ -31,10 +31,6 @@ use Demeanor\TestResult;
  */
 interface OutputWriter
 {
-    const VERBOSITY_QUIET   = 0; // no logs, error, or skip messages, just results
-    const VERBOSITY_NORMAL  = 1; // only print error/skip messages and result
-    const VERBOSITY_VERBOSE = 2; // print everything
-
     /**
      * Print $message to the screen followed by a new line.
      *
@@ -43,7 +39,7 @@ interface OutputWriter
      * @param   int $verbosity level of the message
      * @return  void
      */
-    public function writeln($message, $verbosity=self::VERBOSITY_NORMAL);
+    public function writeln($message);
 
     /**
      * Write a test result to the screen.
