@@ -19,10 +19,12 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor;
+namespace Demeanor\Output;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Demeanor\TestCase;
+use Demeanor\TestResult;
 
 /**
  * An output writer interface that uses symfony's console component

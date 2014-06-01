@@ -22,6 +22,7 @@
 namespace Demeanor;
 
 use Demeanor\Event\Emitter;
+use Demeanor\Output\OutputWriter;
 
 /**
  * Represents a test suite (collection of test cases).

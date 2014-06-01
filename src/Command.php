@@ -27,6 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Demeanor\Config\JsonConfiguration;
 use Demeanor\Config\ConsoleConfiguration;
+use Demeanor\Output\ConsoleOutputWriter;
 
 class Command extends BaseCommand
 {

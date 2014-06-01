@@ -29,6 +29,7 @@ use Demeanor\Subscriber\AnnotationSubscriber;
 use Demeanor\Subscriber\RequirementSubscriber;
 use Demeanor\Subscriber\ExceptionSubscriber;
 use Demeanor\Config\Configuration;
+use Demeanor\Output\OutputWriter;
 use Demeanor\Exception\ConfigurationException;
 
 /**

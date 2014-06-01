@@ -24,6 +24,7 @@ namespace Demeanor;
 use Demeanor\Event\Emitter;
 use Demeanor\Event\TestCaseEvent;
 use Demeanor\Loader\Loader;
+use Demeanor\Output\OutputWriter;
 
 /**
  * ABC for test suites.
