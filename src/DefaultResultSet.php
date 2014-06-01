@@ -61,7 +61,15 @@ class DefaultResultSet implements ResultSet
      */
     public function errorCount()
     {
-        return count($this->errors);
+        return count($this->errors());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function errors()
+    {
+        return $this->errors;
     }
 
     /**
@@ -69,7 +77,15 @@ class DefaultResultSet implements ResultSet
      */
     public function failedCount()
     {
-        return count($this->failed);
+        return count($this->failures());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function failures()
+    {
+        return $this->failed;
     }
 
     /**
