@@ -84,10 +84,10 @@ abstract class AbstractTestSuite implements TestSuite
                     }
                     $_test = clone $test;
                     $_test->addDescriptor('Data Set '.(is_int($argsName) ? "#{$argsName}" : $argsName));
-                    $results->add($test, $this->runTestCase($_test, $emitter, $output, $testArgs));
+                    $results->add($test, $_test->run($emitter, $testArgs));
                 }
             } else {
-                $results->add($test, $this->runTestCase($test, $emitter, $output));
+                $results->add($test, $test->run($emitter));
             }
 
             $emitter->emit(Events::TEARDOWN_TESTCASE, new TestCaseEvent($test));
@@ -96,12 +96,5 @@ abstract class AbstractTestSuite implements TestSuite
         $emitter->emit(Events::AFTER_TESTSUITE, new TestSuiteEVent($this, $results));
 
         return $results;
-    }
-
-    protected function runTestCase(TestCase $test, Emitter $emitter, OutputWriter $output, array $testArgs=[])
-    {
-        $result = $test->run($emitter, $testArgs);
-
-        return $result;
     }
 }
