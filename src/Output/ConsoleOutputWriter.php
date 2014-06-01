@@ -81,7 +81,7 @@ class ConsoleOutputWriter implements OutputWriter
             $this->getResultStatus($result)
         ));
 
-        if ($this->isVerbosity(OutputInterface::VERBOSITY_DEBUG)) {
+        if ($result->errored() || $result->failed() || $this->isVerbosity(OutputInterface::VERBOSITY_DEBUG)) {
             $this->consoleOutput->writeln(sprintf('Location: %s:%d', $testcase->filename(), $testcase->lineno()));
         }
 
