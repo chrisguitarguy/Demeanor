@@ -24,7 +24,9 @@ namespace Demeanor\Output;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Demeanor\TestCase;
+use Demeanor\TestSuite;
 use Demeanor\TestResult;
+use Demeanor\ResultSet;
 
 /**
  * An output writer interface that uses symfony's console component
@@ -65,6 +67,36 @@ class ConsoleOutputWriter implements OutputWriter
             default:
                 $this->writeNoisyResult($testcase, $result);
                 break;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function writeSummary(TestSuite $suite, ResultSet $results)
+    {
+        $this->consoleOutput->writeln('<info>Summary</info>');
+        $this->consoleOutput->writeln(sprintf('Total: %s', count($results)));
+        $this->consoleOutput->writeln(sprintf('Successful: %s', $results->successCount()));
+        $this->consoleOutput->writeln(sprintf('Skipped: %s', $results->skippedCount()));
+        $this->consoleOutput->writeln(sprintf('Errors: %s', $results->errorCount()));
+        $this->consoleOutput->writeln(sprintf('Failures: %s', $results->failedCount()));
+
+        // if we are above VERBOSITY_VERBOSE there's no reason to write errors
+        // or failures to the screen since it's already been done by writeResult
+        if ($this->canWrite(OutputInterface::VERBOSITY_VERBOSE)) {
+            return;
+        }
+
+        $this->writeln('');
+        $this->writeResults($results->errors());
+        $this->writeResults($results->failures());
+    }
+
+    private function writeResults(\SplObjectStorage $res)
+    {
+        foreach ($res as $testcase) {
+            $this->writeNoisyResult($testcase, $res->getInfo());
         }
     }
 

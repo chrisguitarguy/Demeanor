@@ -22,7 +22,9 @@
 namespace Demeanor\Output;
 
 use Demeanor\TestCase;
+use Demeanor\TestSuite;
 use Demeanor\TestResult;
+use Demeanor\ResultSet;
 
 /**
  * Takes care of printing stuff to the screen.
@@ -50,4 +52,14 @@ interface OutputWriter
      * @return  void
      */
     public function writeResult(TestCase $testcase, TestResult $result);
+
+    /**
+     * Write a test suite summary to the screen.
+     *
+     * @since   0.1
+     * @param   TestSuite $suite
+     * @param   ResultSet $results
+     * @return  void
+     */
+    public function writeSummary(TestSuite $suite, ResultSet $results);
 }
