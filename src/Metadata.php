@@ -42,7 +42,6 @@ interface Metadata
      * Get the metadata value for a specific group and name
      *
      * @since   0.2
-     * @param   string $group
      * @param   string $name
      * @return  mixed
      */
@@ -54,7 +53,7 @@ interface Metadata
      * @since   0.2
      * @param   string $name
      * @param   mixed $value optional, defaults to true
-     * @return  void
+     * @return  boolean True if the meta was added
      */
     public function addMeta($name, $value=true);
 
