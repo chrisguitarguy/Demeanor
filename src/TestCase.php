@@ -37,7 +37,7 @@ use Demeanor\Event\Emitter;
  *
  * @since   0.1
  */
-interface TestCase
+interface TestCase extends Metadata
 {
     /**
      * Run the test case and return a result. This should never throw.

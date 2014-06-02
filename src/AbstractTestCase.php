@@ -31,6 +31,8 @@ use Demeanor\Exception\InvalidArgumentException;
 
 abstract class AbstractTestCase implements TestCase
 {
+    use MetadataTrait;
+
     protected $before = array();
     protected $after = array();
     protected $descriptors = array();
