@@ -25,13 +25,6 @@ namespace Demeanor;
  * Metadata implementations act as a container for extra information. Usually
  * this interface is extended, but it may be used on its own.
  *
- * Some terminology:
- *  - A "group" is a named collection of related metadata. Line tags.
- *  - A "name" is the key of a specific bit of meta data. Where tags are a group
- *    a specific tag has a name.
- *  - A "value" is the value assigned to the metadata name. This won't be used
- *    in all cases and is always optional.
- *
  * @since   0.2
  */
 interface Metadata
@@ -40,11 +33,10 @@ interface Metadata
      * Check to see if a piece of metadata exists.
      *
      * @since   0.2
-     * @param   string $group
      * @param   string $name
      * @return  boolean
      */
-    public function hasMeta($group, $name);
+    public function hasMeta($name);
 
     /**
      * Get the metadata value for a specific group and name
@@ -54,18 +46,17 @@ interface Metadata
      * @param   string $name
      * @return  mixed
      */
-    public function getMeta($group, $name);
+    public function getMeta($name);
 
     /**
      * Add a new piece of metadata only if it doesn't exist.
      *
      * @since   0.2
-     * @param   string $group
      * @param   string $name
      * @param   mixed $value optional, defaults to true
      * @return  void
      */
-    public function addMeta($group, $name, $value=true);
+    public function addMeta($name, $value=true);
 
     /**
      * Set a piece of metadata to a value, regardless of whether or not it exists
@@ -76,7 +67,7 @@ interface Metadata
      * @param   mixed $value optional, defaults to true
      * @return  void
      */
-    public function setMeta($group, $name, $value=true);
+    public function setMeta($name, $value=true);
 
     /**
      * Remove a piece of metadata from the object.
@@ -86,5 +77,5 @@ interface Metadata
      * @param   string $name
      * @return  boolean True if the value was removed
      */
-    public function removeMeta($group, $name);
+    public function removeMeta($name);
 }
