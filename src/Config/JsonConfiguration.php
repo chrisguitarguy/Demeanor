@@ -146,7 +146,7 @@ class JsonConfiguration implements Configuration
         foreach ($this->config['testsuites'] as $name => $suiteConfig) {
             if (!$this->isAssociativeArray($suiteConfig)) {
                 throw new ConfigurationException(sprintf(
-                    "Testsuite %s's configuration is not an object",
+                    "Test suite %s's configuration is not an object",
                     $name
                 ));
             }
@@ -159,8 +159,18 @@ class JsonConfiguration implements Configuration
                 ));
             }
 
-            foreach (['bootstrap', 'directories', 'files', 'glob'] as $kn) {
-                $suiteConfig[$kn] = is_array($suiteConfig[$kn]) ? $suiteConfig[$kn] : [$suiteConfig[$kn]];
+            if (!$this->isAssociativeArray($suiteConfig['exclude'])) {
+                throw new ConfigurationException(sprintf(
+                    "Test suite %s's `exclude` is not an object",
+                    $name
+                ));
+            }
+
+            $suiteConfig['bootstrap'] = $this->ensureArray($suiteConfig['bootstrap']);
+
+            foreach (['directories', 'files', 'glob'] as $kn) {
+                $suiteConfig[$kn] = $this->ensureArray($suiteConfig[$kn]);
+                $suiteConfig['exclude'][$kn] = $this->ensureArray($suiteConfig['exclude'][$kn]);
             }
 
             $testsuites[$name] = $suiteConfig;
@@ -192,12 +202,17 @@ class JsonConfiguration implements Configuration
 
     private function setSuiteDefaults(array $config)
     {
-        return array_replace([
+        return array_replace_recursive([
             'type'          => 'unit',
             'bootstrap'     => array(),
             'directories'   => array(),
             'files'         => array(),
             'glob'          => array(),
+            'exclude'       => [
+                'directories'   => array(),
+                'files'         => array(),
+                'glob'          => array(),
+            ],
         ], $config);
     }
 
@@ -256,5 +271,14 @@ class JsonConfiguration implements Configuration
         }
 
         return true;
+    }
+
+    private function ensureArray($mixed)
+    {
+        if (!is_array($mixed)) {
+            $mixed = [$mixed];
+        }
+
+        return $mixed;
     }
 }

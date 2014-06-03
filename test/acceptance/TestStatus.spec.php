@@ -58,3 +58,12 @@ $this->it('should exit with a failure code when tests cause warnings', function 
     $ctx->log(sprintf('STDERR> %s', $proc->getErrorOutput()));
     Assert::assertGreaterThan(0, $proc->getExitCode());
 });
+
+$this->it('should exclude tests based on the configuration', function (TestContext $ctx) {
+    $proc = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/excluded_tests');
+    $proc->run();
+
+    $ctx->log(sprintf('STDOUT> %s', $proc->getOutput()));
+    $ctx->log(sprintf('STDERR> %s', $proc->getErrorOutput()));
+    Assert::assertEquals(0, $proc->getExitCode());
+});

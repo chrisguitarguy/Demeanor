@@ -34,7 +34,18 @@ Here's a complete example:
                 ],
                 "glob": [
                     "test/files/*Test.php"
-                ]
+                ],
+                "exclude": {
+                    "directories": [
+                        "test/classes/not_this_one"
+                    ]
+                    , "files": [
+                        "test/path/to/exclude.php"
+                    ]
+                    , "glob": [
+                        "test/exclude/*.php"
+                    ]
+                }
             }
         }
     }
@@ -50,6 +61,9 @@ Here's a complete example:
 - `files` is a list of files that will be treated as if they contain test cases.
 - `glob` is a list of [`glob`](http://www.php.net/manual/en/function.glob.php)
   patterns that will be used to locate test files.
+- `exclude` is used to blacklist files from your test suite. It's an object that
+  looks very similar to the test suite itself. `directories`, `files`, and
+  `glob` work exactly as they do in the test suite itself.
 
 ## Default Test Suites
 
