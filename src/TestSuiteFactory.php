@@ -25,6 +25,7 @@ use Demeanor\Finder\ChainFinder;
 use Demeanor\Finder\DirectoryFinder;
 use Demeanor\Finder\FileFinder;
 use Demeanor\Finder\GlobFinder;
+use Demeanor\Finder\ExcludingFinder;
 use Demeanor\Unit\UnitTestSuite;
 use Demeanor\Spec\SpecTestSuite;
 use Demeanor\Phpt\PhptTestSuite;
@@ -87,7 +88,12 @@ class TestSuiteFactory
         $this->addFileFinders($finder, $configuration['files']);
         $this->addGlobFinders($finder, $configuration['glob']);
 
-        return $finder;
+        $exclude = new ChainFinder();
+        $this->addDirectoryFinders($exclude, $configuration['exclude']['directories'], $suffix);
+        $this->addFileFinders($exclude, $configuration['exclude']['files']);
+        $this->addGlobFinders($exclude, $configuration['exclude']['glob']);
+
+        return new ExcludingFinder($finder, $exclude);
     }
 
     private function addDirectoryFinders(ChainFinder $chain, array $directories, $suffix=null)
