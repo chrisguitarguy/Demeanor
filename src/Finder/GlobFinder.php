@@ -19,32 +19,34 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
+namespace Demeanor\Finder;
 
-use Counterpart\Assert;
-use Demeanor\TestContext;
+use Demeanor\Exception\GlobException;
 
-class DirectoryLoaderTest
+/**
+ * Loads files based on a `glob` pattern.
+ *
+ * @since   0.1
+ */
+class GlobFinder implements Finder
 {
+    private $pattern;
+
+    public function __construct($pattern)
+    {
+        $this->pattern = $pattern;
+    }
+
     /**
-     * @Expect("Demeanor\\Exception\\FileNotFoundException")
+     * {@inheritdoc}
      */
-    public function testLoadWithInvalidDirectoryThrowsException(TestContext $ctx)
+    public function all()
     {
-        $loader = new DirectoryLoader(__DIR__ . '/does/not/exist');
-        $loader->load();
-    }
+        $files = glob($this->pattern, GLOB_BRACE);
+        if (false === $files) {
+            throw new GlobException("Could not excute glob pattern {$this->pattern}");
+        }
 
-    public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix(TestContext $ctx)
-    {
-        $loader = new DirectoryLoader(__DIR__ . '/../Fixtures/dirloader', '_test');
-        $files = $loader->load();
-        Assert::assertType('array', $files);
-        Assert::assertCount(2, $files);
-    }
-
-    public function notATest()
-    {
-        
+        return array_filter(array_map('realpath', $files), 'is_file');
     }
 }

@@ -46,7 +46,7 @@ class PhptTestSuite extends AbstractTestSuite
         $parser = new Parser();
         $executor = new SymfonyExecutor();
         $cases = array();
-        foreach ($this->loader->load() as $file) {
+        foreach ($this->finder->all() as $file) {
             $cases[] = new PhptTestCase($file, $executor, $parser);
         }
 

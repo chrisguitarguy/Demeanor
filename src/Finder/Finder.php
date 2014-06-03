@@ -19,26 +19,21 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
+namespace Demeanor\Finder;
 
-use Counterpart\Assert;
-use Demeanor\TestContext;
-
-class FileLoaderTest
+/**
+ * Locates files matching a configuration pass to it's constructor and returns
+ * them as an iterable.
+ *
+ * @since   0.1
+ */
+interface Finder
 {
     /**
-     * @Expect("Demeanor\Exception\FileNotFoundException")
+     * Locate all the files and return them.
+     *
+     * @since   0.1
+     * @return  string[]
      */
-    public function testLoadWithBadFileThrowsException(TestContext $ctx)
-    {
-        $loader = new FileLoader([__DIR__ . '/does/not/exist.php']);
-        $loader->load();
-    }
-
-    public function testLoadWithExistingFilesReturnsTheSameArrayAsConstructor()
-    {
-        $files = [__FILE__];
-        $loader = new FileLoader($files);
-        Assert::assertEquals($files, $loader->load());
-    }
+    public function all();
 }

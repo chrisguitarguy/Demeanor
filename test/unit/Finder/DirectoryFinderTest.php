@@ -19,39 +19,27 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
+namespace Demeanor\Finder;
 
-/**
- * Combine multiple loader instances into one.
- *
- * @since   0.1
- */
-class ChainLoader implements Loader
+use Counterpart\Assert;
+use Demeanor\TestContext;
+
+class DirectoryFinderTest
 {
-    private $loaders = array();
-
-    public function __construct(array $loaders=array())
-    {
-        foreach ($loaders as $loader) {
-            $this->addLoader($loader);
-        }
-    }
-
     /**
-     * {@inheritdoc}
+     * @Expect("Demeanor\\Exception\\FileNotFoundException")
      */
-    public function load()
+    public function testLoadWithInvalidDirectoryThrowsException(TestContext $ctx)
     {
-        $files = array();
-        foreach ($this->loaders as $loader) {
-            $files = array_merge($files, $loader->load());
-        }
-
-        return $files;
+        $loader = new DirectoryFinder(__DIR__ . '/does/not/exist');
+        $loader->all();
     }
 
-    public function addLoader(Loader $loader)
+    public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix(TestContext $ctx)
     {
-        $this->loaders[] = $loader;
+        $loader = new DirectoryFinder(__DIR__ . '/../Fixtures/dirloader', '_test');
+        $files = $loader->all();
+        Assert::assertType('array', $files);
+        Assert::assertCount(2, $files);
     }
 }

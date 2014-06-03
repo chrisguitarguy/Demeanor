@@ -19,37 +19,54 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
+namespace Demeanor\Finder;
 
 use Demeanor\Exception\FileNotFoundException;
 
 /**
- * Takes an array of files, checks to make sure they exist and returns them.
+ * Locates all files in a directory that match a specified suffix.
  *
  * @since   0.1
  */
-class FileLoader implements Loader
+class DirectoryFinder implements Finder
 {
-    private $files = array();
+    const DEFAULT_SUFFIX = 'Test.php';
 
-    public function __construct(array $files)
+    private $directory;
+    private $suffix;
+
+    public function __construct($directory, $suffix=null)
     {
-        $this->files = $files;
+        $this->directory = $directory;
+        $this->suffix = $suffix ?: self::DEFAULT_SUFFIX;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function all()
     {
         $files = array();
-        foreach ($this->files as $file) {
-            if (!file_exists($file)) {
-                throw new FileNotFoundException("{$file} does not exist");
+        foreach ($this->createIterator() as $file) {
+            if ($file->getBasename($this->suffix) == $file->getBasename()) {
+                continue;
             }
-            $files[] = realpath($file);
+
+            $files[] = $file->getRealPath();
         }
 
         return $files;
+    }
+
+    private function createIterator()
+    {
+        try {
+            return new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($this->directory),
+                \RecursiveIteratorIterator::LEAVES_ONLY
+            );
+        } catch (\Exception $e) {
+            throw new FileNotFoundException("Could not locate directory {$this->directory}", 0, $e);
+        }
     }
 }

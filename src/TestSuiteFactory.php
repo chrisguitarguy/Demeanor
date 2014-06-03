@@ -21,10 +21,10 @@
 
 namespace Demeanor;
 
-use Demeanor\Loader\ChainLoader;
-use Demeanor\Loader\DirectoryLoader;
-use Demeanor\Loader\FileLoader;
-use Demeanor\Loader\GlobLoader;
+use Demeanor\Finder\ChainFinder;
+use Demeanor\Finder\DirectoryFinder;
+use Demeanor\Finder\FileFinder;
+use Demeanor\Finder\GlobFinder;
 use Demeanor\Unit\UnitTestSuite;
 use Demeanor\Spec\SpecTestSuite;
 use Demeanor\Phpt\PhptTestSuite;
@@ -64,60 +64,60 @@ class TestSuiteFactory
 
     private function createUnitTestSuite($name, array $configuration)
     {
-        $loader = $this->createLoader($configuration);
-        return new UnitTestSuite($name, $loader, $configuration['bootstrap']);
+        $finder = $this->createFinder($configuration);
+        return new UnitTestSuite($name, $finder, $configuration['bootstrap']);
     }
 
     private function createSpecTestSuite($name, array $configuration)
     {
-        $loader = $this->createLoader($configuration, 'spec.php');
-        return new SpecTestSuite($name, $loader, $configuration['bootstrap']);
+        $finder = $this->createFinder($configuration, 'spec.php');
+        return new SpecTestSuite($name, $finder, $configuration['bootstrap']);
     }
 
     private function createPhptTestSuite($name, array $configuration)
     {
-        $loader = $this->createLoader($configuration, '.phpt');
-        return new PhptTestSuite($name, $loader, $configuration['bootstrap']);
+        $finder = $this->createFinder($configuration, '.phpt');
+        return new PhptTestSuite($name, $finder, $configuration['bootstrap']);
     }
 
-    private function createLoader(array $configuration, $suffix=null)
+    private function createFinder(array $configuration, $suffix=null)
     {
-        $loader = new ChainLoader();
-        $this->addDirectoryLoaders($loader, $configuration['directories'], $suffix);
-        $this->addFileLoaders($loader, $configuration['files']);
-        $this->addGlobLoaders($loader, $configuration['glob']);
+        $finder = new ChainFinder();
+        $this->addDirectoryFinders($finder, $configuration['directories'], $suffix);
+        $this->addFileFinders($finder, $configuration['files']);
+        $this->addGlobFinders($finder, $configuration['glob']);
 
-        return $loader;
+        return $finder;
     }
 
-    private function addDirectoryLoaders(ChainLoader $chain, array $directories, $suffix=null)
+    private function addDirectoryFinders(ChainFinder $chain, array $directories, $suffix=null)
     {
         if (!$directories) {
             return;
         }
 
         foreach ($directories as $directory) {
-            $chain->addLoader(new DirectoryLoader($directory, $suffix));
+            $chain->addFinder(new DirectoryFinder($directory, $suffix));
         }
     }
 
-    private function addFileLoaders(ChainLoader $chain, array $files)
+    private function addFileFinders(ChainFinder $chain, array $files)
     {
         if (!$files) {
             return;
         }
 
-        $chain->addLoader(new FileLoader($files));
+        $chain->addFinder(new FileFinder($files));
     }
 
-    private function addGlobLoaders(ChainLoader $chain, array $globs)
+    private function addGlobFinders(ChainFinder $chain, array $globs)
     {
         if (!$globs) {
             return;
         }
 
         foreach ($globs as $glob) {
-            $chain->addLoader(new GlobLoader($glob));
+            $chain->addFinder(new GlobFinder($glob));
         }
     }
 }

@@ -19,23 +19,23 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
+namespace Demeanor\Finder;
 
 use Counterpart\Assert;
 use Demeanor\TestContext;
 
-class GlobLoaderTest
+class GlobFinderTest
 {
     public function testLoadWithNonExistingDirectoryReturnsEmptyArray()
     {
-        $loader = new GlobLoader(__DIR__.'/does/not/exist/*.php');
-        Assert::assertEmpty($loader->load());
+        $loader = new GlobFinder(__DIR__.'/does/not/exist/*.php');
+        Assert::assertEmpty($loader->all());
     }
 
     public function testLoadWithExistingDirectoryReturnsArrayOfExpectedFiles()
     {
-        $loader = new GlobLoader(__DIR__.'/../Fixtures/globloader/*test');
-        $files = $loader->load();
+        $loader = new GlobFinder(__DIR__.'/../Fixtures/globloader/*test');
+        $files = $loader->all();
         Assert::assertType('array', $files);
         Assert::assertCount(2, $files);
     }

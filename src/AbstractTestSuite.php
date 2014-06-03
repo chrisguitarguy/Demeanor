@@ -24,7 +24,7 @@ namespace Demeanor;
 use Demeanor\Event\Emitter;
 use Demeanor\Event\TestCaseEvent;
 use Demeanor\Event\TestSuiteEvent;
-use Demeanor\Loader\Loader;
+use Demeanor\Finder\Finder;
 
 /**
  * ABC for test suites.
@@ -33,14 +33,14 @@ use Demeanor\Loader\Loader;
  */
 abstract class AbstractTestSuite implements TestSuite
 {
-    protected $loader;
+    protected $finder;
     protected $name;
     protected $bootstrap;
 
-    public function __construct($name, Loader $loader, array $bootstrap=array())
+    public function __construct($name, Finder $finder, array $bootstrap=array())
     {
         $this->name = $name;
-        $this->loader = $loader;
+        $this->finder = $finder;
         $this->bootstrap = $bootstrap;
     }
 

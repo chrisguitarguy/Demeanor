@@ -19,34 +19,39 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
-
-use Demeanor\Exception\GlobException;
+namespace Demeanor\Finder;
 
 /**
- * Loads files based on a `glob` pattern.
+ * Combine multiple loader instances into one.
  *
  * @since   0.1
  */
-class GlobLoader implements Loader
+class ChainFinder implements Finder
 {
-    private $pattern;
+    private $finders = array();
 
-    public function __construct($pattern)
+    public function __construct(array $finders=array())
     {
-        $this->pattern = $pattern;
+        foreach ($finders as $finder) {
+            $this->addFinder($finder);
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function all()
     {
-        $files = glob($this->pattern, GLOB_BRACE);
-        if (false === $files) {
-            throw new GlobException("Could not excute glob pattern {$this->pattern}");
+        $files = array();
+        foreach ($this->finders as $finder) {
+            $files = array_merge($files, $finder->all());
         }
 
-        return array_filter(array_map('realpath', $files), 'is_file');
+        return $files;
+    }
+
+    public function addFinder(Finder $finder)
+    {
+        $this->finders[] = $finder;
     }
 }
