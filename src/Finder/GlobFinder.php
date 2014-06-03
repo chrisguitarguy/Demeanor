@@ -40,7 +40,7 @@ class GlobFinder implements Finder
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function all()
     {
         $files = glob($this->pattern, GLOB_BRACE);
         if (false === $files) {

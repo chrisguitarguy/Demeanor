@@ -32,13 +32,13 @@ class FileFinderTest
     public function testLoadWithBadFileThrowsException(TestContext $ctx)
     {
         $loader = new FileFinder([__DIR__ . '/does/not/exist.php']);
-        $loader->load();
+        $loader->all();
     }
 
     public function testLoadWithExistingFilesReturnsTheSameArrayAsConstructor()
     {
         $files = [__FILE__];
         $loader = new FileFinder($files);
-        Assert::assertEquals($files, $loader->load());
+        Assert::assertEquals($files, $loader->all());
     }
 }

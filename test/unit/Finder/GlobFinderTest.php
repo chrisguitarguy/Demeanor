@@ -29,13 +29,13 @@ class GlobFinderTest
     public function testLoadWithNonExistingDirectoryReturnsEmptyArray()
     {
         $loader = new GlobFinder(__DIR__.'/does/not/exist/*.php');
-        Assert::assertEmpty($loader->load());
+        Assert::assertEmpty($loader->all());
     }
 
     public function testLoadWithExistingDirectoryReturnsArrayOfExpectedFiles()
     {
         $loader = new GlobFinder(__DIR__.'/../Fixtures/globloader/*test');
-        $files = $loader->load();
+        $files = $loader->all();
         Assert::assertType('array', $files);
         Assert::assertCount(2, $files);
     }

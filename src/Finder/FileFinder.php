@@ -40,7 +40,7 @@ class FileFinder implements Finder
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function all()
     {
         $files = array();
         foreach ($this->files as $file) {

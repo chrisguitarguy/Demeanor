@@ -33,7 +33,7 @@ interface Finder
      * Locate all the files and return them.
      *
      * @since   0.1
-     * @return  array
+     * @return  string[]
      */
-    public function load();
+    public function all();
 }

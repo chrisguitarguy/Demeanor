@@ -40,11 +40,11 @@ class ChainFinder implements Finder
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function all()
     {
         $files = array();
         foreach ($this->finders as $finder) {
-            $files = array_merge($files, $finder->load());
+            $files = array_merge($files, $finder->all());
         }
 
         return $files;

@@ -35,7 +35,7 @@ class UnitTestSuite extends AbstractTestSuite
      */
     public function load()
     {
-        $files = $this->finder->load();
+        $files = $this->finder->all();
         foreach ($files as $file) {
             include_once $file;
         }

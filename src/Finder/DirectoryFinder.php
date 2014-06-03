@@ -44,7 +44,7 @@ class DirectoryFinder implements Finder
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function all()
     {
         $files = array();
         foreach ($this->createIterator() as $file) {

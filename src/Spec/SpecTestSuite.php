@@ -37,7 +37,7 @@ class SpecTestSuite extends AbstractTestSuite
     {
         $collection = new TestCaseCollection();
 
-        $files = $this->finder->load();
+        $files = $this->finder->all();
         foreach ($files as $file) {
             new DefaultSpecification(
                 $collection,

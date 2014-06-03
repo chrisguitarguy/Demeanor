@@ -32,13 +32,13 @@ class DirectoryFinderTest
     public function testLoadWithInvalidDirectoryThrowsException(TestContext $ctx)
     {
         $loader = new DirectoryFinder(__DIR__ . '/does/not/exist');
-        $loader->load();
+        $loader->all();
     }
 
     public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix(TestContext $ctx)
     {
         $loader = new DirectoryFinder(__DIR__ . '/../Fixtures/dirloader', '_test');
-        $files = $loader->load();
+        $files = $loader->all();
         Assert::assertType('array', $files);
         Assert::assertCount(2, $files);
     }
