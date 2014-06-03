@@ -18,6 +18,11 @@
             , "bootstrap": [
                 "test/acceptance/bootstrap.php"
             ]
+            , "exclude": {
+                "glob": [
+                    "test/acceptance/Fixtures/**/*.php"
+                ]
+            }
         }
     }
 }
