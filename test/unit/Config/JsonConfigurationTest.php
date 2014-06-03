@@ -71,6 +71,13 @@ class JsonConfigurationTest
         $config->initialize();
     }
 
+    public function testInitializeThrowsWhenExcludeIsNotAnAssociativeArray(TestContext $ctx)
+    {
+        $this->expect($ctx);
+        $config = new JsonConfiguration([__DIR__.'/../Fixtures/badexclude_config.json']);
+        $config->initialize();
+    }
+
     public function testConfigurationNormalizesTestSuiteConfig()
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
@@ -79,8 +86,11 @@ class JsonConfigurationTest
         $suite = array_pop($suites);
 
         Assert::assertType('array', $suite);
-        foreach (['bootstrap', 'files', 'glob', 'directories'] as $kn) {
+        Assert::assertType('array', $suite['bootstrap']);
+        Assert::assertType('array', $suite['exclude']);
+        foreach (['files', 'glob', 'directories'] as $kn) {
             Assert::assertType('array', $suite[$kn]);
+            Assert::assertType('array', $suite['exclude'][$kn]);
         }
     }
 
