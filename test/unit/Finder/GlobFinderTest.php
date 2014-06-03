@@ -19,26 +19,24 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
+namespace Demeanor\Finder;
 
 use Counterpart\Assert;
 use Demeanor\TestContext;
 
-class FileLoaderTest
+class GlobFinderTest
 {
-    /**
-     * @Expect("Demeanor\Exception\FileNotFoundException")
-     */
-    public function testLoadWithBadFileThrowsException(TestContext $ctx)
+    public function testLoadWithNonExistingDirectoryReturnsEmptyArray()
     {
-        $loader = new FileLoader([__DIR__ . '/does/not/exist.php']);
-        $loader->load();
+        $loader = new GlobFinder(__DIR__.'/does/not/exist/*.php');
+        Assert::assertEmpty($loader->load());
     }
 
-    public function testLoadWithExistingFilesReturnsTheSameArrayAsConstructor()
+    public function testLoadWithExistingDirectoryReturnsArrayOfExpectedFiles()
     {
-        $files = [__FILE__];
-        $loader = new FileLoader($files);
-        Assert::assertEquals($files, $loader->load());
+        $loader = new GlobFinder(__DIR__.'/../Fixtures/globloader/*test');
+        $files = $loader->load();
+        Assert::assertType('array', $files);
+        Assert::assertCount(2, $files);
     }
 }

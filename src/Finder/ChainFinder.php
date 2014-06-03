@@ -19,21 +19,21 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
+namespace Demeanor\Finder;
 
 /**
  * Combine multiple loader instances into one.
  *
  * @since   0.1
  */
-class ChainLoader implements Loader
+class ChainFinder implements Finder
 {
-    private $loaders = array();
+    private $finders = array();
 
-    public function __construct(array $loaders=array())
+    public function __construct(array $finders=array())
     {
-        foreach ($loaders as $loader) {
-            $this->addLoader($loader);
+        foreach ($finders as $finder) {
+            $this->addFinder($finder);
         }
     }
 
@@ -43,15 +43,15 @@ class ChainLoader implements Loader
     public function load()
     {
         $files = array();
-        foreach ($this->loaders as $loader) {
-            $files = array_merge($files, $loader->load());
+        foreach ($this->finders as $finder) {
+            $files = array_merge($files, $finder->load());
         }
 
         return $files;
     }
 
-    public function addLoader(Loader $loader)
+    public function addFinder(Finder $finder)
     {
-        $this->loaders[] = $loader;
+        $this->finders[] = $finder;
     }
 }

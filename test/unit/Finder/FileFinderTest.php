@@ -19,32 +19,26 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
+namespace Demeanor\Finder;
 
 use Counterpart\Assert;
 use Demeanor\TestContext;
 
-class DirectoryLoaderTest
+class FileFinderTest
 {
     /**
-     * @Expect("Demeanor\\Exception\\FileNotFoundException")
+     * @Expect("Demeanor\Exception\FileNotFoundException")
      */
-    public function testLoadWithInvalidDirectoryThrowsException(TestContext $ctx)
+    public function testLoadWithBadFileThrowsException(TestContext $ctx)
     {
-        $loader = new DirectoryLoader(__DIR__ . '/does/not/exist');
+        $loader = new FileFinder([__DIR__ . '/does/not/exist.php']);
         $loader->load();
     }
 
-    public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix(TestContext $ctx)
+    public function testLoadWithExistingFilesReturnsTheSameArrayAsConstructor()
     {
-        $loader = new DirectoryLoader(__DIR__ . '/../Fixtures/dirloader', '_test');
-        $files = $loader->load();
-        Assert::assertType('array', $files);
-        Assert::assertCount(2, $files);
-    }
-
-    public function notATest()
-    {
-        
+        $files = [__FILE__];
+        $loader = new FileFinder($files);
+        Assert::assertEquals($files, $loader->load());
     }
 }

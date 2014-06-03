@@ -19,21 +19,27 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
+namespace Demeanor\Finder;
 
-/**
- * Locates files matching a configuration pass to it's constructor and returns
- * them as an iterable.
- *
- * @since   0.1
- */
-interface Loader
+use Counterpart\Assert;
+use Demeanor\TestContext;
+
+class DirectoryFinderTest
 {
     /**
-     * Locate all the files and return them.
-     *
-     * @since   0.1
-     * @return  array
+     * @Expect("Demeanor\\Exception\\FileNotFoundException")
      */
-    public function load();
+    public function testLoadWithInvalidDirectoryThrowsException(TestContext $ctx)
+    {
+        $loader = new DirectoryFinder(__DIR__ . '/does/not/exist');
+        $loader->load();
+    }
+
+    public function testLoadWithValidDirectoryLoadsOnlyFilesThatHaveSuffix(TestContext $ctx)
+    {
+        $loader = new DirectoryFinder(__DIR__ . '/../Fixtures/dirloader', '_test');
+        $files = $loader->load();
+        Assert::assertType('array', $files);
+        Assert::assertCount(2, $files);
+    }
 }

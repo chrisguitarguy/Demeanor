@@ -19,7 +19,7 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Loader;
+namespace Demeanor\Finder;
 
 use Demeanor\Exception\GlobException;
 
@@ -28,7 +28,7 @@ use Demeanor\Exception\GlobException;
  *
  * @since   0.1
  */
-class GlobLoader implements Loader
+class GlobFinder implements Finder
 {
     private $pattern;
 
