@@ -1,0 +1,13 @@
+{
+    "testsuites": {
+        "aSuite": {
+            "type": "unit"
+            , "directories": [
+                "."
+            ]
+            , "exclude": {
+                "files": "FailingTest.php"
+            }
+        }
+    }
+}
