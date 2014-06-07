@@ -36,8 +36,9 @@ interface Executor
      * @since   0.1
      * @param   string $code
      * @param   array $env
+     * @param   array $ini A set of INI values that will be set for the test
      * @throws  ProcessException when the $code can't be run for some reason.
      * @return  array [$stdout, $stderr]
      */
-    public function execute($code, array $env);
+    public function execute($code, array $env, array $ini=[]);
 }
