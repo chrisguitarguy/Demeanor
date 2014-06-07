@@ -20,7 +20,7 @@
  */
 
 use Demeanor\TestContext;
-use Demeanor\Extension\Requirement\VersionRequirement;
+use Demeanor\Requirement\VersionRequirement;
 
 $this->before(function (TestContext $ctx) {
     $ctx['requirements']->add(new VersionRequirement('4.0'));
