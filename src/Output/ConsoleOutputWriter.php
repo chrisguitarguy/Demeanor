@@ -83,6 +83,7 @@ class ConsoleOutputWriter implements OutputWriter
         $this->consoleOutput->writeln(sprintf('Total: %s', count($results)));
         $this->consoleOutput->writeln(sprintf('Successful: %s', $results->successCount()));
         $this->consoleOutput->writeln(sprintf('Skipped: %s', $results->skippedCount()));
+        $this->consoleOutput->writeln(sprintf('Filtered: %s', $results->filteredCount()));
         $this->consoleOutput->writeln(sprintf('Errors: %s', $results->errorCount()));
         $this->consoleOutput->writeln(sprintf('Failures: %s', $results->failedCount()));
 
