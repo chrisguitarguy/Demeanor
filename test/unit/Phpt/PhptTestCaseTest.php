@@ -95,6 +95,28 @@ class PhptTestCaseTest
         Assert::assertTrue($result->successful());
     }
 
+    public function testPhptWithIniSectionPassesIniToExecutor()
+    {
+        $tc = $this->createTestCase();
+        $this->parserReturns([
+            'FILE'      => '..',
+            'EXPECT'    => 'here',
+            'INI'       => ['display_errors' => 'On'],
+        ]);
+        $this->executor->shouldReceive('execute')
+            ->once()
+            ->with(
+                \Mockery::any(),
+                \Mockery::type('array'),
+                \Mockery::hasKey('display_errors')
+            )
+            ->andReturn(['here', '']);
+
+        $result = $this->runTest($tc);
+
+        Assert::assertTrue($result->successful());
+    }
+
     public function testFilenameReturnsTheRealpathedVersionOfThePhptFile()
     {
         Assert::assertEquals(realpath($this->getTestFile()), $this->createTestCase()->filename());

@@ -21,27 +21,76 @@
 
 namespace Demeanor\Phpt;
 
-use Symfony\Component\Process\PhpProcess;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Demeanor\Exception\ProcessException;
 
 /**
- * Uses Symfony's process component to run PHP code.
+ * Uses Symfony's process component to run PHP code. We can't use PhpProcess
+ * here due to the INI settings.
  *
  * @since   0.1
  */
 class SymfonyExecutor implements Executor
 {
     /**
+     * The path to the PHP binary
+     *
+     * @since   0.2
+     * @var     string
+     */
+    private $phpBinary;
+
+    /**
+     * Constructor. Optionally pass in the PHP binary location or one will be
+     * looked up with a symfony excutable finder.
+     *
+     * @since   0.2
+     * @param   string $phpBinary
+     * @return  void
+     */
+    public function __construct($phpBinary=null)
+    {
+        $this->phpBinary = $phpBinary ?: $this->locateBinary();
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function execute($code, array $env)
+    public function execute($code, array $env, array $ini=[])
     {
+        $command = $this->buildCommand($ini);
         try {
-            $proc = new PhpProcess($code, null, $env);
+            $proc = new Process($command, null, $env, $code);
             $proc->run();
             return [$proc->getOutput(), $proc->getErrorOutput()];
         } catch (\Exception $e) {
             throw new ProcessException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    private function buildCommand(array $ini)
+    {
+        $cmd = $this->phpBinary;
+        foreach ($ini as $key => $val) {
+            $arg = "{$key}={$val}";
+            $cmd .= sprintf(
+                ' --define %s',
+                escapeshellarg($arg)
+            );
+        }
+
+        return $cmd;
+    }
+
+    private function locateBinary()
+    {
+        $finder = new PhpExecutableFinder();
+        $binary = $finder->find();
+        if (!$binary) {
+            throw new ProcessException('Could not locate PHP Binary');
+        }
+
+        return $binary;
     }
 }
