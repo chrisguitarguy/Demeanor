@@ -59,6 +59,10 @@ class ConsoleOutputWriter implements OutputWriter
      */
     public function writeResult(TestCase $testcase, TestResult $result)
     {
+        if ($result->filtered()) {
+            return;
+        }
+
         switch ($this->getVerbosity()) {
             case OutputInterface::VERBOSITY_QUIET:
             case OutputInterface::VERBOSITY_NORMAL:
