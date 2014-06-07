@@ -152,7 +152,11 @@ class PhptTestCase extends AbstractTestCase
             $code
         );
 
-        return $this->executor->execute($code, $this->getSection('ENV') ?: array());
+        return $this->executor->execute(
+            $code,
+            $this->getSection('ENV') ?: array(),
+            $this->getSection('INI') ?: array()
+        );
     }
 
     /**
