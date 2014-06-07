@@ -33,6 +33,7 @@ interface TestResult
     const STATUS_FAILED     = 1;
     const STATUS_SKIPPED    = 2;
     const STATUS_ERROR      = 3;
+    const STATUS_FILTERED   = 4;
 
     /**
      * Check to see if the test was successful.
@@ -89,6 +90,22 @@ interface TestResult
      * @return  boolean
      */
     public function errored();
+
+    /**
+     * Mark a test as filtered: not able to run.
+     *
+     * @since   0.2
+     * @return  void
+     */
+    public function filter();
+
+    /**
+     * Check to see if a test was filtered.
+     *
+     * @since   0.2
+     * @return  boolean
+     */
+    public function filtered();
 
     /**
      * Add a log message.

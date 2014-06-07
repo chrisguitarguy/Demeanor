@@ -56,6 +56,14 @@ class DefaultTestResultTest
         Assert::assertTrue($result->errored());
     }
 
+    public function testFilterMarksTestAsFiltered()
+    {
+        $result = $this->createTestResult();
+        Assert::assertFalse($result->filtered());
+        $result->filter();
+        Assert::assertTrue($result->filtered());
+    }
+
     public function testMessagesAreReturnedFromGetMessagesIfTheyAreAdded()
     {
         $result = $this->createTestResult();
