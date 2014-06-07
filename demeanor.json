@@ -10,6 +10,15 @@
                 "test/unit"
             ]
         }
+        , "integration": {
+            "type": "unit"
+            , "bootstrap": [
+                "test/integration/bootstrap.php"
+            ]
+            , "directories": [
+                "test/integration"
+            ]
+        }
         , "acceptance": {
             "type": "spec"
             , "directories": [
