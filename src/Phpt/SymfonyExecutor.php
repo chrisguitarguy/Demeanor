@@ -73,10 +73,10 @@ class SymfonyExecutor implements Executor
     {
         $cmd = $this->phpBinary;
         foreach ($ini as $key => $val) {
+            $arg = "{$key}={$val}";
             $cmd .= sprintf(
-                ' --define "%s=%s"',
-                escapeshellarg($key),
-                escapeshellarg($val)
+                ' --define %s',
+                escapeshellarg($arg)
             );
         }
 
