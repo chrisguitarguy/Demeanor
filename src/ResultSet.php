@@ -87,6 +87,14 @@ interface ResultSet extends \Countable
     public function successCount();
 
     /**
+     * Get the count of filtered tests.
+     *
+     * @since   0.2
+     * @return  int
+     */
+    public function filteredCount();
+
+    /**
      * Check to see if the result set is successful (has no errors and no failures).
      *
      * @since   0.1
