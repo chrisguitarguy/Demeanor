@@ -55,11 +55,13 @@ class FilterSubscriber implements Subscriber
 
     /**
      * {@inheritdoc}
+     * The one event here is subscribed very, very late. We want the last status
+     * a test result can get to be filtered.
      */
     public function getSubscribedEvents()
     {
         return [
-            Events::AFTER_TESTCASE  => 'filterTestCase',
+            Events::AFTER_TESTCASE  => ['filterTestCase', -1000],
         ];
     }
 
