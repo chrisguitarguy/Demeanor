@@ -58,6 +58,12 @@ class Command extends BaseCommand
             InputOption::VALUE_NONE,
             'Run all the test suites'
         );
+        $this->addOption(
+            'filter-name',
+            null,
+            InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+            'Filter test cases by name'
+        );
     }
 
     /**

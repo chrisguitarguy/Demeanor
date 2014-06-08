@@ -76,6 +76,19 @@ class DefaultResultSetTest
         Assert::assertCount(1, $set);
     }
 
+    public function testAssingFilteredTestIncreasesFilteredCount()
+    {
+        $set = $this->createSet();
+        $result = $this->createResult();
+        $result->filter();
+
+        Assert::assertEquals(0, $set->filteredCount());
+        Assert::assertCount(0, $set);
+        $set->add($this->testcase(), $result);
+        Assert::assertEquals(1, $set->filteredCount());
+        Assert::assertCount(1, $set);
+    }
+
     public function testResultSetWithErroredTestsIsNotSuccessful()
     {
         $set = $this->createSet();

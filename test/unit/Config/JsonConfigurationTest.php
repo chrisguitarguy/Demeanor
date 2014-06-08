@@ -163,6 +163,14 @@ class JsonConfigurationTest
         }
     }
 
+    public function testGetFiltersReturnsAFilterImplementation()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
+        $config->initialize();
+
+        Assert::assertInstanceOf('Demeanor\\Filter\\Filter', $config->getFilters());
+    }
+
     private function expect(TestContext $ctx)
     {
         $ctx->expectException('Demeanor\\Exception\\ConfigurationException');

@@ -85,6 +85,22 @@ class DefaultTestResult implements TestResult
     /**
      * {@inheritdoc}
      */
+    public function filter()
+    {
+        $this->status = self::STATUS_FILTERED;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function filtered()
+    {
+        return self::STATUS_FILTERED === $this->status;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addMessage($messageType, $message)
     {
         if (!isset($this->messages[$messageType])) {

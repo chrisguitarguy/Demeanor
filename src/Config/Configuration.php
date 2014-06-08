@@ -75,4 +75,12 @@ interface Configuration
      * @return  Demeanor\Event\Subscriber
      */
     public function getEventSubscribers();
+
+    /**
+     * Get the filters defined by the configuration.
+     *
+     * @since   0.2
+     * @return  Demeanor\Filter\Filter
+     */
+    public function getFilters();
 }

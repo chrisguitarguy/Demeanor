@@ -27,6 +27,7 @@ class DefaultResultSet implements ResultSet
     private $failed;
     private $skipped;
     private $success;
+    private $filtered;
     private $all;
 
     public function __construct()
@@ -35,6 +36,7 @@ class DefaultResultSet implements ResultSet
         $this->failed = new \SplObjectStorage();
         $this->skipped = new \SplObjectStorage();
         $this->success = new \SplObjectStorage();
+        $this->filtered = new \SplObjectStorage();
         $this->all = new \SplObjectStorage();
     }
 
@@ -47,6 +49,8 @@ class DefaultResultSet implements ResultSet
 
         if ($result->skipped()) {
             $this->skipped[$test] = $result;
+        } elseif ($result->filtered()) {
+            $this->filtered[$test] = $result;
         } elseif ($result->errored()) {
             $this->errors[$test] = $result;
         } elseif ($result->failed()) {
@@ -102,6 +106,14 @@ class DefaultResultSet implements ResultSet
     public function successCount()
     {
         return count($this->success);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function filteredCount()
+    {
+        return count($this->filtered);
     }
 
     /**
