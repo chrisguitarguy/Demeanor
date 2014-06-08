@@ -34,6 +34,17 @@ $this->describe('#BeforeAfter', function () {
         Assert::assertStringContains('in after callback', $proc->getOutput());
         Assert::assertEquals(0, $proc->getExitCode());
     });
+
+    $this->it('should run after functions even if the test fails', function (TestContext $ctx) {
+        $proc = new Process(DEMEANOR_BINARY.' -vvv', __DIR__.'/Fixtures/beforeafter_withfailure_test');
+        $proc->run();
+
+        $ctx->log(sprintf('STDOUT> %s', $proc->getOutput()));
+        $ctx->log(sprintf('STDERR> %s', $proc->getErrorOutput()));
+        Assert::assertStringContains('in before callback', $proc->getOutput());
+        Assert::assertStringContains('in after callback', $proc->getOutput());
+        Assert::assertGreaterThan(0, $proc->getExitCode());
+    });
 });
 
 $this->describe('#Expect', function () {

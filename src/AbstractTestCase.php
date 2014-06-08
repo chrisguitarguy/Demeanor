@@ -59,9 +59,17 @@ abstract class AbstractTestCase implements TestCase
         try {
             $this->doBeforeCallbacks($context);
             $emitter->emit(Events::BEFORERUN_TESTCASE, new TestRunEvent($this, $context, $result));
-            $this->doRun($testArgs);
+            $exception = null;
+            try {
+                $this->doRun($testArgs);
+            } catch (\Exception $exception) {
+                // catch block only here to set the $exception variable
+            }
             $emitter->emit(Events::AFTERRUN_TESTCASE, new TestRunEvent($this, $context, $result));
-            $this->doAfterCallbacks($context); // TODO figure out how to make these run every time
+            $this->doAfterCallbacks($context);
+            if (null !== $exception) {
+                throw $exception;
+            }
         } catch (TestFailed $e) {
             $result->fail();
         } catch (TestSkipped $e) {
