@@ -12,6 +12,14 @@ Demeanor is PHP testing framework that supports several different test formats.
 #. Unit Tests
 #. PHPT Tests
 
+Contents
+--------
+
+.. toctree::
+   :maxdepth: 2
+
+   configuration
+
 Getting Started
 ---------------
 
@@ -170,9 +178,3 @@ Need More Examples?
 Demeanor uses itself to test -- well, to test itself. Look in the ``test`` directory
 of the `demeanor repository <https://github.com/chrisguitarguy/Demeanor>`_ for
 a bunch more examples.
-
-Contents
---------
-
-.. toctree::
-   :maxdepth: 2
