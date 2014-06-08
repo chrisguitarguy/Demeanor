@@ -24,6 +24,7 @@ Contents
    data-providers
    requirements
    mock-objects
+   exit-codes
 
 Getting Started
 ---------------
