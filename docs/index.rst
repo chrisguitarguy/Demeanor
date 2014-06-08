@@ -17,9 +17,11 @@ Contents
 
 .. toctree::
    :maxdepth: 2
+   :glob:
 
    configuration
    test-context
+   types/*
    annotations
    data-providers
    requirements
