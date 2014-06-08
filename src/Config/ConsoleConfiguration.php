@@ -23,6 +23,8 @@ namespace Demeanor\Config;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Demeanor\Exception\ConfigurationException;
+use Demeanor\Filter\ChainFilter;
+use Demeanor\Filter\NameFilter;
 
 /**
  * A configuration object that's aware of the Symfony InputInterface and serves
@@ -113,6 +115,15 @@ class ConsoleConfiguration implements Configuration
     public function getFilters()
     {
         $chain = $this->wrappedConfig->getFilters();
+        if (!$chain instanceof ChainFilter) {
+            $chain = new ChainFilter([$chain]);
+        }
+
+        $nameFilters = $this->consoleInput->getOption('filter-name') ?: array();
+        foreach ($nameFilters as $name) {
+            $chain->addFilter(new NameFilter($name));
+        }
+
         return $chain;
     }
 }
