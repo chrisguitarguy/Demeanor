@@ -1,23 +1,29 @@
-# Data Providers
+Data Providers
+==============
 
 Data providers let you run the same test with multiple sets of arguments. Any
-`TestCase` implementation can have a provider, but currently they are only
+``TestCase`` implementation can have a provider, but currently they are only
 really first class citizens in the unit test world on Demeanor.
 
-## Annotations
+Annotations
+-----------
 
-Data providers are set on unit tests using the `@Provider` annotation.
+Data providers are set on unit tests using the ``@Provider`` annotation.
 
 Data providers can be one of three types:
 
-1. A static method on the test class -- `@Provider(method="someMethod")` or
-   `@Provider("someMethod")`
-2. A function -- `@Provider(function="a_provider_function")`
+1. A static method on the test class -- ``@Provider(method="someMethod")`` or
+   ``@Provider("someMethod")``
+2. A function -- ``@Provider(function="a_provider_function")``
 3. Inline
-    - `@Provider(data=["one", "two"])`
-    - `@Provider(data={aKey: ["data", "set"], anotherKey: "dataset"})`
 
-### Static Method Data Provider
+    * ``@Provider(data=["one", "two"])``
+    * ``@Provider(data={aKey: ["data", "set"], anotherKey: "dataset"})``
+
+Static Method Data Provider
+---------------------------
+
+.. code-block:: php
 
     <?php
     use Demeanor\TestContext;
@@ -44,7 +50,10 @@ Data providers can be one of three types:
         }
     }
 
-### Function Data Provider
+Function Data Provider
+----------------------
+
+.. code-block:: php
 
     <?php
     use Demeanor\TestContext;
@@ -69,7 +78,10 @@ Data providers can be one of three types:
         }
     }
 
-### Inline Data Provider
+Inline Data Provider
+--------------------
+
+.. code-block:: php
 
     <?php
     use Demeanor\TestContext;
@@ -94,8 +106,9 @@ Data providers can be one of three types:
         }
     }
 
-## The Test Context
+The Test Context
+----------------
 
-Notice the the [test context](03-the-test-context.md) is *always* the first argument
+Notice the the :doc:`test context <test-context>` is *always* the first argument
 to test methods. In Demeanor the context object is important, and any data
 provider arguments will come after it.

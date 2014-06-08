@@ -20,6 +20,9 @@ Contents
 
    configuration
    test-context
+   annotations
+   data-providers
+   requirements
    mock-objects
 
 Getting Started

@@ -1,15 +1,19 @@
-# Annotations
+Annotations
+===========
 
-Demeanor uses a [simple annotation library](https://github.com/chrisguitarguy/Annotation)
+Demeanor uses a `simple annotation library <https://github.com/chrisguitarguy/Annotation>`_
 to make it a bit easier to configure unit tests.
 
 Annotations are case sensitive.
 
-## Class or Method?
+Annotations on Classes or Methods?
+----------------------------------
 
 Annotations can be defined on the test class or test method. Annotations on the
 class will be applied to all test methods in the class. A great use case for
 this is running a method before every test.
+
+.. code-block:: php
 
     <?php
     // AnnotationTest.php
@@ -25,10 +29,13 @@ this is running a method before every test.
         }
     }
 
-## Adding Before/After Callbacks
+Adding Before/After Callbacks
+-----------------------------
 
-The `Before` and `After` annotations provide ways to call methods on the test
+The ``Before`` and ``After`` annotations provide ways to call methods on the test
 class or some function before and after each test case.
+
+.. code-block:: php
 
     <?php
     // BeforeTest.php
@@ -60,17 +67,20 @@ class or some function before and after each test case.
         }
     }
 
-Both `Before` and `After` can take a `method` OR `function` argument. As you
-might expect, `method` calls a method on the test class before the test run and
-`function` calls a function.
+Both ``Before`` and ``After`` can take a ``method`` OR ``function`` argument. As you
+might expect, ``method`` calls a method on the test class before the test run and
+``function`` calls a function.
 
-Nothing will be added if the `method` doesn't exist or isn't public or if the
+Nothing will be added if the ``method`` doesn't exist or isn't public or if the
 function doesn't exist.
 
-## Expecting Exceptions
+Expecting Exceptions
+--------------------
 
-The `Expect` annotation can be used instead of calling `TestContext::expectException`
-in the test method. `Expect` requires the `exception` argument to work.
+The ``Expect`` annotation can be used instead of calling ``TestContext::expectException``
+in the test method. ``Expect`` requires the ``exception`` argument to work.
+
+.. code-block:: php
 
     <?php
     // ExpectTest.php
@@ -90,6 +100,18 @@ in the test method. `Expect` requires the `exception` argument to work.
         }
     }
 
-If the class name in the `exception` argument doesn't exist, the test will be
+If the class name in the ``exception`` argument doesn't exist, the test will be
 errored and will show an error message saying that the exception class wasn't
 found.
+
+Specifying Requirements
+-----------------------
+
+See the :doc:`requirements` documentation for information about using annotations
+to specify requirements.
+
+Data Providers
+--------------
+
+:doc:`Data providers <data-providers>` can also be specified with annotations.
+Details on them can be found on the :doc:`data providers <data-providers>` page.
