@@ -64,7 +64,7 @@ class ConsoleConfigurationTest
     {
         $this->willInitialize();
         $this->consoleHasOption('all', true);
-        $this->consoleHasOption('testsuite', 'a_suite');
+        $this->consoleHasOption('testsuite', ['a_suite']);
 
         $this->consoleConfig->initialize();
     }
