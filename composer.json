@@ -9,7 +9,7 @@
         , "symfony/console": "~2.4"
         , "counterpart/counterpart": "~1.3"
         , "mockery/mockery": "~0.9"
-        , "chrisguitarguy/annotation": "dev-master"
+        , "chrisguitarguy/annotation": "~1.0"
         , "symfony/process": "~2.4"
     }
     , "autoload": {
