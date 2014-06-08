@@ -61,7 +61,7 @@ class FilterSubscriber implements Subscriber
     public function getSubscribedEvents()
     {
         return [
-            Events::AFTER_TESTCASE  => ['filterTestCase', -1000],
+            Events::BEFORE_TESTCASE  => ['filterTestCase', -1000],
         ];
     }
 
