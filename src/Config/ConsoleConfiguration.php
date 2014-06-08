@@ -106,4 +106,13 @@ class ConsoleConfiguration implements Configuration
     {
         return $this->wrappedConfig->getEventSubscribers();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilters()
+    {
+        $chain = $this->wrappedConfig->getFilters();
+        return $chain;
+    }
 }

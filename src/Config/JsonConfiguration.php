@@ -22,6 +22,7 @@
 namespace Demeanor\Config;
 
 use Demeanor\Event\Subscriber;
+use Demeanor\Filter\ChainFilter;
 use Demeanor\Exception\ConfigurationException;
 
 /**
@@ -96,6 +97,16 @@ class JsonConfiguration implements Configuration
     public function getEventSubscribers()
     {
         return $this->config['subscribers'];
+    }
+
+    /**
+     * {@inheritdoc}
+     * There is no filtering done by default in JsonConfiguration, so return
+     * an empty chain.
+     */
+    public function getFilters()
+    {
+        return new ChainFilter();
     }
 
     private function loadConfigFile()
