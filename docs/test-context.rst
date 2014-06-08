@@ -1,15 +1,18 @@
-# The Test Context
+The Test Context
+================
 
 Demeanor has a concept of a test context that's defined by the
-`Demeanor\TestContext` interface. This context object is **always** the first
+``Demeanor\TestContext`` interface. This context object is **always** the first
 argument to any test method or callback.
 
 The test context simply lets you pass messages back to the test case -- telling
 it to fail, skip, expect and exception, or log a message. Additionally the
-context implements `ArrayAccess` so you can use it to store values for the
+context implements ``ArrayAccess`` so you can use it to store values for the
 duration of the test run.
 
 Here's an example for a unit test.
+
+.. code-block:: php
 
     <?php
     // SomeTest.php
@@ -40,13 +43,15 @@ Here's an example for a unit test.
         }
     }
 
-Of these `log` is probably the more interesting. These message are not shown to
+Of these ``log`` is probably the more interesting. These message are not shown to
 the user unless they've cranked up the verbosity on the command line test runner
-(with the `-v|-vv|-vvv` options) or the test fails.
+(with the ``-v|-vv|-vvv`` options) or the test fails.
 
 The same test context object that's passed to the actually test method/callback
 is also passed to the before and after callbacks. This is very useful for
 spec-style tests.
+
+.. code-block:: php
 
     <?php
     // SomeClass.spec.php
@@ -61,11 +66,13 @@ spec-style tests.
         $ctx['something']->cleanup();
     });
 
-    $this->it('should do somethin'g, function (TestContext $ctx) {
+    $this->it('should do something', function (TestContext $ctx) {
         // use $ctx['something'] here
     });
 
-Or using annotations with unit tests (more on annotations later).
+Or using :doc:`annotations` with unit tests.
+
+.. code-block:: php
 
     <?php
     // AnotherTest.php

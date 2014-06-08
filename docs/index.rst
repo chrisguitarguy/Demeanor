@@ -19,6 +19,7 @@ Contents
    :maxdepth: 2
 
    configuration
+   test-context
    mock-objects
 
 Getting Started
