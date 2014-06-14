@@ -29,6 +29,9 @@ class ReportFactory
             case 'diff':
                 return new DiffReport($outputPath);
                 break;
+            case 'text':
+                return new TextReport($outputPath);
+                break;
             default:
                 return new NullReport();
         }
