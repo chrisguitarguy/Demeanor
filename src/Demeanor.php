@@ -119,7 +119,11 @@ final class Demeanor
             new ExceptionSubscriber(),
             new ResultWritingSubscriber($this->outputWriter),
             new FilterSubscriber($this->config->getFilters()),
-            new CoverageSubscriber(),
+            new CoverageSubscriber(
+                $this->config->coverageEnabled(),
+                $this->config->coverageFinder(),
+                $this->config->coverageReports()
+            ),
         ], $this->config->getEventSubscribers());
 
         foreach ($subscribers as $sub) {

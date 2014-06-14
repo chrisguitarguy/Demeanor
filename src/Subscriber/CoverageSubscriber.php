@@ -24,6 +24,7 @@ namespace Demeanor\Subscriber;
 use Demeanor\Events;
 use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestRunEvent;
+use Demeanor\Finder\Finder;
 use Demeanor\Coverage\Collector;
 
 /**
@@ -33,15 +34,25 @@ use Demeanor\Coverage\Collector;
  */
 class CoverageSubscriber implements Subscriber
 {
+    private $finder;
+    private $enabled;
+    private $reports;
     private $coverageCollector;
 
-    public function __construct()
+    public function __construct($enabled, Finder $finder, array $reports)
     {
+        $this->enabled = (bool)$enabled;
+        $this->finder = $finder;
+        $this->reports = $reports;
         $this->coverageCollector = new Collector();
     }
 
     public function getSubscribedEvents()
     {
+        if (!$this->enabled) {
+            return [];
+        }
+
         return [
             Events::BEFORERUN_TESTCASE  => ['startCoverage', -1000],
             Events::AFTERRUN_TESTCASE   => ['stopCoverage', 1000],
