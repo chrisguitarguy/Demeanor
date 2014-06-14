@@ -26,7 +26,10 @@
         }
     }
     , "coverage": {
-        "directories": [
+        "reports": {
+            "diff": "coverage"
+        }
+        , "directories": [
             "src"
         ]
     }

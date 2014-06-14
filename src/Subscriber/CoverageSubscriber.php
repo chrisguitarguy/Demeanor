@@ -26,6 +26,7 @@ use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestRunEvent;
 use Demeanor\Finder\Finder;
 use Demeanor\Coverage\Collector;
+use Demeanor\Coverage\Report\ReportFactory;
 
 /**
  * Collects code coverage on a test case.
@@ -72,6 +73,10 @@ class CoverageSubscriber implements Subscriber
 
     public function writeReports()
     {
-        // todo
+        $files = $this->finder->all();
+        foreach ($this->reports as $type => $output) {
+            $report = ReportFactory::create($type, $output);
+            $report->render($this->coverageCollector, $files);
+        }
     }
 }
