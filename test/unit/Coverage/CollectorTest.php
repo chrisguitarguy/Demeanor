@@ -44,13 +44,15 @@ class CollectorTest
 
     public function testFinishWithNonExistentFileDoesNotAddAnyCoverage()
     {
+        $file = __DIR__ .'/does/not/exist';
         $this->driver->shouldReceive('finish')
             ->once()
-            ->andReturn([__DIR__.'/does/not/exist' => [1,2]]);
+            ->andReturn([$file => [1,2]]);
 
         $this->collector->finish($this->testCase());
+        $cov = $this->collector->getCoverage();
 
-        Assert::assertCount(0, $this->collector->getIterator());
+        Assert::assertArrayDoesNotHaveKey($file, $cov);
     }
 
     public function testFinishWithExistingFileAddsLinesToCoverageReport()
@@ -62,9 +64,9 @@ class CollectorTest
             ]);
 
         $this->collector->finish($this->testCase());
+        $cov = $this->collector->getCoverage();
 
-        $iter = $this->collector->getIterator();
-        Assert::assertCount(1, $iter);
+        Assert::assertArrayHasKey(__FILE__, $cov);
     }
 
     private function testCase()

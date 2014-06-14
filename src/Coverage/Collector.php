@@ -31,7 +31,7 @@ use Demeanor\Coverage\Driver\DriverFactory;
  *
  * @since   0.3
  */
-class Collector implements \IteratorAggregate
+class Collector
 {
     /**
      * A driver instance that powers the code coverage.
@@ -92,7 +92,13 @@ class Collector implements \IteratorAggregate
         }
     }
 
-    public function getIterator()
+    /**
+     * Get the coverage collected by the object.
+     *
+     * @since   0.3
+     * @return  ArrayAccess
+     */
+    public function getCoverage()
     {
         return $this->coverage;
     }
