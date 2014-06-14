@@ -73,10 +73,11 @@ class CoverageSubscriber implements Subscriber
 
     public function writeReports()
     {
+        $coverage = $this->coverageCollector->getCoverage();
         $files = $this->finder->all();
         foreach ($this->reports as $type => $output) {
             $report = ReportFactory::create($type, $output);
-            $report->render($this->coverageCollector, $files);
+            $report->render($coverage, $files);
         }
     }
 }

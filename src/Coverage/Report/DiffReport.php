@@ -50,12 +50,11 @@ class DiffReport implements Report
     /**
      * {@inheritdoc}
      */
-    public function render(Collector $collector, array $fileWhitelist)
+    public function render(\ArrayAccess $coverage, array $fileWhitelist)
     {
-        $iter = $collector->getIterator();
         $cwd = getcwd();
         foreach ($fileWhitelist as $file) {
-            $this->renderFile($iter, $cwd, $file);
+            $this->renderFile($coverage, $cwd, $file);
         }
     }
 

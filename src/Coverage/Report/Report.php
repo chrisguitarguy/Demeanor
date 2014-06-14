@@ -21,8 +21,6 @@
 
 namespace Demeanor\Coverage\Report;
 
-use Demeanor\Coverage\Collector;
-
 /**
  * Reports render collectors into something useful.
  *
@@ -38,5 +36,5 @@ interface Report
      * @param   array $fileWhitelist;
      * @return  void
      */
-    public function render(Collector $collector, array $fileWhitelist);
+    public function render(\ArrayAccess $coverage, array $fileWhitelist);
 }

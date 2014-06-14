@@ -21,8 +21,6 @@
 
 namespace Demeanor\Coverage\Report;
 
-use Demeanor\Coverage\Collector;
-
 /**
  * A report that does nothing.
  *
@@ -33,7 +31,7 @@ class NullReport implements Report
     /**
      * {@inheritdoc}
      */
-    public function render(Collector $collector, array $fileWhitelist)
+    public function render(\ArrayAccess $coverage, array $fileWhitelist)
     {
         // noop
     }
