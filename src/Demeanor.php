@@ -23,6 +23,7 @@ namespace Demeanor;
 
 use Demeanor\Event\Emitter;
 use Demeanor\Event\DefaultEmitter;
+use Demeanor\Event\DefaultEvent;
 use Demeanor\Event\TestCaseEvent;
 use Demeanor\Subscriber\MockerySubscriber;
 use Demeanor\Subscriber\AnnotationSubscriber;
@@ -70,10 +71,13 @@ final class Demeanor
 
         $this->addEventSubscribers();
 
-        set_error_handler([$this, 'errorException']);
 
         $hasErrors = false;
         $results = [];
+
+        $this->emitter->emit(Events::SETUP_ALL, new DefaultEvent());
+
+        set_error_handler([$this, 'errorException']);
         foreach ($this->loadTestSuites() as $name => $testsuite) {
             if (!$this->config->suiteCanRun($name)) {
                 continue;
@@ -82,8 +86,9 @@ final class Demeanor
             $results[$name] = $testsuite->run($this->emitter, $this->outputWriter);
             $hasErrors = $hasErrors || !$results[$name]->successful();
         }
-
         restore_error_handler();
+
+        $this->emitter->emit(Events::TEARDOWN_ALL, new DefaultEvent());
 
         return $hasErrors ? self::EXIT_TESTERROR : self::EXIT_SUCCESS;
     }
