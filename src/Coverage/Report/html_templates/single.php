@@ -12,6 +12,7 @@
     <div class="wrap">
         <h2><?php echo htmlspecialchars($filename, ENT_HTML5); ?></h2>
         <p><?php printf('%.3f%% Covered', $coveredPercent); ?></p>
+        <p><a href="index.html">&laquo; Back</a></p>
         <div class="file">
             <?php foreach ($lines as $lineno => $line): ?>
             <div class="line <?php if (isset($covered[$lineno+1])): ?>covered<?php endif; ?>">
