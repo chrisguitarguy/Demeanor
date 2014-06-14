@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Code Coverage For <?php echo htmlspecialchars($filename, ENT_HTML5); ?></title>
     <style type="text/css">
         <?php
         include __DIR__ .'/normalize.php.css';
