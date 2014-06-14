@@ -27,7 +27,7 @@ class ReportFactory
     {
         switch (strtolower($type)) {
             case 'diff':
-                return new Diffreport($outputPath);
+                return new DiffReport($outputPath);
                 break;
             default:
                 return new NullReport();
