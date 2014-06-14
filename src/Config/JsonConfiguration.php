@@ -117,7 +117,8 @@ class JsonConfiguration implements Configuration
      */
     public function coverageEnabled()
     {
-        return !empty($this->coverageReports());
+        $reports = $this->coverageReports();
+        return !empty($reports);
     }
 
     /**
