@@ -32,6 +32,9 @@ class ReportFactory
             case 'text':
                 return new TextReport($outputPath);
                 break;
+            case 'html':
+                return new HtmlReport($outputPath);
+                break;
             default:
                 return new NullReport();
         }
