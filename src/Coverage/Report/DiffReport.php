@@ -31,43 +31,23 @@ use Demeanor\Coverage\Collector;
  *
  * @since   0.3
  */
-class DiffReport implements Report
+class DiffReport extends FileBasedReport
 {
-    private $outputPath;
-
-    public function __construct($outputPath)
-    {
-        if (!is_dir($outputPath)) {
-            throw new InvalidArgumentException(sprintf(
-                '"%s" is not a valid directory',
-                $outputPath
-            ));
-        }
-
-        $this->outputPath = $outputPath;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function render(\ArrayAccess $coverage, array $fileWhitelist)
     {
-        $cwd = getcwd();
         foreach ($fileWhitelist as $file) {
-            $this->renderFile($coverage, $cwd, $file);
+            $this->renderFile($coverage, $file);
         }
     }
 
-    private function renderFile(\ArrayAccess $collector, $cwd, $file)
+    private function renderFile(\ArrayAccess $coverage, $file)
     {
-        $dir = dirname($file);
-        $filePath = $this->outputPath.DIRECTORY_SEPARATOR.str_replace(
-            ['\\', '/'],
-            '_',
-            trim(str_replace($cwd, '', $file), '/\\')
-        ).'.diff';
+        $filePath = $this->createOutputFilename($file, '.diff');
 
-        $covered = isset($collector[$file]) ? $collector[$file] : array();
+        $covered = isset($collector[$file]) ? $coverage[$file] : array();
 
         $lines = file($file);
         $fh = new \SplFileObject($filePath, 'w');
