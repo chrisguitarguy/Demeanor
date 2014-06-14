@@ -69,6 +69,7 @@ class JsonConfiguration implements Configuration
         $this->validateTestSuites();
         $this->validateDefaultSuites();
         $this->validateEventSubscribers();
+        $this->validateCoverage();
     }
 
     /**
@@ -268,6 +269,31 @@ class JsonConfiguration implements Configuration
         }
 
         return $obj;
+    }
+
+    private function validateCoverage()
+    {
+        if (!empty($this->config['coverage']) && !$this->isAssociativeArray($this->config['coverage'])) {
+            throw new ConfigurationException('"coverage" configuration must be a JSON object');
+        }
+
+        $coverage = array_replace_recursive([
+            'reports'       => array(),
+            'directories'   => array(),
+            'files'         => array(),
+            'glob'          => array(),
+            'exclude'       => [
+                'directories'   => array(),
+                'files'         => array(),
+                'glob'          => array(),
+            ],
+        ], empty($this->config['coverage']) ? array() : $this->config['coverage']);
+
+        if (!empty($coverage['reports']) && !$this->isAssociativeArray($coverage['reports'])) {
+            throw new ConfigurationException('Coverage reports must be a JSON object');
+        }
+
+        $this->config['coverage'] = $coverage;
     }
 
     private function isAssociativeArray($obj)
