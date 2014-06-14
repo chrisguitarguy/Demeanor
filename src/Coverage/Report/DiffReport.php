@@ -47,7 +47,7 @@ class DiffReport extends FileBasedReport
     {
         $filePath = $this->createOutputFilename($file, '.diff');
 
-        $covered = isset($collector[$file]) ? $coverage[$file] : array();
+        $covered = isset($coverage[$file]) ? $coverage[$file] : array();
 
         $lines = file($file);
         $fh = new \SplFileObject($filePath, 'w');
