@@ -78,6 +78,7 @@ final class Demeanor
 
         $this->emitter->emit(Events::SETUP_ALL, new DefaultEvent());
 
+        $oldErrLevel = error_reporting(E_ALL);
         set_error_handler([$this, 'errorException']);
         foreach ($this->loadTestSuites() as $name => $testsuite) {
             if (!$this->config->suiteCanRun($name)) {
@@ -88,6 +89,7 @@ final class Demeanor
             $hasErrors = $hasErrors || !$results[$name]->successful();
         }
         restore_error_handler();
+        error_reporting($oldErrLevel);
 
         $this->emitter->emit(Events::TEARDOWN_ALL, new DefaultEvent());
 
@@ -96,6 +98,13 @@ final class Demeanor
 
     public function errorException($errno, $errstr, $errfile, $errline)
     {
+        // this will return 0 if the call that generated the error was
+        // preceded by the shutup (@) operator.
+        // http://www.php.net//manual/en/language.operators.errorcontrol.php
+        if (!error_reporting()) {
+            return;
+        }
+
         throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
