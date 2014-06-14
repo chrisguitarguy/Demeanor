@@ -25,8 +25,9 @@ use Demeanor\Exception\InvalidArgumentException;
 use Demeanor\Coverage\Collector;
 
 /**
- * Render coverage as "diff" files. Diff reports don't include information
- * about what test cases covered what.
+ * Render coverage as "diff" files with +'s for covered lines and -'s for
+ * uncovered. Diff reports don't include information about what test cases
+ * covered what.
  *
  * @since   0.3
  */
@@ -70,13 +71,13 @@ class DiffReport implements Report
         $covered = isset($collector[$file]) ? $collector[$file] : array();
 
         $lines = file($file);
-        $fh = fopen($filePath, 'w');
-        fwrite($fh, '# '.$file."\n");
-        fprintf($fh, "# %%%.3f Covered\n", 100 * (count($covered)/count($lines)));
+        $fh = new \SplFileObject($filePath, 'w');
+        $fh->fwrite('# '.$file."\n");
+        $fh->fwrite(sprintf("# %%%.3f Covered\n", 100 * (count($covered)/count($lines))));
         foreach ($lines as $lineno => $line) {
             $prefix = isset($covered[$lineno+1]) ? '+' : '-';
-            fwrite($fh, $prefix.$line);
+            $fh->fwrite($prefix.$line);
         }
-        fclose($fh);
+        $fh->fflush();
     }
 }
