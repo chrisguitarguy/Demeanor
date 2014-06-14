@@ -185,6 +185,38 @@ class JsonConfigurationTest
         Assert::assertInstanceOf('Demeanor\\Filter\\Filter', $config->getFilters());
     }
 
+    public function testCoverageEnabledReturnsFalseWithEmptyReports()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
+        $config->initialize();
+
+        Assert::assertFalse($config->coverageEnabled());
+    }
+
+    public function testCoverageEnabledReturnsTrueWithNonEmptyReportArray()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validcoverage_config.json']);
+        $config->initialize();
+
+        Assert::assertTrue($config->coverageEnabled());
+    }
+
+    public function testCoverageFinderReturnsInstanceOfFinder()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validcoverage_config.json']);
+        $config->initialize();
+
+        Assert::assertInstanceOf('Demeanor\\Finder\\Finder', $config->coverageFinder());
+    }
+
+    public function testCoverageReportsReturnArrayOfReports()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validcoverage_config.json']);
+        $config->initialize();
+
+        Assert::assertType('array', $config->coverageReports());
+    }
+
     private function expect(TestContext $ctx)
     {
         $ctx->expectException('Demeanor\\Exception\\ConfigurationException');

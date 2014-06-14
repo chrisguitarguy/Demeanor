@@ -126,4 +126,28 @@ class ConsoleConfiguration implements Configuration
 
         return $chain;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function coverageEnabled()
+    {
+        return !empty($this->coverageReports());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function coverageFinder()
+    {
+        return $this->wrappedConfig->coverageFinder();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function coverageReports()
+    {
+        return $this->wrappedConfig->coverageReports();
+    }
 }

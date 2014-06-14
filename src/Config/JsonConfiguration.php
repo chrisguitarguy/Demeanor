@@ -23,6 +23,8 @@ namespace Demeanor\Config;
 
 use Demeanor\Event\Subscriber;
 use Demeanor\Filter\ChainFilter;
+use Demeanor\Finder\FinderBuilder;
+use Demeanor\Finder\ExcludingFinder;
 use Demeanor\Exception\ConfigurationException;
 
 /**
@@ -108,6 +110,42 @@ class JsonConfiguration implements Configuration
     public function getFilters()
     {
         return new ChainFilter();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function coverageEnabled()
+    {
+        return !empty($this->coverageReports());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function coverageFinder()
+    {
+        $whitelist = FinderBuilder::create()
+            ->withDirectories($this->config['coverage']['directories'], '.php')
+            ->withFiles($this->config['coverage']['files'])
+            ->withGlobs($this->config['coverage']['glob'])
+            ->build();
+
+        $blacklist = FinderBuilder::create()
+            ->withDirectories($this->config['coverage']['exclude']['directories'], '.php')
+            ->withFiles($this->config['coverage']['exclude']['files'])
+            ->withGlobs($this->config['coverage']['exclude']['glob'])
+            ->build();
+
+        return new ExcludingFinder($whitelist, $blacklist);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function coverageReports()
+    {
+        return $this->config['coverage']['reports'];
     }
 
     private function loadConfigFile()
@@ -291,6 +329,11 @@ class JsonConfiguration implements Configuration
 
         if (!empty($coverage['reports']) && !$this->isAssociativeArray($coverage['reports'])) {
             throw new ConfigurationException('Coverage reports must be a JSON object');
+        }
+
+        foreach (['directories', 'files', 'glob'] as $kn) {
+            $coverage[$kn] = $this->ensureArray($coverage[$kn]);
+            $coverage['exclude'][$kn] = $this->ensureArray($coverage[$kn]);
         }
 
         $this->config['coverage'] = $coverage;

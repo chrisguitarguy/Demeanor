@@ -1,0 +1,18 @@
+{
+    "coverage": {
+        "reports": {
+            "html": "coverage"
+        }
+    }
+    , "testsuites": {
+        "a_suite": {
+            "directories": "a_dir"
+            , "glob": "*.php"
+            , "files": "a_file.php"
+            , "bootstrap": "a_bootstrap.php"
+            , "exclude": {
+                "files": "another_file.php"
+            }
+        }
+    }
+}
