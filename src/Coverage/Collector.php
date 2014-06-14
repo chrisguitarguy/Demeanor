@@ -110,7 +110,7 @@ class Collector
         }
 
         foreach ($lines as $lineno => $covered) {
-            if (1 == $covered || -1 == $covered) {
+            if (1 == $covered) {
                 $this->addCoveredLine($testcase, realpath($filename), $lineno);
             }
         }
