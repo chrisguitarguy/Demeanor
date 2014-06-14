@@ -73,7 +73,7 @@ class DiffReport implements Report
         $fh = fopen($filePath, 'w');
         fwrite($fh, '# '.$file."\n");
         foreach ($lines as $lineno => $line) {
-            $prefix = isset($covered[$line+1]) ? '+' : '-';
+            $prefix = isset($covered[$lineno+1]) ? '+' : '-';
             fwrite($fh, $prefix.$line);
         }
         fclose($fh);
