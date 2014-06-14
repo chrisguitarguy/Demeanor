@@ -333,7 +333,7 @@ class JsonConfiguration implements Configuration
 
         foreach (['directories', 'files', 'glob'] as $kn) {
             $coverage[$kn] = $this->ensureArray($coverage[$kn]);
-            $coverage['exclude'][$kn] = $this->ensureArray($coverage[$kn]);
+            $coverage['exclude'][$kn] = $this->ensureArray($coverage['exclude'][$kn]);
         }
 
         $this->config['coverage'] = $coverage;
