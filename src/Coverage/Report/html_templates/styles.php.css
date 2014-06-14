@@ -7,6 +7,23 @@ pre {
   padding: 0;
 }
 
+table {
+  width: 100%;
+}
+
+th {
+  text-align: left;
+}
+
+a, a:visited {
+  color: #428bca;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #2a6496;
+}
+
 .wrap {
   max-width: 1000px;
   margin: 0 auto;
