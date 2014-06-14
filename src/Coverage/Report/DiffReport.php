@@ -72,7 +72,7 @@ class DiffReport implements Report
         $lines = file($file);
         $fh = new \SplFileObject($filePath, 'w');
         $fh->fwrite('# '.$file."\n");
-        $fh->fwrite(sprintf("# %%%.3f Covered\n", 100 * (count($covered)/count($lines))));
+        $fh->fwrite(sprintf("# %.3f%% Covered\n", 100 * (count($covered)/count($lines))));
         foreach ($lines as $lineno => $line) {
             $prefix = isset($covered[$lineno+1]) ? '+' : '-';
             $fh->fwrite($prefix.$line);
