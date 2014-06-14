@@ -31,6 +31,7 @@ use Demeanor\Subscriber\RequirementSubscriber;
 use Demeanor\Subscriber\ExceptionSubscriber;
 use Demeanor\Subscriber\ResultWritingSubscriber;
 use Demeanor\Subscriber\FilterSubscriber;
+use Demeanor\Subscriber\CoverageSubscriber;
 use Demeanor\Config\Configuration;
 use Demeanor\Output\OutputWriter;
 use Demeanor\Exception\ConfigurationException;
@@ -118,6 +119,7 @@ final class Demeanor
             new ExceptionSubscriber(),
             new ResultWritingSubscriber($this->outputWriter),
             new FilterSubscriber($this->config->getFilters()),
+            new CoverageSubscriber(),
         ], $this->config->getEventSubscribers());
 
         foreach ($subscribers as $sub) {
