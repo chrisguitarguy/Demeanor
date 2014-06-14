@@ -67,7 +67,7 @@ class TextReport implements Report
                 return 'php://stdout';
                 break;
             case 'STDERR':
-                return 'php::/stderr';
+                return 'php://stderr';
                 break;
             default:
                 return $this->filename;
