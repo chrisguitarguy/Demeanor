@@ -60,7 +60,10 @@ class CollectorTest
         $this->driver->shouldReceive('finish')
             ->once()
             ->andReturn([
-                __FILE__    => [1, 2],
+                __FILE__    => [
+                    1 => 1,
+                    2 => -1,
+                ],
             ]);
 
         $this->collector->finish($this->testCase());

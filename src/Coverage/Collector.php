@@ -109,8 +109,10 @@ class Collector
             return false;
         }
 
-        foreach ($lines as $lineno) {
-            $this->addCoveredLine($testcase, realpath($filename), $lineno);
+        foreach ($lines as $lineno => $covered) {
+            if (1 == $covered || -1 == $covered) {
+                $this->addCoveredLine($testcase, realpath($filename), $lineno);
+            }
         }
     }
 

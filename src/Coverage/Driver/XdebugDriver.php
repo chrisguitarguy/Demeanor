@@ -33,7 +33,7 @@ class XdebugDriver implements Driver
      */
     public function start()
     {
-        xdebug_start_code_coverage();
+        xdebug_start_code_coverage(XDEBUG_CC_UNUSED);
     }
 
     /**
