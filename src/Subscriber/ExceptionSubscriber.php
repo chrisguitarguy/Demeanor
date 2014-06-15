@@ -36,8 +36,6 @@ use Demeanor\StackTrace\FileStackTraceFilter;
  */
 class ExceptionSubscriber implements Subscriber
 {
-    private $assertReflect = null;
-
     private $assertionFilter;
     private $exceptionFilter;
 
