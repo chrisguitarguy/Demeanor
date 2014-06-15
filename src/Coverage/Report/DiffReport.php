@@ -55,7 +55,7 @@ class DiffReport extends FileBasedReport
         $fh->fwrite(sprintf("# %.3f%% Covered\n", 100 * (count($covered)/count($lines))));
         foreach ($lines as $lineno => $line) {
             $prefix = isset($covered[$lineno+1]) ? '+' : ' ';
-            $fh->fwrite($prefix.$line);
+            $fh->fwrite(rtrim($prefix.$line) . "\n");
         }
         $fh->fflush();
     }
