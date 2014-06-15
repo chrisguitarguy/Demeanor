@@ -22,6 +22,7 @@ Contents
    configuration
    test-context
    types/*
+   code-coverage
    annotations
    data-providers
    requirements
