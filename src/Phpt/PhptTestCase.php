@@ -65,7 +65,6 @@ class PhptTestCase extends AbstractTestCase
     {
         $testCode = $this->getSection('FILE');
         $skipCode = $this->getSection('SKIPIF');
-        $cleanCode = $this->getSection('CLEAN');
 
         if ($skipReason = $this->shouldSkip($skipCode)) {
             throw new TestSkipped($skipReason);
