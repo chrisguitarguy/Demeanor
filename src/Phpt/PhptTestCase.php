@@ -70,7 +70,7 @@ class PhptTestCase extends AbstractTestCase
             throw new TestSkipped($skipReason);
         }
 
-        list($stdout, $stderr) = $this->runCode($testCode);
+        list($stdout) = $this->runCode($testCode);
 
         $stdout = trim($stdout);
         $thrown = null;
