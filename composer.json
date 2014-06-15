@@ -1,6 +1,8 @@
 {
     "name": "demeanor/demeanor"
     , "description": "A multi-paradigm testing utility"
+    , "license": "Apache-2.0"
+    , "keywords": ["testing", "test"]
     , "authors": [
         { "name": "Christopher Davis", "homepage": "http://christopherdavis.me" }
     ]
