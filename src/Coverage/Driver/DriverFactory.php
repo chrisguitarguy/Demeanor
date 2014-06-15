@@ -30,7 +30,7 @@ class DriverFactory
 {
     public static function create()
     {
-        if (function_exists('xdebug_start_code_coverage')) {
+        if (function_exists('xdebug_start_code_coverage') && ini_get('xdebug.coverage_enable')) {
             return new XdebugDriver();
         }
 
