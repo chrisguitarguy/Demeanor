@@ -128,7 +128,7 @@ class PhptTestCase extends AbstractTestCase
             return false;
         }
 
-        list($stdout, $stderr) = $this->runCode($skipCode);
+        list($stdout) = $this->runCode($skipCode);
         if (preg_match('/^skip.*$/ui', trim($stdout), $matches)) {
             return trim($matches[0]);
         }
