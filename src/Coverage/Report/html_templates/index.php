@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Covde Coverage Report</title>
+    <title>Code Coverage Report</title>
     <style type="text/css">
         <?php
         include __DIR__ .'/normalize.php.css';
