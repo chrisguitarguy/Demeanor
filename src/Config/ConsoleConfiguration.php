@@ -132,6 +132,10 @@ class ConsoleConfiguration implements Configuration
      */
     public function coverageEnabled()
     {
+        if ($this->consoleInput->getOption('no-coverage')) {
+            return false;
+        }
+
         $reports = $this->coverageReports();
         return !empty($reports);
     }
@@ -149,6 +153,19 @@ class ConsoleConfiguration implements Configuration
      */
     public function coverageReports()
     {
-        return $this->wrappedConfig->coverageReports();
+        $reports = $this->wrappedConfig->coverageReports();
+        if ($html = $this->consoleInput->getOption('coverage-html')) {
+            $reports['html'] = $html;
+        }
+
+        if ($diff = $this->consoleInput->getOption('coverage-diff')) {
+            $reports['diff'] = $diff;
+        }
+
+        if ($text = $this->consoleInput->getOption('coverage-text')) {
+            $reports['text'] = $text;
+        }
+
+        return $reports;
     }
 }
