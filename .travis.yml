@@ -8,4 +8,4 @@ php:
 install:
     - composer install --prefer-source --dev
 
-script: ./demeanor --all
+script: ./demeanor --all --no-coverage
