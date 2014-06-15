@@ -49,7 +49,7 @@ class DefaultSpecification implements Specification
             return;
         }
 
-        $specObj = new self($this->collection, $this->description.$description, $spec, $this->before, $this->after);
+        new self($this->collection, $this->description.$description, $spec, $this->before, $this->after);
     }
 
     /**
