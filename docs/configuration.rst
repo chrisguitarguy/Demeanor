@@ -10,6 +10,8 @@ line options.
 
     ./vendor/bin/demeanor --config a_custom_config.json
 
+.. _test-suites:
+
 Test Suites
 -----------
 
@@ -176,3 +178,91 @@ hook in and change how the test runs work.
 These subscribers should have a argumentless constructor. Demeanor uses the
 event subscriber API itself, look in the ``src/Subscriber`` directory of the
 `demeanor repo <https://github.com/chrisguitarguy/Demeanor>`_ for examples.
+
+.. _code-coverage-config:
+
+Code Coverage
+-------------
+
+Demeanor's code coverage uses a whitelist of files to generate reports. Unless
+``coverage`` is defined in ``demeanor.json`` no coverage will be reported on.
+
+``coverage`` looks very close to a test suite.
+
+.. code-block:: json
+
+    {
+        "coverage": {
+            "reports": {
+                "text": "coverage/coverage.txt",
+                "html": "coverage/html_dir",
+                "diff": "coverage/diff_dir"
+            },
+            "directories": [
+                "src/"
+            ],
+            "files": [
+                "path/to/a/file.php"
+            ],
+            "glob": [
+                "files/*.php"
+            ],
+            "exclude": {
+                "directories": [
+                    "src/NotThisOne"
+                ],
+                "files": [
+                    "path/to/a/file/excluded.php"
+                ],
+                "glob": [
+                    "files/nothere/*.php"
+                ]
+            }
+        }
+    }
+
+- ``directories`` is a list of directories that will be search for all files
+  ending with ``.php``
+- ``files`` and ``glob`` work as described in the :ref:`test suites <test-suites>`
+- ``exclude`` can be used to leave files out of the coverage report. All of its
+  keys (``directories``, ``files``, and ``glob``) work the same as described in
+  the two points above.
+- ``reports`` is really the only coverage specific part of the configuration. It
+  defines a set of coverage reports with the report type as the key and an output
+  path as the value. Reports is optional, report options can be specified from
+  the CLI.
+
+If no directories, files, or glob keys are provided, Demeanor will no generate
+any coverage reports or may generate an empty ``index.html``.
+
+Please see :doc:`code-coverage` for a more complete guide to report types.
+
+.. _code-coverage-cli-config:
+
+Command Line Coverage Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- The ``--no-coverage`` option will completely disable collection and rendering
+  of coverage reports.
+- ``--coverage-html`` tells Demeanor to use a the supplied directory to output a
+  html report.
+- ``--coverage-text`` tells Demeanor use the supplied file path to write a text
+  report.
+- ``--coverage-diff`` tells Demeanor to use the supplied directory to output a
+  diff report.
+
+Some examples:
+
+.. code-block:: bash
+
+    # disable coverage completely
+    ./vendor/bin/demeanor --no-coverage
+
+    # output an HTML report to the coverage directory
+    ./vendor/bin/demeanor --coverage-html=coverage
+
+    # output a diff reprot to the coverage directory
+    ./vendor/bin/demeanor --coverage-diff=coverage
+
+    # output a text report to the file coverage.txt
+    ./vendor/bin/demeanor --coverage-text=coverage.txt

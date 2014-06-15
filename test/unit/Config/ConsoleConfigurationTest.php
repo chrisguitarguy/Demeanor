@@ -140,6 +140,47 @@ class ConsoleConfigurationTest
         Assert::assertIdentical($filter, $this->consoleConfig->getFilters());
     }
 
+    public function testCoverageEnabledWithNoCoverageOptionsReturnsFalse()
+    {
+        $this->consoleHasOption('no-coverage', true);
+        Assert::assertFalse($this->consoleConfig->coverageEnabled());
+    }
+
+    public function testCoverageEnabledWithoutNoCoverageProxiesToReports()
+    {
+        $this->withCoverageReports(['html' => 1]);
+        Assert::assertTrue($this->consoleConfig->coverageEnabled());
+    }
+
+    public function testCoverageFinderProxiesToWrappedConfig()
+    {
+        $finder = \Mockery::mock('Demeanor\\Finder\\Finder');
+        $this->wrappedConfig->shouldReceive('coverageFinder')
+            ->atLeast(1)
+            ->andReturn($finder);
+
+        Assert::assertIdentical($finder, $this->consoleConfig->coverageFinder());
+    }
+
+    public function testConsoleCoverageReportsOverrideWrappedConfiguration()
+    {
+        $this->withCoverageReports([
+            'html'  => 'html',
+            'diff'  => 'diff',
+            'text'  => 'text',
+        ]);
+        $this->consoleHasOption('coverage-html', 'html2');
+        $this->consoleHasOption('coverage-text', 'text2');
+        $this->consoleHasOption('coverage-diff', 'diff2');
+
+        $reports = $this->consoleConfig->coverageReports();
+
+        foreach (['html', 'diff', 'text'] as $rt) {
+            Assert::assertArrayHasKey($rt, $reports);
+            Assert::assertEquals("{$rt}2", $reports[$rt]);
+        }
+    }
+
     private function consoleHasOption($name, $value=null)
     {
         $this->consoleInput->setOption($name, $value);
@@ -173,5 +214,12 @@ class ConsoleConfigurationTest
         $this->wrappedConfig->shouldReceive('getFilters')
             ->atLeast(1)
             ->andReturn($filter);
+    }
+
+    private function withCoverageReports(array $reports)
+    {
+        $this->wrappedConfig->shouldReceive('coverageReports')
+            ->atLeast(1)
+            ->andReturn($reports);
     }
 }

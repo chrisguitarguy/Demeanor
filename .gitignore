@@ -1,6 +1,4 @@
 /vendor
-/coverage/*
-/phpunit.xml
 /composer.lock
 
 # ignore certain files

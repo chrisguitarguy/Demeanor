@@ -83,5 +83,15 @@ final class Events
      */
     const TEARDOWN_TESTCASE     = 'testcase.teardown';
 
+    /**
+     * Fired before any testsuites are run.
+     */
+    const SETUP_ALL             = 'all.setup';
+
+    /**
+     * Fired after all test suites are run.
+     */
+    const TEARDOWN_ALL          = 'all.teardown';
+
     private function __construct() { }
 }

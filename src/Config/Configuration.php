@@ -83,4 +83,29 @@ interface Configuration
      * @return  Demeanor\Filter\Filter
      */
     public function getFilters();
+
+    /**
+     * Check to see if coverage is enabled.
+     *
+     * @since   0.3
+     * @return  boolean
+     */
+    public function coverageEnabled();
+
+    /**
+     * Create the Finder object that will be used for coverage.
+     *
+     * @since   0.3
+     * @return  Finder
+     */
+    public function coverageFinder();
+
+    /**
+     * Get the associative array of report objects + output paths for
+     * code coverage
+     *
+     * @since   0.3
+     * @return  array
+     */
+    public function coverageReports();
 }

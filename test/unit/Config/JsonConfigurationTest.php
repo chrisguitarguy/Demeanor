@@ -150,6 +150,20 @@ class JsonConfigurationTest
         $config->initialize();
     }
 
+    public function testNonAssociativeCoverageThrowsException(TestContext $ctx)
+    {
+        $this->expect($ctx);
+        $config = new JsonConfiguration([__DIR__.'/../Fixtures/badcoverage_config.json']);
+        $config->initialize();
+    }
+
+    public function testNonAssociativeArrayCoverageReportsThrowsException(TestContext $ctx)
+    {
+        $this->expect($ctx);
+        $config = new JsonConfiguration([__DIR__.'/../Fixtures/badcoveragereports_config.json']);
+        $config->initialize();
+    }
+
     public function testGetEventSubscribersReturnInstanceOfSubscriberWhenGivenValidConfig()
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validsubscriber_config.json']);
@@ -169,6 +183,38 @@ class JsonConfigurationTest
         $config->initialize();
 
         Assert::assertInstanceOf('Demeanor\\Filter\\Filter', $config->getFilters());
+    }
+
+    public function testCoverageEnabledReturnsFalseWithEmptyReports()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
+        $config->initialize();
+
+        Assert::assertFalse($config->coverageEnabled());
+    }
+
+    public function testCoverageEnabledReturnsTrueWithNonEmptyReportArray()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validcoverage_config.json']);
+        $config->initialize();
+
+        Assert::assertTrue($config->coverageEnabled());
+    }
+
+    public function testCoverageFinderReturnsInstanceOfFinder()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validcoverage_config.json']);
+        $config->initialize();
+
+        Assert::assertInstanceOf('Demeanor\\Finder\\Finder', $config->coverageFinder());
+    }
+
+    public function testCoverageReportsReturnArrayOfReports()
+    {
+        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validcoverage_config.json']);
+        $config->initialize();
+
+        Assert::assertType('array', $config->coverageReports());
     }
 
     private function expect(TestContext $ctx)

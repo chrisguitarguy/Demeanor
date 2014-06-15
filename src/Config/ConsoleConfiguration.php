@@ -126,4 +126,46 @@ class ConsoleConfiguration implements Configuration
 
         return $chain;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function coverageEnabled()
+    {
+        if ($this->consoleInput->getOption('no-coverage')) {
+            return false;
+        }
+
+        $reports = $this->coverageReports();
+        return !empty($reports);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function coverageFinder()
+    {
+        return $this->wrappedConfig->coverageFinder();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function coverageReports()
+    {
+        $reports = $this->wrappedConfig->coverageReports();
+        if ($html = $this->consoleInput->getOption('coverage-html')) {
+            $reports['html'] = $html;
+        }
+
+        if ($diff = $this->consoleInput->getOption('coverage-diff')) {
+            $reports['diff'] = $diff;
+        }
+
+        if ($text = $this->consoleInput->getOption('coverage-text')) {
+            $reports['text'] = $text;
+        }
+
+        return $reports;
+    }
 }

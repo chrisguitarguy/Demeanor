@@ -23,6 +23,7 @@ namespace Demeanor;
 
 use Demeanor\Event\Emitter;
 use Demeanor\Event\DefaultEmitter;
+use Demeanor\Event\DefaultEvent;
 use Demeanor\Event\TestCaseEvent;
 use Demeanor\Subscriber\MockerySubscriber;
 use Demeanor\Subscriber\AnnotationSubscriber;
@@ -30,6 +31,7 @@ use Demeanor\Subscriber\RequirementSubscriber;
 use Demeanor\Subscriber\ExceptionSubscriber;
 use Demeanor\Subscriber\ResultWritingSubscriber;
 use Demeanor\Subscriber\FilterSubscriber;
+use Demeanor\Subscriber\CoverageSubscriber;
 use Demeanor\Config\Configuration;
 use Demeanor\Output\OutputWriter;
 use Demeanor\Exception\ConfigurationException;
@@ -41,7 +43,7 @@ use Demeanor\Exception\ConfigurationException;
  */
 final class Demeanor
 {
-    const VERSION   = '0.2';
+    const VERSION   = '0.3';
     const NAME      = 'Demeanor';
 
     const EXIT_SUCCESS      = 0;
@@ -70,10 +72,14 @@ final class Demeanor
 
         $this->addEventSubscribers();
 
-        set_error_handler([$this, 'errorException']);
 
         $hasErrors = false;
         $results = [];
+
+        $this->emitter->emit(Events::SETUP_ALL, new DefaultEvent());
+
+        $oldErrLevel = error_reporting(E_ALL);
+        set_error_handler([$this, 'errorException']);
         foreach ($this->loadTestSuites() as $name => $testsuite) {
             if (!$this->config->suiteCanRun($name)) {
                 continue;
@@ -82,14 +88,23 @@ final class Demeanor
             $results[$name] = $testsuite->run($this->emitter, $this->outputWriter);
             $hasErrors = $hasErrors || !$results[$name]->successful();
         }
-
         restore_error_handler();
+        error_reporting($oldErrLevel);
+
+        $this->emitter->emit(Events::TEARDOWN_ALL, new DefaultEvent());
 
         return $hasErrors ? self::EXIT_TESTERROR : self::EXIT_SUCCESS;
     }
 
     public function errorException($errno, $errstr, $errfile, $errline)
     {
+        // this will return 0 if the call that generated the error was
+        // preceded by the shutup (@) operator.
+        // http://www.php.net//manual/en/language.operators.errorcontrol.php
+        if (!error_reporting()) {
+            return;
+        }
+
         throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
@@ -113,6 +128,11 @@ final class Demeanor
             new ExceptionSubscriber(),
             new ResultWritingSubscriber($this->outputWriter),
             new FilterSubscriber($this->config->getFilters()),
+            new CoverageSubscriber(
+                $this->config->coverageEnabled(),
+                $this->config->coverageFinder(),
+                $this->config->coverageReports()
+            ),
         ], $this->config->getEventSubscribers());
 
         foreach ($subscribers as $sub) {

@@ -21,10 +21,7 @@
 
 namespace Demeanor;
 
-use Demeanor\Finder\ChainFinder;
-use Demeanor\Finder\DirectoryFinder;
-use Demeanor\Finder\FileFinder;
-use Demeanor\Finder\GlobFinder;
+use Demeanor\Finder\FinderBuilder;
 use Demeanor\Finder\ExcludingFinder;
 use Demeanor\Unit\UnitTestSuite;
 use Demeanor\Spec\SpecTestSuite;
@@ -83,47 +80,18 @@ class TestSuiteFactory
 
     private function createFinder(array $configuration, $suffix=null)
     {
-        $finder = new ChainFinder();
-        $this->addDirectoryFinders($finder, $configuration['directories'], $suffix);
-        $this->addFileFinders($finder, $configuration['files']);
-        $this->addGlobFinders($finder, $configuration['glob']);
+        $finder = FinderBuilder::create()
+            ->withDirectories($configuration['directories'], $suffix)
+            ->withFiles($configuration['files'])
+            ->withGlobs($configuration['glob'])
+            ->build();
 
-        $exclude = new ChainFinder();
-        $this->addDirectoryFinders($exclude, $configuration['exclude']['directories'], $suffix);
-        $this->addFileFinders($exclude, $configuration['exclude']['files']);
-        $this->addGlobFinders($exclude, $configuration['exclude']['glob']);
+        $exclude = FinderBuilder::create()
+            ->withDirectories($configuration['exclude']['directories'], $suffix)
+            ->withFiles($configuration['exclude']['files'])
+            ->withGlobs($configuration['exclude']['glob'])
+            ->build();
 
         return new ExcludingFinder($finder, $exclude);
-    }
-
-    private function addDirectoryFinders(ChainFinder $chain, array $directories, $suffix=null)
-    {
-        if (!$directories) {
-            return;
-        }
-
-        foreach ($directories as $directory) {
-            $chain->addFinder(new DirectoryFinder($directory, $suffix));
-        }
-    }
-
-    private function addFileFinders(ChainFinder $chain, array $files)
-    {
-        if (!$files) {
-            return;
-        }
-
-        $chain->addFinder(new FileFinder($files));
-    }
-
-    private function addGlobFinders(ChainFinder $chain, array $globs)
-    {
-        if (!$globs) {
-            return;
-        }
-
-        foreach ($globs as $glob) {
-            $chain->addFinder(new GlobFinder($glob));
-        }
     }
 }

@@ -64,6 +64,30 @@ class Command extends BaseCommand
             InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
             'Filter test cases by name'
         );
+        $this->addOption(
+            'no-coverage',
+            null,
+            InputOption::VALUE_NONE,
+            'Turn off all coverage reports'
+        );
+        $this->addOption(
+            'coverage-html',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Generate an HTML coverage report in the provided directory'
+        );
+        $this->addOption(
+            'coverage-text',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Generate a text based coverage report to the provide filename'
+        );
+        $this->addOption(
+            'coverage-diff',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Generate a diff-file coverage report to the provided directory'
+        );
     }
 
     /**
