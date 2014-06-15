@@ -21,29 +21,31 @@
 
 namespace Demeanor\Coverage\Report;
 
-use Counterpart\Assert;
-
-class TextReportTest extends ReportTestCase
+abstract class ReportTestCase
 {
-    private $outputFile;
-    private $report;
-
-    public function __construct()
+    protected function rmdir($dir)
     {
-        $this->outputFile = __DIR__.'/../../Fixtures/tmp/coverage.txt';
-        if (file_exists($this->outputFile)) {
-            unlink($this->outputFile);
+        $iter = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($iter as $file) {
+            $file->isDir() ? rmdir($file->getPathname()) : unlink($file->getPathname());
         }
-        $this->report = new TextReport($this->outputFile);
+        rmdir($dir);
     }
 
-    public function testRenderOutputsFileWithExpectedContents()
+    protected function createCoverage()
     {
-        list($coverage, $files) = $this->createCoverage();
+        $coverage = new \ArrayObject([
+            __FILE__    => [
+                1   => 1,
+                2   => 1,
+            ],
+        ]);
+        $files = [__FILE__];
 
-        $this->report->render($coverage, $files);
-
-        Assert::assertFileExists($this->outputFile);
-        Assert::assertStringContains(__DIR__, file_get_contents($this->outputFile));
+        return [$coverage, $files];
     }
 }
