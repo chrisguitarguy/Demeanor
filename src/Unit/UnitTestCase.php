@@ -22,8 +22,6 @@
 namespace Demeanor\Unit;
 
 use Demeanor\AbstractTestCase;
-use Demeanor\TestResult;
-use Demeanor\TestContext;
 
 class UnitTestCase extends AbstractTestCase
 {

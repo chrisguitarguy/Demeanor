@@ -22,7 +22,6 @@
 namespace Demeanor\Annotation;
 
 use Demeanor\Unit\UnitTestCase;
-use Demeanor\Exception\UnexpectedValueException;
 
 /**
  * Set the data provider for a test case.

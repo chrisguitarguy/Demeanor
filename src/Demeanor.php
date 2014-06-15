@@ -24,7 +24,6 @@ namespace Demeanor;
 use Demeanor\Event\Emitter;
 use Demeanor\Event\DefaultEmitter;
 use Demeanor\Event\DefaultEvent;
-use Demeanor\Event\TestCaseEvent;
 use Demeanor\Subscriber\MockerySubscriber;
 use Demeanor\Subscriber\AnnotationSubscriber;
 use Demeanor\Subscriber\RequirementSubscriber;

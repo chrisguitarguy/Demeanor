@@ -21,8 +21,6 @@
 
 namespace Demeanor\StackTrace;
 
-use Demeanor\Exception\InvalidArgumentException;
-
 /**
  * A StackTraceFilter implementation that limits traces to frames that include
  * a `file` key that points to a valid file.

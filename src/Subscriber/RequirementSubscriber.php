@@ -21,7 +21,6 @@
 
 namespace Demeanor\Subscriber;
 
-use Demeanor\TestCase;
 use Demeanor\Events;
 use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestRunEvent;

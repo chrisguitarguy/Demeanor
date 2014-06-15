@@ -22,8 +22,6 @@
 namespace Demeanor\Spec;
 
 use Demeanor\AbstractTestCase;
-use Demeanor\TestResult;
-use Demeanor\TestContext;
 
 /**
  * Represents a specification test case.

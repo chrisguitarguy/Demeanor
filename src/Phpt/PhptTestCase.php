@@ -23,7 +23,6 @@ namespace Demeanor\Phpt;
 
 use Counterpart\Assert;
 use Demeanor\AbstractTestCase;
-use Demeanor\Exception\UnexpectedValueException;
 use Demeanor\Exception\TestSkipped;
 
 class PhptTestCase extends AbstractTestCase

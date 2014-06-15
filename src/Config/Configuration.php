@@ -21,8 +21,6 @@
 
 namespace Demeanor\Config;
 
-use Demeanor\Exception\ConfigurationException;
-
 /**
  * Represents the overall configuration of the test runner. This is responsible
  * for loading configuration from files and making sure it's valid.
@@ -45,7 +43,7 @@ interface Configuration
      * that everything is okay.
      *
      * @since   0.1
-     * @throws  ConfigurtionException
+     * @throws  Demeanor\Exception\ConfigurationException
      * @return  void
      */
     public function initialize();

@@ -21,7 +21,6 @@
 
 namespace Demeanor\Output;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Demeanor\TestCase;
 use Demeanor\TestSuite;

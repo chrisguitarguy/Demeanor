@@ -21,9 +21,6 @@
 
 namespace Demeanor\Coverage\Report;
 
-use Demeanor\Exception\InvalidArgumentException;
-use Demeanor\Coverage\Collector;
-
 /**
  * Render coverage as "diff" files with +'s for covered lines and -'s for
  * uncovered. Diff reports don't include information about what test cases
