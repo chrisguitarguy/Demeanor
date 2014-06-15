@@ -40,12 +40,21 @@ abstract class ReportTestCase
     {
         $coverage = new \ArrayObject([
             __FILE__    => [
-                1   => 1,
-                2   => 1,
+                1   => [$this->testCase()],
+                2   => [$this->testCase()],
             ],
         ]);
         $files = [__FILE__];
 
         return [$coverage, $files];
+    }
+
+    protected function testCase()
+    {
+        return \Mockery::mock('Demeanor\\TestCase', function ($mock) {
+            $mock->shouldReceive('getName');
+            $mock->shouldReceive('filename');
+            $mock->shouldReceive('lineno');
+        });
     }
 }
