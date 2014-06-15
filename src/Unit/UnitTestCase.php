@@ -145,8 +145,6 @@ class UnitTestCase extends AbstractTestCase
     /**
      * Creates the class in which the test method resides.
      *
-     * TODO allow for factory methods.
-     *
      * @since   0.1
      * @return  object
      */
