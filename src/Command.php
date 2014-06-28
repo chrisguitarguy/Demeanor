@@ -71,6 +71,12 @@ class Command extends BaseCommand
             'Run only test cases with a given group'
         );
         $this->addOption(
+            'exclude-group',
+            null,
+            InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+            'Run only test cases that are not in a given group'
+        );
+        $this->addOption(
             'no-coverage',
             null,
             InputOption::VALUE_NONE,
