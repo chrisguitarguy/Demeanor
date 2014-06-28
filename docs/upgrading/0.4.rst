@@ -10,5 +10,5 @@ meet all defined filters to run. For example:
 
     ./vendor/bin/demeanor --filter-name SomeTest --include-group aGroup
 
-Only tests with *SomeTest* in their name that belong to the group *aGroup** will
+Only tests with *SomeTest* in their name that belong to the group *aGroup* will
 run.
