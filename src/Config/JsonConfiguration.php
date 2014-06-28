@@ -36,6 +36,7 @@ class JsonConfiguration implements Configuration
 {
     private $search;
     private $configFile = null;
+    private $cleaner;
     private $config = array();
 
     /**
@@ -46,12 +47,13 @@ class JsonConfiguration implements Configuration
      * @param   array $search
      * @return  void
      */
-    public function __construct(array $search=null)
+    public function __construct(array $search=null, Cleaner $cleaner=null)
     {
         $this->search = $search ?: [
             'demeanor.json',
             'demanor.dist.json'
         ];
+        $this->cleaner = $cleaner ?: new DefaultCleaner();
     }
 
     /**
@@ -67,11 +69,8 @@ class JsonConfiguration implements Configuration
      */
     public function initialize()
     {
-        $this->loadConfigFile();
-        $this->validateTestSuites();
-        $this->validateDefaultSuites();
-        $this->validateEventSubscribers();
-        $this->validateCoverage();
+        $config = $this->loadConfigFile();
+        $this->config = $this->cleaner->cleanConfig($config);
     }
 
     /**
@@ -162,10 +161,12 @@ class JsonConfiguration implements Configuration
             throw new ConfigurationException(sprintf('Configuration file %s does not exist', $fn));
         }
 
-        $this->config = json_decode(file_get_contents($fn), true);
+        $config = json_decode(file_get_contents($fn), true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new ConfigurationException(sprintf('Error parsing JSON in %s', $fn));
         }
+
+        return $config;
     }
 
     private function locateConfigFile()
