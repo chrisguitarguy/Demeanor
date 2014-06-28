@@ -50,63 +50,12 @@ class JsonConfigurationTest
         $config->initialize();
     }
 
-    public function testInitializeThrowsWhenConfigurationDoesNotDefineAnyTestSuites(TestContext $ctx)
-    {
-        $this->expect($ctx);
-        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/nosuites_config.json']);
-        $config->initialize();
-    }
-
-    public function testInitializeThrowsWhenTestSuiteConfigurationIsNotAnAssociativeArray(TestContext $ctx)
-    {
-        $this->expect($ctx);
-        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/badsuites_config.json']);
-        $config->initialize();
-    }
-
-    public function testInitializeThrowsWhenInvidualTestSuiteConfigIsNotAssociativeArray(TestContext $ctx)
-    {
-        $this->expect($ctx);
-        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/badsuite_config.json']);
-        $config->initialize();
-    }
-
-    public function testInitializeThrowsWhenExcludeIsNotAnAssociativeArray(TestContext $ctx)
-    {
-        $this->expect($ctx);
-        $config = new JsonConfiguration([__DIR__.'/../Fixtures/badexclude_config.json']);
-        $config->initialize();
-    }
-
-    public function testConfigurationNormalizesTestSuiteConfig()
-    {
-        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
-        $config->initialize();
-        $suites = $config->getTestSuites();
-        $suite = array_pop($suites);
-
-        Assert::assertType('array', $suite);
-        Assert::assertType('array', $suite['bootstrap']);
-        Assert::assertType('array', $suite['exclude']);
-        foreach (['files', 'glob', 'directories'] as $kn) {
-            Assert::assertType('array', $suite[$kn]);
-            Assert::assertType('array', $suite['exclude'][$kn]);
-        }
-    }
-
     public function testSuiteCanRunReturnsTrueWhenNoDefaultSuitesAreSet(TestContext $ctx)
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
         $config->initialize();
 
         Assert::assertTrue($config->suiteCanRun('aSuite'));
-    }
-
-    public function testInitializeThrowsWhenDefaultSuitesIncludesNonExistentTestSuite(TestContext $ctx)
-    {
-        $this->expect($ctx);
-        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/baddefault_config.json']);
-        $config->initialize();
     }
 
     public function testSuiteCanRunReturnsTrueWhenSuiteIsInDefaultSuites()
@@ -127,41 +76,6 @@ class JsonConfigurationTest
 
         Assert::assertType('array', $subs);
         Assert::assertEmpty($subs);
-    }
-
-    public function testConfigWithNonStringSubscriberThrowsException(TestContext $ctx)
-    {
-        $this->expect($ctx);
-        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/badsubscriber_config.json']);
-        $config->initialize();
-    }
-
-    public function testSubscriberThatDoesNotExistThrowsException(TestContext $ctx)
-    {
-        $this->expect($ctx);
-        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/nonexistsubscriber_config.json']);
-        $config->initialize();
-    }
-
-    public function testSubscriberClassNameThatDoesNotImplementSubscriberThrows(TestContext $ctx)
-    {
-        $this->expect($ctx);
-        $config = new JsonConfiguration([__DIR__ . '/../Fixtures/badimplementssubscriber_config.json']);
-        $config->initialize();
-    }
-
-    public function testNonAssociativeCoverageThrowsException(TestContext $ctx)
-    {
-        $this->expect($ctx);
-        $config = new JsonConfiguration([__DIR__.'/../Fixtures/badcoverage_config.json']);
-        $config->initialize();
-    }
-
-    public function testNonAssociativeArrayCoverageReportsThrowsException(TestContext $ctx)
-    {
-        $this->expect($ctx);
-        $config = new JsonConfiguration([__DIR__.'/../Fixtures/badcoveragereports_config.json']);
-        $config->initialize();
     }
 
     public function testGetEventSubscribersReturnInstanceOfSubscriberWhenGivenValidConfig()
