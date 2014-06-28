@@ -43,7 +43,7 @@ use Demeanor\Exception\ConfigurationException;
  */
 final class Demeanor
 {
-    const VERSION   = '0.3';
+    const VERSION   = '0.4';
     const NAME      = 'Demeanor';
 
     const EXIT_SUCCESS      = 0;
