@@ -36,6 +36,7 @@ class ConsoleConfiguration implements Configuration
 {
     private $consoleInput;
     private $wrappedConfig;
+    private $initialized = false;
 
     public function __construct(Configuration $config, InputInterface $in)
     {
@@ -56,6 +57,10 @@ class ConsoleConfiguration implements Configuration
      */
     public function initialize()
     {
+        if ($this->initialized) {
+            return;
+        }
+
         if ($confFile = $this->consoleInput->getOption('config')) {
             $this->setFile($confFile);
         }
@@ -75,6 +80,8 @@ class ConsoleConfiguration implements Configuration
                 ));
             }
         }
+
+        $this->initialized = true;
     }
 
     /**
@@ -82,6 +89,7 @@ class ConsoleConfiguration implements Configuration
      */
     public function getTestSuites()
     {
+        $this->initialize();
         return $this->wrappedConfig->getTestSuites();
     }
 
@@ -90,6 +98,8 @@ class ConsoleConfiguration implements Configuration
      */
     public function suiteCanRun($suiteName)
     {
+        $this->initialize();
+
         if ($this->consoleInput->getOption('all')) {
             return true;
         }
@@ -106,6 +116,8 @@ class ConsoleConfiguration implements Configuration
      */
     public function getEventSubscribers()
     {
+        $this->initialize();
+
         return $this->wrappedConfig->getEventSubscribers();
     }
 
@@ -114,6 +126,8 @@ class ConsoleConfiguration implements Configuration
      */
     public function getFilters()
     {
+        $this->initialize();
+
         $chain = $this->wrappedConfig->getFilters();
         if (!$chain instanceof ChainFilter) {
             $chain = new ChainFilter([$chain]);
@@ -132,6 +146,8 @@ class ConsoleConfiguration implements Configuration
      */
     public function coverageEnabled()
     {
+        $this->initialize();
+
         if ($this->consoleInput->getOption('no-coverage')) {
             return false;
         }
@@ -145,6 +161,7 @@ class ConsoleConfiguration implements Configuration
      */
     public function coverageFinder()
     {
+        $this->initialize();
         return $this->wrappedConfig->coverageFinder();
     }
 
@@ -153,6 +170,8 @@ class ConsoleConfiguration implements Configuration
      */
     public function coverageReports()
     {
+        $this->initialize();
+
         $reports = $this->wrappedConfig->coverageReports();
         if ($html = $this->consoleInput->getOption('coverage-html')) {
             $reports['html'] = $html;

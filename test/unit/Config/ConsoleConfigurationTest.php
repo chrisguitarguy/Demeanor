@@ -83,18 +83,22 @@ class ConsoleConfigurationTest
 
     public function testGetTestSuitesProxiesToWrappedConnection()
     {
+        $this->willInitialize();
         $this->hasTestSuites();
         Assert::assertArrayHasKey(self::DEFAULT_SUITE, $this->consoleConfig->getTestSuites());
     }
 
     public function testSuiteCanRunAlwaysReturnsTrueWithAllOption()
     {
+        $this->willInitialize();
         $this->consoleHasOption('all', true);
         Assert::assertTrue($this->consoleConfig->suiteCanRun('a_suite'));
     }
 
     public function testSuiteCanRunOnlyAllowsSuitesInCliOptions()
     {
+        $this->willInitialize();
+        $this->hasTestSuites();
         $this->consoleHasOption('testsuite', ['one']);
         Assert::assertTrue($this->consoleConfig->suiteCanRun('one'));
         Assert::assertFalse($this->consoleConfig->suiteCanRun('two'));
@@ -102,6 +106,7 @@ class ConsoleConfigurationTest
 
     public function testSuiteCanRunWithoutCliOptionsProxiesToWrappedConfig()
     {
+        $this->willInitialize();
         $suite = 'a_suite';
         $this->wrappedConfig->shouldReceive('suiteCanRun')
             ->once()
@@ -113,6 +118,7 @@ class ConsoleConfigurationTest
 
     public function testGetEventSubscribersProxiesToWrappedConfig()
     {
+        $this->willInitialize();
         $this->wrappedConfig->shouldReceive('getEventSubscribers')
             ->once()
             ->andReturn([]);
@@ -122,6 +128,7 @@ class ConsoleConfigurationTest
 
     public function testGetFiltersWithWrappedConfigReturningNonChainConvertsToChainFilter()
     {
+        $this->willInitialize();
         $filter = new NameFilter('a_name');
         $this->hasFilters($filter);
 
@@ -130,6 +137,7 @@ class ConsoleConfigurationTest
 
     public function testFilterNameOptionCausesFiltersToBeAddedToTheChain()
     {
+        $this->willInitialize();
         $filter = \Mockery::mock('Demeanor\\Filter\\ChainFilter');
         $filter->shouldReceive('addFilter')
             ->with(\Mockery::type('Demeanor\\Filter\\NameFilter'))
@@ -142,18 +150,21 @@ class ConsoleConfigurationTest
 
     public function testCoverageEnabledWithNoCoverageOptionsReturnsFalse()
     {
+        $this->willInitialize();
         $this->consoleHasOption('no-coverage', true);
         Assert::assertFalse($this->consoleConfig->coverageEnabled());
     }
 
     public function testCoverageEnabledWithoutNoCoverageProxiesToReports()
     {
+        $this->willInitialize();
         $this->withCoverageReports(['html' => 1]);
         Assert::assertTrue($this->consoleConfig->coverageEnabled());
     }
 
     public function testCoverageFinderProxiesToWrappedConfig()
     {
+        $this->willInitialize();
         $finder = \Mockery::mock('Demeanor\\Finder\\Finder');
         $this->wrappedConfig->shouldReceive('coverageFinder')
             ->atLeast(1)
@@ -164,6 +175,7 @@ class ConsoleConfigurationTest
 
     public function testConsoleCoverageReportsOverrideWrappedConfiguration()
     {
+        $this->willInitialize();
         $this->withCoverageReports([
             'html'  => 'html',
             'diff'  => 'diff',
@@ -195,7 +207,7 @@ class ConsoleConfigurationTest
     private function willInitialize()
     {
         $this->wrappedConfig->shouldReceive('initialize')
-            ->atLeast(1);
+            ->once();
     }
 
     private function hasTestSuites(array $suites=null)
