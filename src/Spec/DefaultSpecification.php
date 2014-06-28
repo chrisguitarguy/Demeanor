@@ -21,19 +21,29 @@
 
 namespace Demeanor\Spec;
 
+use Demeanor\Group\GroupStorage;
+
 class DefaultSpecification implements Specification
 {
     private $collection;
     private $before = array();
     private $after = array();
+    private $groups = array();
     private $description = null;
 
-    public function __construct(TestCaseCollection $collection, $desc, \Closure $spec, array $before=array(), array $after=array())
-    {
+    public function __construct(
+        TestCaseCollection $collection,
+        $desc,
+        \Closure $spec,
+        array $before=array(),
+        array $after=array(),
+        array $groups=array()
+    ) {
         $this->collection = $collection;
         $this->description = $desc;
         $this->before = $before;
         $this->after = $after;
+        $this->groups = $groups;
 
         $spec = $spec->bindTo($this);
         $spec();
@@ -49,7 +59,14 @@ class DefaultSpecification implements Specification
             return;
         }
 
-        new self($this->collection, $this->description.$description, $spec, $this->before, $this->after);
+        new self(
+            $this->collection,
+            $this->description.$description,
+            $spec,
+            $this->before,
+            $this->after,
+            $this->groups
+        );
     }
 
     /**
@@ -73,11 +90,24 @@ class DefaultSpecification implements Specification
      */
     public function it($description, \Closure $it)
     {
-        $this->collection->put(new SpecTestCase(
+        $testcase = new SpecTestCase(
             sprintf('[%s] %s', $this->description, $description),
             $it,
             $this->before,
             $this->after
-        ));
+        );
+        foreach ($this->groups as $group) {
+            GroupStorage::getDefaultInstance()->addGroup($testcase, $group);
+        }
+
+        $this->collection->put($testcase);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function group($group)
+    {
+        $this->groups[] = (string)$group;
     }
 }
