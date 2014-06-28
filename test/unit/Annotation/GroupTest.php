@@ -24,9 +24,6 @@ namespace Demeanor\Annotation;
 use Counterpart\Assert;
 use Demeanor\Group\GroupStorage;
 
-/**
- * @Before('clearGroups')
- */
 class GroupTest
 {
     private $test;
@@ -34,11 +31,6 @@ class GroupTest
     public function __construct()
     {
         $this->test = \Mockery::mock('Demeanor\\Unit\\UnitTestCase');
-    }
-
-    public function clearGroups()
-    {
-        GroupStorage::clearDefaultInstance();
     }
 
     public function testAttachSetupAddsAllPositionalArgumentsAsGroups()
