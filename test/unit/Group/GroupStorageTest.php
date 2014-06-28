@@ -36,6 +36,12 @@ class GroupStorageTest
         $this->store = new GroupStorage();
     }
 
+    public function testGetDefaultInstanceAlwaysReturnsTheSameInstance()
+    {
+        $ins = GroupStorage::getDefaultInstance();
+        Assert::assertIdentical($ins, GroupStorage::getDefaultInstance());
+    }
+
     public function testHasAndRemoveRespondAppropriately()
     {
         Assert::assertFalse($this->store->hasGroup($this->test, self::GROUP));
