@@ -22,7 +22,6 @@
 namespace Demeanor\Subscriber;
 
 use Counterpart\Assert;
-use Demeanor\Event\DefaultEvent;
 
 class StatsSubscriberTest
 {
@@ -48,8 +47,8 @@ class StatsSubscriberTest
                 return false !== stripos($val, 'time') && false !== stripos($val, 'memory');
             }));
 
-        $this->subscriber->start(new DefaultEvent());
-        $this->subscriber->stop(new DefaultEvent());
+        $this->subscriber->start();
+        $this->subscriber->stop();
     }
 
     public function testStopWithoutStartDoesNothing()
@@ -57,6 +56,6 @@ class StatsSubscriberTest
         $this->outputWriter->shouldReceive('writeln')
             ->never();
 
-        $this->subscriber->stop(new DefaultEvent());
+        $this->subscriber->stop();
     }
 }

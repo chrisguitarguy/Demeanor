@@ -22,9 +22,7 @@
 namespace Demeanor\Subscriber;
 
 use Symfony\Component\Stopwatch\Stopwatch;
-use Symfony\Component\Stopwatch\StopwatchEvent;
 use Demeanor\Events;
-use Demeanor\Event\Event;
 use Demeanor\Event\Subscriber;
 use Demeanor\Output\OutputWriter;
 
@@ -60,12 +58,12 @@ class StatsSubscriber implements Subscriber
         ];
     }
 
-    public function start(Event $event)
+    public function start()
     {
         $this->stopwatch->start(self::OVERALL, self::CATEGORY);
     }
 
-    public function stop(Event $event)
+    public function stop()
     {
         if (!$this->stopwatch->isStarted(self::OVERALL)) {
             return;
