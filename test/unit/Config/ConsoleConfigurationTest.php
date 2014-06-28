@@ -26,6 +26,9 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Demeanor\Filter\Filter;
 use Demeanor\Filter\NameFilter;
 
+/**
+ * @Group("symfony")
+ */
 class ConsoleConfigurationTest
 {
     const DEFAULT_SUITE = 'one';
