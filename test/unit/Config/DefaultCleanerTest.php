@@ -127,6 +127,13 @@ class DefaultCleanerTest
         $this->cleaner->cleanConfig($this->validConfig);
     }
 
+    public function testBadSubscriberClassThrowsException(TestContext $ctx)
+    {
+        $this->willThrow($ctx);
+        $this->validConfig['subscribers'] = __CLASS__;
+        $this->cleaner->cleanConfig($this->validConfig);
+    }
+
     public static function validSubscribers()
     {
         return [

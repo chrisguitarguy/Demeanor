@@ -148,7 +148,7 @@ class DefaultCleaner implements Cleaner
             if (!$sub instanceof Subscriber) {
                 throw new ConfigurationException(sprintf(
                     "Class %s could not be added as a subscriber because it doesn't implement Demeanor\\Event\\Subscriber",
-                    get_class($cls)
+                    get_class($sub)
                 ));
             }
 
