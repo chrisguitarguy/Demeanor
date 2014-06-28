@@ -46,10 +46,6 @@ class ChainFilter implements Filter
      */
     public function canRun(TestCase $test)
     {
-        if (!$this->filters) {
-            return true;
-        }
-
         foreach ($this->filters as $filter) {
             if (!$filter->canRun($test)) {
                 return false;
