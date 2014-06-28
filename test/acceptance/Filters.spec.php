@@ -39,3 +39,29 @@ $this->describe('#FilterName', function () {
         Assert::assertEquals(0, $ctx['proc']->getExitCode());
     });
 });
+
+$this->describe('#Groups', function () {
+    $this->it('should only run tests not in a given group', function (TestContext $ctx) {
+        $ctx['proc'] = new Process(
+            DEMEANOR_BINARY.' --include-group groupOne -vvv',
+            __DIR__.'/Fixtures/filter_group'
+        );
+        $ctx['proc']->run();
+
+        $out = $ctx['proc']->getOutput();
+        Assert::assertStringContains('hello from group one', $out);
+        Assert::assertStringDoesNotContain('hello from group two', $out);
+    });
+
+    $this->it('should not run groups that are excluded', function (TestContext $ctx) {
+        $ctx['proc'] = new Process(
+            DEMEANOR_BINARY.' --exclude-group groupOne -vvv',
+            __DIR__.'/Fixtures/filter_group'
+        );
+        $ctx['proc']->run();
+
+        $out = $ctx['proc']->getOutput();
+        Assert::assertStringContains('hello from group two', $out);
+        Assert::assertStringDoesNotContain('hello from group one', $out);
+    });
+});

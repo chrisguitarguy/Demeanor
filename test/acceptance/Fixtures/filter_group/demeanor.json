@@ -1,0 +1,8 @@
+{
+    "testsuites": {
+        "aSuite": {
+            "type": "spec"
+            , "directories": "."
+        }
+    }
+}
