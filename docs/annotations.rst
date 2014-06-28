@@ -115,3 +115,9 @@ Data Providers
 
 :doc:`Data providers <data-providers>` can also be specified with annotations.
 Details on them can be found on the :doc:`data providers <data-providers>` page.
+
+Groups
+------
+
+:doc:`groups` must be specified on unit tests using annotations. See the
+:doc:`group <groups>` documentation for more information.

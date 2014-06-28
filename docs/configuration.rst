@@ -266,3 +266,27 @@ Some examples:
 
     # output a text report to the file coverage.txt
     ./vendor/bin/demeanor --coverage-text=coverage.txt
+
+.. _groups-cli-config:
+
+Including and Excluding Groups
+------------------------------
+
+- The ``--include-group`` will exclude all tests but those in a given group.
+- The ``--exclude-group`` will exclude any tests in a given group
+
+Some examples:
+
+.. code-block:: bash
+
+    # include a single group
+    ./vendor/bin/demeanor --include-group aGroup
+
+    # include multiple groups
+    ./vendor/bin/demeanor --include-group aGroup --include-group anotherGroup
+
+    # exclude a single group
+    ./vendor/bin/demeanor --exclude-group aGroup
+
+    # exclude multiple groups
+    ./vendor/bin/demeanor --exclude-group aGroup --exclude-group anotherGroup

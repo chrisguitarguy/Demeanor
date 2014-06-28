@@ -25,6 +25,7 @@ Contents
    code-coverage
    annotations
    data-providers
+   groups
    requirements
    mock-objects
    test-result-statuses
