@@ -65,6 +65,12 @@ class Command extends BaseCommand
             'Filter test cases by name'
         );
         $this->addOption(
+            'include-group',
+            null,
+            InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+            'Run only test cases with a given group'
+        );
+        $this->addOption(
             'no-coverage',
             null,
             InputOption::VALUE_NONE,

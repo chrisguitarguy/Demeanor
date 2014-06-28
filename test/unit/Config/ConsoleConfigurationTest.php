@@ -151,6 +151,19 @@ class ConsoleConfigurationTest
         Assert::assertIdentical($filter, $this->consoleConfig->getFilters());
     }
 
+    public function testIncludeGroupOptionCausesFiltersToBeAddedToTheChain()
+    {
+        $this->willInitialize();
+        $filter = \Mockery::mock('Demeanor\\Filter\\ChainFilter');
+        $filter->shouldReceive('addFilter')
+            ->with(\Mockery::type('Demeanor\\Filter\\GroupFilter'))
+            ->once();
+        $this->hasFilters($filter);
+        $this->consoleHasOption('include-group', ['aGroup']);
+
+        Assert::assertIdentical($filter, $this->consoleConfig->getFilters());
+    }
+
     public function testCoverageEnabledWithNoCoverageOptionsReturnsFalse()
     {
         $this->willInitialize();

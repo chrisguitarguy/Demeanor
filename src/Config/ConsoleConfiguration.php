@@ -25,6 +25,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Demeanor\Exception\ConfigurationException;
 use Demeanor\Filter\ChainFilter;
 use Demeanor\Filter\NameFilter;
+use Demeanor\Filter\GroupFilter;
 
 /**
  * A configuration object that's aware of the Symfony InputInterface and serves
@@ -136,6 +137,11 @@ class ConsoleConfiguration implements Configuration
         $nameFilters = $this->consoleInput->getOption('filter-name') ?: array();
         foreach ($nameFilters as $name) {
             $chain->addFilter(new NameFilter($name));
+        }
+
+        $groupFilters = $this->consoleInput->getOption('include-group') ?: array();
+        foreach ($groupFilters as $group) {
+            $chain->addFilter(new GroupFilter($group));
         }
 
         return $chain;
