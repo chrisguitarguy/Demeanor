@@ -35,8 +35,9 @@ use Demeanor\Exception\ConfigurationException;
 class JsonConfiguration implements Configuration
 {
     private $search;
-    private $configFile = null;
     private $cleaner;
+    private $configFile = null;
+    private $initialized = false;
     private $config = array();
 
     /**
@@ -69,8 +70,13 @@ class JsonConfiguration implements Configuration
      */
     public function initialize()
     {
+        if ($this->initialized) {
+            return;
+        }
+
         $config = $this->loadConfigFile();
         $this->config = $this->cleaner->cleanConfig($config);
+        $this->initialized = true;
     }
 
     /**
@@ -78,6 +84,7 @@ class JsonConfiguration implements Configuration
      */
     public function getTestSuites()
     {
+        $this->initialize();
         return $this->config['testsuites'];
     }
 
@@ -86,6 +93,8 @@ class JsonConfiguration implements Configuration
      */
     public function suiteCanRun($suiteName)
     {
+        $this->initialize();
+
         if (empty($this->config['default-suites'])) {
             return true;
         }
@@ -98,6 +107,7 @@ class JsonConfiguration implements Configuration
      */
     public function getEventSubscribers()
     {
+        $this->initialize();
         return $this->config['subscribers'];
     }
 
@@ -108,6 +118,7 @@ class JsonConfiguration implements Configuration
      */
     public function getFilters()
     {
+        $this->initialize();
         return new ChainFilter();
     }
 
@@ -116,6 +127,7 @@ class JsonConfiguration implements Configuration
      */
     public function coverageEnabled()
     {
+        $this->initialize();
         $reports = $this->coverageReports();
         return !empty($reports);
     }
@@ -125,6 +137,8 @@ class JsonConfiguration implements Configuration
      */
     public function coverageFinder()
     {
+        $this->initialize();
+
         $whitelist = FinderBuilder::create()
             ->withDirectories($this->config['coverage']['directories'], '.php')
             ->withFiles($this->config['coverage']['files'])
@@ -145,6 +159,8 @@ class JsonConfiguration implements Configuration
      */
     public function coverageReports()
     {
+        $this->initialize();
+
         return $this->config['coverage']['reports'];
     }
 

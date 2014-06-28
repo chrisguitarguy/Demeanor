@@ -53,7 +53,6 @@ class JsonConfigurationTest
     public function testSuiteCanRunReturnsTrueWhenNoDefaultSuitesAreSet(TestContext $ctx)
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
-        $config->initialize();
 
         Assert::assertTrue($config->suiteCanRun('aSuite'));
     }
@@ -61,7 +60,6 @@ class JsonConfigurationTest
     public function testSuiteCanRunReturnsTrueWhenSuiteIsInDefaultSuites()
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validdefault_config.json']);
-        $config->initialize();
 
         Assert::assertTrue($config->suiteCanRun('a_suite'));
         Assert::assertFalse($config->suiteCanRun('not_runnable'));
@@ -70,7 +68,6 @@ class JsonConfigurationTest
     public function testConfigWithoutSubscribersReturnsEmptyArrayFromGetEventSubscribers()
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
-        $config->initialize();
 
         $subs = $config->getEventSubscribers();
 
@@ -82,7 +79,6 @@ class JsonConfigurationTest
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validsubscriber_config.json']);
 
-        $config->initialize();
         $subs = $config->getEventSubscribers();
 
         Assert::assertType('array', $subs);
@@ -94,7 +90,6 @@ class JsonConfigurationTest
     public function testGetFiltersReturnsAFilterImplementation()
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
-        $config->initialize();
 
         Assert::assertInstanceOf('Demeanor\\Filter\\Filter', $config->getFilters());
     }
@@ -102,7 +97,6 @@ class JsonConfigurationTest
     public function testCoverageEnabledReturnsFalseWithEmptyReports()
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/valid_config.json']);
-        $config->initialize();
 
         Assert::assertFalse($config->coverageEnabled());
     }
@@ -110,7 +104,6 @@ class JsonConfigurationTest
     public function testCoverageEnabledReturnsTrueWithNonEmptyReportArray()
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validcoverage_config.json']);
-        $config->initialize();
 
         Assert::assertTrue($config->coverageEnabled());
     }
@@ -118,7 +111,6 @@ class JsonConfigurationTest
     public function testCoverageFinderReturnsInstanceOfFinder()
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validcoverage_config.json']);
-        $config->initialize();
 
         Assert::assertInstanceOf('Demeanor\\Finder\\Finder', $config->coverageFinder());
     }
@@ -126,7 +118,6 @@ class JsonConfigurationTest
     public function testCoverageReportsReturnArrayOfReports()
     {
         $config = new JsonConfiguration([__DIR__ . '/../Fixtures/validcoverage_config.json']);
-        $config->initialize();
 
         Assert::assertType('array', $config->coverageReports());
     }
