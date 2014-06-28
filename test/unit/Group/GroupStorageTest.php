@@ -22,6 +22,7 @@
 namespace Demeanor\Group;
 
 use Counterpart\Assert;
+use Counterpart\Matchers;
 
 class GroupStorageTest
 {
@@ -40,6 +41,18 @@ class GroupStorageTest
     {
         $ins = GroupStorage::getDefaultInstance();
         Assert::assertIdentical($ins, GroupStorage::getDefaultInstance());
+    }
+
+    public function testClearingDefaultAllowsForCreationOfNewInstanceInGetDefaultInstance()
+    {
+        $ins = GroupStorage::getDefaultInstance();
+        Assert::assertIdentical($ins, GroupStorage::getDefaultInstance());
+        GroupStorage::clearDefaultInstance();
+        Assert::assertThat(
+            Matchers::logicalNot(Matchers::isIdentical($ins)),
+            GroupStorage::getDefaultInstance(),
+            'should create a new instance after clearDefaultInstance is called'
+        );
     }
 
     public function testHasAndRemoveRespondAppropriately()

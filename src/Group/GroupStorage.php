@@ -64,6 +64,11 @@ class GroupStorage
         return self::$defaultInstance;
     }
 
+    public static function clearDefaultInstance()
+    {
+        self::$defaultInstance = null;
+    }
+
     public function addGroup(TestCase $testcase, $group)
     {
         if (!$this->isKnown($testcase)) {
