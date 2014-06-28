@@ -66,4 +66,13 @@ interface Specification
      * @return  void
      */
     public function it($description, \Closure $it);
+
+    /**
+     * Mark the current specification with a group.
+     *
+     * @since   0.4
+     * @param   string $group
+     * @return  void
+     */
+    public function group($group);
 }

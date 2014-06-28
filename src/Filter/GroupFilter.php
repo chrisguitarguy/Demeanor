@@ -22,48 +22,38 @@
 namespace Demeanor\Filter;
 
 use Demeanor\TestCase;
+use Demeanor\Group\GroupStorage;
 
 /**
- * Uses a collection of other filters to see if a test case can run.
+ * Check to see if a test is in a group.
  *
- * @since   0.2
+ * @since   0.4
  */
-class ChainFilter implements Filter
+class GroupFilter implements Filter
 {
-    private $filters = array();
+    private $groupName;
+    private $groupStorage;
 
-    public function __construct(array $filters=[])
+    /**
+     * Set up the group name and, optionally, the group storage.
+     *
+     * @since   0.4
+     * @param   string $groupName The group name to filter on
+     * @param   GroupStorage $groupStorage If none is provided the default instance
+     *          will be fetched.
+     * @return  void
+     */
+    public function __construct($groupName, GroupStorage $groupStorage=null)
     {
-        foreach ($filters as $filter) {
-            $this->addFilter($filter);
-        }
+        $this->groupName = $groupName;
+        $this->groupStorage = $groupStorage ?: GroupStorage::getDefaultInstance();
     }
 
     /**
      * {@inheritdoc}
-     * Will only allow a test case through if no filters are in the chain or at
-     * least one filter is met.
      */
-    public function canRun(TestCase $test)
+    public function canRun(TestCase $testcase)
     {
-        foreach ($this->filters as $filter) {
-            if (!$filter->canRun($test)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Add a new filter to the chain.
-     *
-     * @since   0.2
-     * @param   Filter $filter
-     * @return  void
-     */
-    public function addFilter(Filter $filter)
-    {
-        $this->filters[] = $filter;
+        return $this->groupStorage->hasGroup($testcase, $this->groupName);
     }
 }

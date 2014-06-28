@@ -19,51 +19,27 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Filter;
+namespace Demeanor\Annotation;
 
-use Demeanor\TestCase;
+use Demeanor\Unit\UnitTestCase;
+use Demeanor\Group\GroupStorage;
 
 /**
- * Uses a collection of other filters to see if a test case can run.
+ * Annotation for adding groups to test cases.
  *
- * @since   0.2
+ * @since   0.4
  */
-class ChainFilter implements Filter
+class Group extends Annotation
 {
-    private $filters = array();
-
-    public function __construct(array $filters=[])
-    {
-        foreach ($filters as $filter) {
-            $this->addFilter($filter);
-        }
-    }
-
     /**
      * {@inheritdoc}
-     * Will only allow a test case through if no filters are in the chain or at
-     * least one filter is met.
      */
-    public function canRun(TestCase $test)
+    public function attachSetup(UnitTestCase $testcase)
     {
-        foreach ($this->filters as $filter) {
-            if (!$filter->canRun($test)) {
-                return false;
+        foreach ($this->positional as $groupName) {
+            if ($groupName && is_string($groupName)) {
+                GroupStorage::getDefaultInstance()->addGroup($testcase, (string)$groupName);
             }
         }
-
-        return true;
-    }
-
-    /**
-     * Add a new filter to the chain.
-     *
-     * @since   0.2
-     * @param   Filter $filter
-     * @return  void
-     */
-    public function addFilter(Filter $filter)
-    {
-        $this->filters[] = $filter;
     }
 }

@@ -23,47 +23,31 @@ namespace Demeanor\Filter;
 
 use Counterpart\Assert;
 
-class ChainFilterTest
+class NegatingFilterTest
 {
-    public function testEmptyFilterAllowsAllTestsToRun()
-    {
-        $filter = new ChainFilter();
+    private $wrapped;
+    private $filter;
 
-        Assert::assertTrue($filter->canRun($this->testCase()));
+    public function __construct()
+    {
+        $this->wrapped = \Mockery::mock('Demeanor\\Filter\\Filter');
+        $this->filter = new NegatingFilter($this->wrapped);
     }
 
-    public function testFiltersWithoutConsensusDoesNotAllowTestToRun()
+    public function testCanReturnReturnsTheOppositeOfWhatWrappedFilterReturns()
     {
-        $filter = new ChainFilter([
-            $this->filterReturning(false),
-            $this->filterReturning(true),
-        ]);
-
-        Assert::assertFalse($filter->canRun($this->testCase()));
+        $this->filterReturns(false);
+        Assert::assertTrue($this->filter->canRun($this->createTest()));
     }
 
-    public function testFilterConsensusAllowsFiltersToRun()
-    {
-        $filter = new ChainFilter([
-            $this->filterReturning(true),
-            $this->filterReturning(true),
-        ]);
-
-        Assert::assertTrue($filter->canRun($this->testCase()));
-    }
-
-    private function testCase()
+    private function createTest()
     {
         return \Mockery::mock('Demeanor\\TestCase');
     }
 
-    private function filterReturning($bool)
+    private function filterReturns($bool)
     {
-        $f = \Mockery::mock('Demeanor\\Filter\\Filter');
-        $f->shouldReceive('canRun')
-            ->atLeast(1)
+        $this->wrapped->shouldReceive('canRun')
             ->andReturn($bool);
-
-        return $f;
     }
 }

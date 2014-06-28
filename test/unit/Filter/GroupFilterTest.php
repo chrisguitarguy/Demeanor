@@ -23,47 +23,47 @@ namespace Demeanor\Filter;
 
 use Counterpart\Assert;
 
-class ChainFilterTest
+class GroupFilterTest
 {
-    public function testEmptyFilterAllowsAllTestsToRun()
-    {
-        $filter = new ChainFilter();
+    const GROUP = 'aGroup';
 
-        Assert::assertTrue($filter->canRun($this->testCase()));
+    private $storage;
+    private $filter;
+
+    public function __construct()
+    {
+        $this->storage = \Mockery::mock('Demeanor\\Group\\GroupStorage');
+        $this->filter = new GroupFilter(self::GROUP, $this->storage);
     }
 
-    public function testFiltersWithoutConsensusDoesNotAllowTestToRun()
+    public function testCanRunReturnsTrueWhenTestCaseIsInTheGroup()
     {
-        $filter = new ChainFilter([
-            $this->filterReturning(false),
-            $this->filterReturning(true),
-        ]);
-
-        Assert::assertFalse($filter->canRun($this->testCase()));
+        $this->hasGroup();
+        Assert::assertTrue($this->filter->canRun($this->createTest()));
     }
 
-    public function testFilterConsensusAllowsFiltersToRun()
+    public function testCanReturnReturnsFalseWhenTestCaseIsNotInGroup()
     {
-        $filter = new ChainFilter([
-            $this->filterReturning(true),
-            $this->filterReturning(true),
-        ]);
-
-        Assert::assertTrue($filter->canRun($this->testCase()));
+        $this->doesNotHaveGroup();
+        Assert::assertFalse($this->filter->canRun($this->createTest()));
     }
 
-    private function testCase()
+    private function createTest()
     {
         return \Mockery::mock('Demeanor\\TestCase');
     }
 
-    private function filterReturning($bool)
+    private function hasGroup()
     {
-        $f = \Mockery::mock('Demeanor\\Filter\\Filter');
-        $f->shouldReceive('canRun')
+        $this->storage->shouldReceive('hasGroup')
             ->atLeast(1)
-            ->andReturn($bool);
+            ->andReturn(true);
+    }
 
-        return $f;
+    private function doesNotHaveGroup()
+    {
+        $this->storage->shouldReceive('hasGroup')
+            ->atLeast(1)
+            ->andReturn(false);
     }
 }

@@ -23,6 +23,8 @@ use Symfony\Component\Process\Process;
 use Counterpart\Assert;
 use Demeanor\TestContext;
 
+$this->group('phpt');
+
 $this->after(function (TestContext $ctx) {
     $ctx->log(sprintf('STDOUT> %s', $ctx['proc']->getOutput()));
     $ctx->log(sprintf('STDERR> %s', $ctx['proc']->getErrorOutput()));

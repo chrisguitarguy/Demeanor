@@ -1,0 +1,14 @@
+Upgrading to 0.4
+================
+
+**Filters Now Require a Consensus**
+
+Previously if a test case met a single filter, it would run. Now a test case must
+meet all defined filters to run. For example:
+
+.. code-block:: bash
+
+    ./vendor/bin/demeanor --filter-name SomeTest --include-group aGroup
+
+Only tests with *SomeTest* in their name that belong to the group *aGroup** will
+run.

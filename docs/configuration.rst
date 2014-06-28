@@ -266,3 +266,49 @@ Some examples:
 
     # output a text report to the file coverage.txt
     ./vendor/bin/demeanor --coverage-text=coverage.txt
+
+.. _filtering-cli-config:
+
+Filtering Test Cases
+--------------------
+
+Filters allow you to include (and in some cases, exclude) certain tests. Filters
+require a consensus: all filters must be met for a test case to run.
+
+- The ``--filter-name`` option will allow only test cases that contain the provided
+  string in their name(s).
+
+Examples:
+
+.. code-block:: bash
+
+    # run tests with `SomeTest` in their name(s)
+    ./vendor/bin/demeanor --filter-name SomeTest
+
+    # run tests with `SomeTest` and `config` in their names
+    ./vendor/bin/demeanor --filter-name SomeTest --filter-name config
+
+.. _groups-cli-config:
+
+Including and Excluding Groups
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- The ``--include-group`` will exclude all tests but those in a given group.
+- The ``--exclude-group`` will exclude any tests in a given group
+
+Some examples:
+
+.. code-block:: bash
+
+    # include a single group
+    ./vendor/bin/demeanor --include-group aGroup
+
+    # include multiple groups
+    ./vendor/bin/demeanor --include-group aGroup --include-group anotherGroup
+
+    # exclude a single group
+    ./vendor/bin/demeanor --exclude-group aGroup
+
+    # exclude multiple groups
+    ./vendor/bin/demeanor --exclude-group aGroup --exclude-group anotherGroup
+

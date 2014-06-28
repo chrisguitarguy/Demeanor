@@ -26,6 +26,9 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Demeanor\Filter\Filter;
 use Demeanor\Filter\NameFilter;
 
+/**
+ * @Group("symfony")
+ */
 class ConsoleConfigurationTest
 {
     const DEFAULT_SUITE = 'one';
@@ -144,6 +147,32 @@ class ConsoleConfigurationTest
             ->once();
         $this->hasFilters($filter);
         $this->consoleHasOption('filter-name', ['one name']);
+
+        Assert::assertIdentical($filter, $this->consoleConfig->getFilters());
+    }
+
+    public function testIncludeGroupOptionCausesFiltersToBeAddedToTheChain()
+    {
+        $this->willInitialize();
+        $filter = \Mockery::mock('Demeanor\\Filter\\ChainFilter');
+        $filter->shouldReceive('addFilter')
+            ->with(\Mockery::type('Demeanor\\Filter\\GroupFilter'))
+            ->once();
+        $this->hasFilters($filter);
+        $this->consoleHasOption('include-group', ['aGroup']);
+
+        Assert::assertIdentical($filter, $this->consoleConfig->getFilters());
+    }
+
+    public function testExcludeGroupOptionCausesFiltersToBeAddedToChain()
+    {
+        $this->willInitialize();
+        $filter = \Mockery::mock('Demeanor\\Filter\\ChainFilter');
+        $filter->shouldReceive('addFilter')
+            ->with(\Mockery::type('Demeanor\\Filter\\NegatingFilter'))
+            ->once();
+        $this->hasFilters($filter);
+        $this->consoleHasOption('exclude-group', ['aGroup']);
 
         Assert::assertIdentical($filter, $this->consoleConfig->getFilters());
     }

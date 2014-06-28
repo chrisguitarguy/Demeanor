@@ -142,6 +142,7 @@ class AnnotationSubscriber implements Subscriber
             'Expect'    => "{$ns}Expect",
             'Require'   => "{$ns}Requirement",
             'Provider'  => "{$ns}DataProvider",
+            'Group'     => "{$ns}Group",
         ]);
     }
 }

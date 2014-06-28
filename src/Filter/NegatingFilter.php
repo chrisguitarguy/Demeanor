@@ -24,46 +24,24 @@ namespace Demeanor\Filter;
 use Demeanor\TestCase;
 
 /**
- * Uses a collection of other filters to see if a test case can run.
+ * Wraps up another filter and returns the opposite of what it returns.
  *
- * @since   0.2
+ * @since   0.4
  */
-class ChainFilter implements Filter
+class NegatingFilter implements Filter
 {
-    private $filters = array();
+    private $wrappedFilter;
 
-    public function __construct(array $filters=[])
+    public function __construct(Filter $filter)
     {
-        foreach ($filters as $filter) {
-            $this->addFilter($filter);
-        }
+        $this->wrappedFilter = $filter;
     }
 
     /**
      * {@inheritdoc}
-     * Will only allow a test case through if no filters are in the chain or at
-     * least one filter is met.
      */
-    public function canRun(TestCase $test)
+    public function canRun(TestCase $testcase)
     {
-        foreach ($this->filters as $filter) {
-            if (!$filter->canRun($test)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Add a new filter to the chain.
-     *
-     * @since   0.2
-     * @param   Filter $filter
-     * @return  void
-     */
-    public function addFilter(Filter $filter)
-    {
-        $this->filters[] = $filter;
+        return !$this->wrappedFilter->canRun($testcase);
     }
 }
