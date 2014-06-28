@@ -32,19 +32,20 @@ class ChainFilterTest
         Assert::assertTrue($filter->canRun($this->testCase()));
     }
 
-    public function testNoFiltersMatchingDoesNotAllowTestCaseToRun()
+    public function testFiltersWithoutConsensusDoesNotAllowTestToRun()
     {
         $filter = new ChainFilter([
             $this->filterReturning(false),
+            $this->filterReturning(true),
         ]);
 
         Assert::assertFalse($filter->canRun($this->testCase()));
     }
 
-    public function testOneFilterPassingAllowsTestCaseToRun()
+    public function testFilterConsensusAllowsFiltersToRun()
     {
         $filter = new ChainFilter([
-            $this->filterReturning(false),
+            $this->filterReturning(true),
             $this->filterReturning(true),
         ]);
 

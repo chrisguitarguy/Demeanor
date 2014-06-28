@@ -51,12 +51,12 @@ class ChainFilter implements Filter
         }
 
         foreach ($this->filters as $filter) {
-            if ($filter->canRun($test)) {
-                return true;
+            if (!$filter->canRun($test)) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
