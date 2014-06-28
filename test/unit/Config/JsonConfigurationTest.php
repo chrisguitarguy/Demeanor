@@ -23,7 +23,6 @@ namespace Demeanor\Config;
 
 use Counterpart\Assert;
 use Demeanor\TestContext;
-use Demeanor\Event\Subscriber;
 
 class JsonConfigurationTest
 {

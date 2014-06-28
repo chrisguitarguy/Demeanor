@@ -21,7 +21,6 @@
 
 namespace Demeanor\Config;
 
-use Demeanor\Event\Subscriber;
 use Demeanor\Filter\ChainFilter;
 use Demeanor\Finder\FinderBuilder;
 use Demeanor\Finder\ExcludingFinder;
