@@ -30,6 +30,7 @@ Contents
    mock-objects
    test-result-statuses
    exit-codes
+   upgrading/*
 
 Getting Started
 ---------------
