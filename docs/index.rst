@@ -22,6 +22,7 @@ Contents
    configuration
    test-context
    types/spec-tests
+   types/unit-tests
    types/phpt-tests
    code-coverage
    annotations
