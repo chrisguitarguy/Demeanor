@@ -21,7 +21,8 @@ Contents
 
    configuration
    test-context
-   types/*
+   types/spec-tests
+   types/phpt-tests
    code-coverage
    annotations
    data-providers
@@ -175,6 +176,8 @@ In demeanor, a spec test looks like this.
 Each call to ``it`` creates a new test case. When the ``directories`` argument is
 used for a ``spec`` test suite, all files that end with ``.spec.php`` are located
 and compiled to test cases.
+
+See :doc:`types/spec-tests` for more information.
 
 Running the Tests
 ^^^^^^^^^^^^^^^^^
