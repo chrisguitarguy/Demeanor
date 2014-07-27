@@ -41,8 +41,8 @@ class ChainFilter implements Filter
 
     /**
      * {@inheritdoc}
-     * Will only allow a test case through if no filters are in the chain or at
-     * least one filter is met.
+     * Will only allow a test case through if no filters are in the chain or all
+     * filters are met.
      */
     public function canRun(TestCase $test)
     {
