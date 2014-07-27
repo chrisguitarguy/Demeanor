@@ -24,8 +24,11 @@ namespace Demeanor\Config;
 use Symfony\Component\Console\Input\InputInterface;
 use Demeanor\Exception\ConfigurationException;
 use Demeanor\Filter\ChainFilter;
+use Demeanor\Filter\LogicalOrFilter;
 use Demeanor\Filter\NameFilter;
 use Demeanor\Filter\GroupFilter;
+use Demeanor\Filter\FileFilter;
+use Demeanor\Filter\DirectoryFilter;
 use Demeanor\Filter\NegatingFilter;
 
 /**
@@ -148,6 +151,15 @@ class ConsoleConfiguration implements Configuration
         $excludeGroups = $this->consoleInput->getOption('exclude-group') ?: array();
         foreach ($excludeGroups as $group) {
             $chain->addFilter(new NegatingFilter(new GroupFilter($group)));
+        }
+
+        $paths = $this->consoleInput->getArgument('path');
+        if ($paths) {
+            $pathFilter = new LogicalOrFilter();
+            foreach ($paths as $path) {
+                $pathFilter->addFilter(is_dir($path) ? new DirectoryFilter($path) : new FileFilter($path));
+            }
+            $chain->addFilter($pathFilter);
         }
 
         return $chain;
