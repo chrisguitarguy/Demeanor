@@ -65,3 +65,39 @@ $this->describe('#Groups', function () {
         Assert::assertStringDoesNotContain('hello from group one', $out);
     });
 });
+
+$this->describe('#Paths', function () {
+    $this->it('should only run tests in a given directory', function (TestContext $ctx) {
+        $ctx['proc'] = new Process(
+            DEMEANOR_BINARY.' -vvv subdir/',
+            __DIR__.'/Fixtures/filter_paths'
+        );
+
+        $ctx['proc']->run();
+
+        Assert::assertEquals(0, $ctx['proc']->getExitCode());
+    });
+
+    $this->it('should only run tests in a given file', function (TestContext $ctx) {
+        $ctx['proc'] = new Process(
+            DEMEANOR_BINARY.' -vvv willpass_test.php',
+            __DIR__.'/Fixtures/filter_paths'
+        );
+
+        $ctx['proc']->run();
+
+        Assert::assertEquals(0, $ctx['proc']->getExitCode());
+    });
+
+    $this->it('should exit with an error exception when an invalid path is given', function ($ctx) {
+        $ctx['proc'] = new Process(
+            DEMEANOR_BINARY.' -vvv does_not_exist.php',
+            __DIR__.'/Fixtures/filter_paths'
+        );
+
+        $ctx['proc']->run();
+
+        Assert::assertStringContains('not a valid file', $ctx['proc']->getErrorOutput());
+        Assert::assertGreaterThan(0, $ctx['proc']->getExitCode());
+    });
+});
