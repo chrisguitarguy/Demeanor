@@ -21,32 +21,22 @@
 
 namespace Demeanor\Filter;
 
-class ChainFilterTest extends ChainTestCase
+class ChainTestCase
 {
-    public function testEmptyFilterAllowsAllTestsToRun()
-    {
-        $filter = new ChainFilter();
+    use \Counterpart\Assert;
 
-        $this->assertTrue($filter->canRun($this->testCase()));
+    protected function testCase()
+    {
+        return \Mockery::mock('Demeanor\\TestCase');
     }
 
-    public function testFiltersWithoutConsensusDoesNotAllowTestToRun()
+    protected function filterReturning($bool)
     {
-        $filter = new ChainFilter([
-            $this->filterReturning(false),
-            $this->filterReturning(true),
-        ]);
+        $f = \Mockery::mock('Demeanor\\Filter\\Filter');
+        $f->shouldReceive('canRun')
+            ->atLeast(1)
+            ->andReturn($bool);
 
-        $this->assertFalse($filter->canRun($this->testCase()));
-    }
-
-    public function testFilterConsensusAllowsFiltersToRun()
-    {
-        $filter = new ChainFilter([
-            $this->filterReturning(true),
-            $this->filterReturning(true),
-        ]);
-
-        $this->assertTrue($filter->canRun($this->testCase()));
+        return $f;
     }
 }
