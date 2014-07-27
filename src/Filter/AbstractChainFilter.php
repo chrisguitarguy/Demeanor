@@ -21,28 +21,42 @@
 
 namespace Demeanor\Filter;
 
-use Demeanor\TestCase;
-
 /**
- * Uses a collection of other filters to see if a test case can run.
+ * ABC for filters that use other filters.
  *
- * @since   0.2
+ * @since   0.4
  */
-class ChainFilter extends AbstractChainFilter
+abstract class AbstractChainFilter implements Filter
 {
-    /**
-     * {@inheritdoc}
-     * Will only allow a test case through if no filters are in the chain or all
-     * filters are met.
-     */
-    public function canRun(TestCase $test)
-    {
-        foreach ($this->getFilters() as $filter) {
-            if (!$filter->canRun($test)) {
-                return false;
-            }
-        }
+    private $filters = array();
 
-        return true;
+    public function __construct(array $filters=[])
+    {
+        foreach ($filters as $filter) {
+            $this->addFilter($filter);
+        }
+    }
+
+    /**
+     * Add a new filter to the chain.
+     *
+     * @since   0.2
+     * @param   Filter $filter
+     * @return  void
+     */
+    public function addFilter(Filter $filter)
+    {
+        $this->filters[] = $filter;
+    }
+
+    /**
+     * Get all the filters registered on the object.
+     *
+     * @since   0.4
+     * @return  Filter[]
+     */
+    protected function getFilters()
+    {
+        return $this->filters;
     }
 }
