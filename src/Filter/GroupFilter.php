@@ -23,6 +23,7 @@ namespace Demeanor\Filter;
 
 use Demeanor\TestCase;
 use Demeanor\Group\GroupStorage;
+use Demeanor\Group\StorageLocator;
 
 /**
  * Check to see if a test is in a group.
@@ -46,7 +47,7 @@ class GroupFilter implements Filter
     public function __construct($groupName, GroupStorage $groupStorage=null)
     {
         $this->groupName = $groupName;
-        $this->groupStorage = $groupStorage ?: GroupStorage::getDefaultInstance();
+        $this->groupStorage = $groupStorage ?: StorageLocator::get();
     }
 
     /**

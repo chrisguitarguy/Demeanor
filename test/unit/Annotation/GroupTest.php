@@ -22,7 +22,7 @@
 namespace Demeanor\Annotation;
 
 use Counterpart\Assert;
-use Demeanor\Group\GroupStorage;
+use Demeanor\Group\StorageLocator;
 
 class GroupTest
 {
@@ -41,7 +41,7 @@ class GroupTest
         $annot->attachSetup($this->test);
 
         foreach ($groups as $group) {
-            Assert::assertTrue(GroupStorage::getDefaultInstance()->hasGroup($this->test, $group));
+            Assert::assertTrue(StorageLocator::get()->hasGroup($this->test, $group));
         }
     }
 }

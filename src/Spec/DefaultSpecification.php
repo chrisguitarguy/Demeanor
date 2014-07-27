@@ -21,7 +21,7 @@
 
 namespace Demeanor\Spec;
 
-use Demeanor\Group\GroupStorage;
+use Demeanor\Group\StorageLocator;
 
 class DefaultSpecification implements Specification
 {
@@ -97,7 +97,7 @@ class DefaultSpecification implements Specification
             $this->after
         );
         foreach ($this->groups as $group) {
-            GroupStorage::getDefaultInstance()->addGroup($testcase, $group);
+            StorageLocator::get()->addGroup($testcase, $group);
         }
 
         $this->collection->put($testcase);

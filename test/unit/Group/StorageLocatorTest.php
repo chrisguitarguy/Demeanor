@@ -19,27 +19,38 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Annotation;
-
-use Demeanor\Unit\UnitTestCase;
-use Demeanor\Group\StorageLocator;
+namespace Demeanor\Group;
 
 /**
- * Annotation for adding groups to test cases.
- *
- * @since   0.4
+ * @Before("backupStorage")
+ * @After("restoreStorage")
  */
-class Group extends Annotation
+class StorageLocatorTest
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function attachSetup(UnitTestCase $testcase)
+    use \Counterpart\Assert;
+
+    private $storage;
+
+    public function backupStorage()
     {
-        foreach ($this->positional as $groupName) {
-            if ($groupName && is_string($groupName)) {
-                StorageLocator::get()->addGroup($testcase, (string)$groupName);
-            }
-        }
+        $this->storage = StorageLocator::get();
+    }
+
+    public function restoreStorage()
+    {
+        StorageLocator::set($this->storage);
+    }
+
+    public function testGetReturnsTheSameInstanceOnMultipleCalls()
+    {
+        $store = StorageLocator::get();
+        $this->assertIdentical($store, StorageLocator::get());
+    }
+
+    public function testGetCreatesNewInstanceOnFirstCall()
+    {
+        $current = StorageLocator::get();
+        StorageLocator::remove();
+        $this->assertNotEquals($current, StorageLocator::get());
     }
 }

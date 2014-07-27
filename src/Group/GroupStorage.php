@@ -41,32 +41,9 @@ class GroupStorage
      */
     private $storage;
 
-    /**
-     * Container for the "default instance" of the GroupStorage. Can be fetched
-     * with getDefaultInstance
-     *
-     * @since   0.4
-     * @var     GroupStorage
-     */
-    private static $defaultInstance = null;
-
     public function __construct()
     {
         $this->storage = new \SplObjectStorage();
-    }
-
-    public static function getDefaultInstance()
-    {
-        if (null === self::$defaultInstance) {
-            self::$defaultInstance = new self();
-        }
-
-        return self::$defaultInstance;
-    }
-
-    public static function clearDefaultInstance()
-    {
-        self::$defaultInstance = null;
     }
 
     public function addGroup(TestCase $testcase, $group)
