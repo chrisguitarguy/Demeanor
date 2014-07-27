@@ -22,7 +22,7 @@
 namespace Demeanor\Finder;
 
 /**
- * A utility to build ChainFilter instances.
+ * A utility to build ChainFinder instances.
  *
  * @since   0.3
  */
