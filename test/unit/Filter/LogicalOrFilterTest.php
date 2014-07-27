@@ -21,28 +21,32 @@
 
 namespace Demeanor\Filter;
 
-use Demeanor\TestCase;
-
-/**
- * Uses a collection of other filters to see if a test case can run.
- *
- * @since   0.2
- */
-class ChainFilter extends AbstractChainFilter
+class LogicalOrFilterTest extends ChainTestCase
 {
-    /**
-     * {@inheritdoc}
-     * Will only allow a test case through if no filters are in the chain or all
-     * filters are met.
-     */
-    public function canRun(TestCase $test)
+    public function testNoFiltersDoesNotAllowTestCaseToRun()
     {
-        foreach ($this->getFilters() as $filter) {
-            if (!$filter->canRun($test)) {
-                return false;
-            }
-        }
+        $filter = new LogicalOrFilter();
 
-        return true;
+        $this->assertFalse($filter->canRun($this->testCase()));
+    }
+
+    public function testTestCaseCaseCanRunIfAtLeastOneFilterMatches()
+    {
+        $filter = new LogicalOrFilter([
+            $this->filterReturning(false),
+            $this->filterReturning(true),
+        ]);
+
+        $this->assertTrue($filter->canRun($this->testCase()));
+    }
+
+    public function testTestCaseCannotRunIfNoFiltersAreMet()
+    {
+        $filter = new LogicalOrFilter([
+            $this->filterReturning(false),
+            $this->filterReturning(false),
+        ]);
+
+        $this->assertFalse($filter->canRun($this->testCase()));
     }
 }

@@ -22,27 +22,42 @@
 namespace Demeanor\Filter;
 
 use Demeanor\TestCase;
+use Demeanor\Exception\InvalidArgumentException;
 
 /**
- * Uses a collection of other filters to see if a test case can run.
+ * Checks a test case's file name against a supplied file name. If they match,
+ * the testcase can runn
  *
- * @since   0.2
+ * @since   0.4
  */
-class ChainFilter extends AbstractChainFilter
+class FileFilter implements Filter
 {
+    private $filename;
+
     /**
-     * {@inheritdoc}
-     * Will only allow a test case through if no filters are in the chain or all
-     * filters are met.
+     * Constructor: set up the directory.
+     *
+     * @since   0.4
+     * @param   string $path
+     * @throws  Demeanor\Exception\InvalidArgumentException if the path supplied
+     *          doesn't exist or isn't a file
+     * @return  void
      */
-    public function canRun(TestCase $test)
+    public function __construct($path)
     {
-        foreach ($this->getFilters() as $filter) {
-            if (!$filter->canRun($test)) {
-                return false;
-            }
+        $_path = realpath($path);
+        if (false === $_path || !is_file($_path)) {
+            throw new InvalidArgumentException(sprintf('"%s" is not a valid file', $path));
         }
 
-        return true;
+        $this->filename = $_path;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canRun(TestCase $testcase)
+    {
+        return $testcase->filename() === $this->filename;
     }
 }

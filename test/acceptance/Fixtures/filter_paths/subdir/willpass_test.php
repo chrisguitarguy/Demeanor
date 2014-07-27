@@ -19,30 +19,6 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Filter;
-
-use Demeanor\TestCase;
-
-/**
- * Uses a collection of other filters to see if a test case can run.
- *
- * @since   0.2
- */
-class ChainFilter extends AbstractChainFilter
-{
-    /**
-     * {@inheritdoc}
-     * Will only allow a test case through if no filters are in the chain or all
-     * filters are met.
-     */
-    public function canRun(TestCase $test)
-    {
-        foreach ($this->getFilters() as $filter) {
-            if (!$filter->canRun($test)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
+$this->it('will pass', function () {
+    // noop, we just care that this test passes
+});

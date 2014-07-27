@@ -21,28 +21,22 @@
 
 namespace Demeanor\Filter;
 
-use Demeanor\TestCase;
-
-/**
- * Uses a collection of other filters to see if a test case can run.
- *
- * @since   0.2
- */
-class ChainFilter extends AbstractChainFilter
+class ChainTestCase
 {
-    /**
-     * {@inheritdoc}
-     * Will only allow a test case through if no filters are in the chain or all
-     * filters are met.
-     */
-    public function canRun(TestCase $test)
-    {
-        foreach ($this->getFilters() as $filter) {
-            if (!$filter->canRun($test)) {
-                return false;
-            }
-        }
+    use \Counterpart\Assert;
 
-        return true;
+    protected function testCase()
+    {
+        return \Mockery::mock('Demeanor\\TestCase');
+    }
+
+    protected function filterReturning($bool)
+    {
+        $f = \Mockery::mock('Demeanor\\Filter\\Filter');
+        $f->shouldReceive('canRun')
+            ->atLeast(1)
+            ->andReturn($bool);
+
+        return $f;
     }
 }

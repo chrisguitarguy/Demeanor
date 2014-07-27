@@ -312,3 +312,23 @@ Some examples:
     # exclude multiple groups
     ./vendor/bin/demeanor --exclude-group aGroup --exclude-group anotherGroup
 
+Including only Certain Files and Directories
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Passing paths as arguments to the demeanor command line tool will include only
+those paths in a run.
+
+.. code-block:: bash
+
+    # include only tests in the test/unit/Config directory
+    ./vendor/bin/demeanor test/unit/Config
+
+    # include only tests in a single file
+    ./vendor/bin/demeanor test/unit/Config/ConsoleConfigurationTest.php
+
+    # include tests in either the directory test/unit/Config or test/unit/Spec
+    ./vendor/bin/demeanor test/unit/Config/ test/unit/Spec/
+
+    # include tests in either the directory test/unit/Config or in the file
+    # test test/unit/Spec/SpecTestCaseTest.php
+    ./vendor/bin/demeanor test/unit/Config test/unit/Spec/SpecTestCaseTest.php

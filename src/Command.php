@@ -23,6 +23,7 @@ namespace Demeanor;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Demeanor\Config\JsonConfiguration;
@@ -99,6 +100,11 @@ class Command extends BaseCommand
             null,
             InputOption::VALUE_REQUIRED,
             'Generate a diff-file coverage report to the provided directory'
+        );
+        $this->addArgument(
+            'path',
+            InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
+            'Files or Directories to include in the run'
         );
     }
 

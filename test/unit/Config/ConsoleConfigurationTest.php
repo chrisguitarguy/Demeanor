@@ -177,6 +177,19 @@ class ConsoleConfigurationTest
         Assert::assertIdentical($filter, $this->consoleConfig->getFilters());
     }
 
+    public function testPathsAddFileAndDirectoryFiltersToChain()
+    {
+        $this->willInitialize();
+        $filter = \Mockery::mock('Demeanor\\Filter\\ChainFilter');
+        $filter->shouldReceive('addFilter')
+            ->with(\Mockery::type('Demeanor\\Filter\\LogicalOrFilter'))
+            ->once();
+        $this->hasFilters($filter);
+        $this->consoleHasArgument('path', [__DIR__, __FILE__]);
+
+        Assert::assertIdentical($filter, $this->consoleConfig->getFilters());
+    }
+
     public function testCoverageEnabledWithNoCoverageOptionsReturnsFalse()
     {
         $this->willInitialize();
@@ -225,6 +238,11 @@ class ConsoleConfigurationTest
     private function consoleHasOption($name, $value=null)
     {
         $this->consoleInput->setOption($name, $value);
+    }
+
+    private function consoleHasArgument($name, $value=null)
+    {
+        $this->consoleInput->setArgument($name, $value);
     }
 
     private function willSetConfig()
