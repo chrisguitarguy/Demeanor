@@ -21,38 +21,32 @@
 
 namespace Demeanor\Filter;
 
-/**
- * ABC for filters that use other filters.
- *
- * @since   0.4
- */
-abstract class AbstractChainFilter implements ChainFilter
+class ConsensusChainFilterTest extends ChainTestCase
 {
-    private $filters = array();
-
-    public function __construct(array $filters=[])
+    public function testEmptyFilterAllowsAllTestsToRun()
     {
-        foreach ($filters as $filter) {
-            $this->addFilter($filter);
-        }
+        $filter = new ConsensusChainFilter();
+
+        $this->assertTrue($filter->canRun($this->testCase()));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addFilter(Filter $filter)
+    public function testFiltersWithoutConsensusDoesNotAllowTestToRun()
     {
-        $this->filters[] = $filter;
+        $filter = new ConsensusChainFilter([
+            $this->filterReturning(false),
+            $this->filterReturning(true),
+        ]);
+
+        $this->assertFalse($filter->canRun($this->testCase()));
     }
 
-    /**
-     * Get all the filters registered on the object.
-     *
-     * @since   0.4
-     * @return  Filter[]
-     */
-    protected function getFilters()
+    public function testFilterConsensusAllowsFiltersToRun()
     {
-        return $this->filters;
+        $filter = new ConsensusChainFilter([
+            $this->filterReturning(true),
+            $this->filterReturning(true),
+        ]);
+
+        $this->assertTrue($filter->canRun($this->testCase()));
     }
 }

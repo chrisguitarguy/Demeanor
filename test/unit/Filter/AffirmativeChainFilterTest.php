@@ -21,32 +21,32 @@
 
 namespace Demeanor\Filter;
 
-class ChainFilterTest extends ChainTestCase
+class AffirmativeChainFilterTest extends ChainTestCase
 {
-    public function testEmptyFilterAllowsAllTestsToRun()
+    public function testNoFiltersDoesNotAllowTestCaseToRun()
     {
-        $filter = new ChainFilter();
-
-        $this->assertTrue($filter->canRun($this->testCase()));
-    }
-
-    public function testFiltersWithoutConsensusDoesNotAllowTestToRun()
-    {
-        $filter = new ChainFilter([
-            $this->filterReturning(false),
-            $this->filterReturning(true),
-        ]);
+        $filter = new AffirmativeChainFilter();
 
         $this->assertFalse($filter->canRun($this->testCase()));
     }
 
-    public function testFilterConsensusAllowsFiltersToRun()
+    public function testTestCaseCaseCanRunIfAtLeastOneFilterMatches()
     {
-        $filter = new ChainFilter([
-            $this->filterReturning(true),
+        $filter = new AffirmativeChainFilter([
+            $this->filterReturning(false),
             $this->filterReturning(true),
         ]);
 
         $this->assertTrue($filter->canRun($this->testCase()));
+    }
+
+    public function testTestCaseCannotRunIfNoFiltersAreMet()
+    {
+        $filter = new AffirmativeChainFilter([
+            $this->filterReturning(false),
+            $this->filterReturning(false),
+        ]);
+
+        $this->assertFalse($filter->canRun($this->testCase()));
     }
 }

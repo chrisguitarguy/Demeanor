@@ -21,7 +21,7 @@
 
 namespace Demeanor\Config;
 
-use Demeanor\Filter\ChainFilter;
+use Demeanor\Filter\ConsensusChainFilter;
 use Demeanor\Finder\FinderBuilder;
 use Demeanor\Finder\ExcludingFinder;
 use Demeanor\Exception\ConfigurationException;
@@ -118,7 +118,7 @@ class JsonConfiguration implements Configuration
     public function getFilters()
     {
         $this->initialize();
-        return new ChainFilter();
+        return new ConsensusChainFilter();
     }
 
     /**

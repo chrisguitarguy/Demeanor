@@ -29,7 +29,7 @@ use Demeanor\TestCase;
  *
  * @since   0.4
  */
-class LogicalOrFilter extends AbstractChainFilter
+class AffirmativeChainFilter extends AbstractChainFilter
 {
     /**
      * {@inheritdoc}

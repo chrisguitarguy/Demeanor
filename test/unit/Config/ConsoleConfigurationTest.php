@@ -182,7 +182,7 @@ class ConsoleConfigurationTest
         $this->willInitialize();
         $filter = \Mockery::mock('Demeanor\\Filter\\ChainFilter');
         $filter->shouldReceive('addFilter')
-            ->with(\Mockery::type('Demeanor\\Filter\\LogicalOrFilter'))
+            ->with(\Mockery::type('Demeanor\\Filter\\ChainFilter'))
             ->once();
         $this->hasFilters($filter);
         $this->consoleHasArgument('path', [__DIR__, __FILE__]);

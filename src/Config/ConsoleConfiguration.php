@@ -24,7 +24,8 @@ namespace Demeanor\Config;
 use Symfony\Component\Console\Input\InputInterface;
 use Demeanor\Exception\ConfigurationException;
 use Demeanor\Filter\ChainFilter;
-use Demeanor\Filter\LogicalOrFilter;
+use Demeanor\Filter\ConsensusChainFilter;
+use Demeanor\Filter\AffirmativeChainFilter;
 use Demeanor\Filter\NameFilter;
 use Demeanor\Filter\GroupFilter;
 use Demeanor\Filter\FileFilter;
@@ -135,7 +136,7 @@ class ConsoleConfiguration implements Configuration
 
         $chain = $this->wrappedConfig->getFilters();
         if (!$chain instanceof ChainFilter) {
-            $chain = new ChainFilter([$chain]);
+            $chain = new ConsensusChainFilter([$chain]);
         }
 
         $nameFilters = $this->consoleInput->getOption('filter-name') ?: array();
@@ -155,7 +156,7 @@ class ConsoleConfiguration implements Configuration
 
         $paths = $this->consoleInput->getArgument('path');
         if ($paths) {
-            $pathFilter = new LogicalOrFilter();
+            $pathFilter = new AffirmativeChainFilter();
             foreach ($paths as $path) {
                 $pathFilter->addFilter(is_dir($path) ? new DirectoryFilter($path) : new FileFilter($path));
             }

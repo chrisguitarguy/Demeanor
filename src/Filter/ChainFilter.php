@@ -28,21 +28,14 @@ use Demeanor\TestCase;
  *
  * @since   0.2
  */
-class ChainFilter extends AbstractChainFilter
+interface ChainFilter extends Filter
 {
     /**
-     * {@inheritdoc}
-     * Will only allow a test case through if no filters are in the chain or all
-     * filters are met.
+     * Add a new filter to the chain.
+     *
+     * @since   0.4
+     * @param   Filter $filter
+     * @return  void
      */
-    public function canRun(TestCase $test)
-    {
-        foreach ($this->getFilters() as $filter) {
-            if (!$filter->canRun($test)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
+    public function addFilter(Filter $filter);
 }
