@@ -51,6 +51,6 @@ class StorageLocatorTest
     {
         $current = StorageLocator::get();
         StorageLocator::remove();
-        $this->assertNotEquals($current, StorageLocator::get());
+        $this->assertFalse($current === StorageLocator::get());
     }
 }
