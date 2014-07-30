@@ -1,8 +1,9 @@
 {
     "name": "demeanor/demeanor"
-    , "description": "A multi-paradigm testing utility"
+    , "description": "A testing framework/harness that supports Spec and XUnit style tests"
     , "license": "Apache-2.0"
-    , "keywords": ["testing", "test"]
+    , "keywords": ["testing", "test", "xunit", "demeanor"]
+    , "homepage": "http://docs.demeanorphp.org/"
     , "authors": [
         { "name": "Christopher Davis", "homepage": "http://christopherdavis.me" }
     ]
