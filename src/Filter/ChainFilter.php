@@ -21,8 +21,6 @@
 
 namespace Demeanor\Filter;
 
-use Demeanor\TestCase;
-
 /**
  * Uses a collection of other filters to see if a test case can run.
  *
