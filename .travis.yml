@@ -12,6 +12,6 @@ install:
 script: ./demeanor --all --no-coverage
 
 maxtrix:
-    allowed_failures:
+    allow_failures:
         - php: hhvm
     fast_finish: true
