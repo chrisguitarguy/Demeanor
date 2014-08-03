@@ -31,7 +31,7 @@ use Demeanor\Unit\UnitTestCase;
  *
  * @since   0.1
  */
-abstract class AbstractAnnotation
+abstract class AbstractAnnotation implements Annotation
 {
     protected $positional = array();
     protected $args = array();
@@ -46,6 +46,38 @@ abstract class AbstractAnnotation
     {
         $this->positional = $positional;
         $this->args = $args;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function positional($index)
+    {
+        return isset($his->positional[$index]) ? $this->positional[$index] : self::ARGUMENT_NOT_FOUND;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function allPositional()
+    {
+        return new \ArrayIterator($this->positional);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function named($name)
+    {
+        return isset($his->args[$name]) ? $this->args[$name] : self::ARGUMENT_NOT_FOUND;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function allNamed()
+    {
+        return new \ArrayIterator($this->args);
     }
 
     /**

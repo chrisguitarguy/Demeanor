@@ -21,24 +21,10 @@
 
 namespace Demeanor\Annotation;
 
-class AnnotationStub implements Annotation
+class AnnotationStub extends AbstractAnnotation
 {
-    private $positional;
-    private $named;
-
     public function __construct(array $positional=array(), array $named=array())
     {
-        $this->positional = $positional;
-        $this->named = $named;
-    }
-
-    public function positional($index)
-    {
-        return isset($this->positional[$index]) ? $this->positional[$index] : self::ARGUMENT_NOT_FOUND;
-    }
-
-    public function named($name)
-    {
-        return isset($this->positional[$name]) ? $this->positional[$name] : self::ARGUMENT_NOT_FOUND;
+        parent::__construct($positional, $named);
     }
 }
