@@ -30,17 +30,24 @@ use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestRunEvent;
 use Demeanor\Event\TestCaseEvent;
 use Demeanor\Unit\UnitTestCase;
+use Demeanor\Annotation\HandlerResolver;
+use Demeanor\Annotation\DefaultHandlerResolver;
 
 class AnnotationSubscriber implements Subscriber
 {
     private $parser;
     private $collection;
+    private $handlerResolver;
     private $cache;
 
-    public function __construct(AnnotationCollectionInterface $collection=null, ParserInterface $parser=null)
-    {
+    public function __construct(
+        AnnotationCollectionInterface $collection=null,
+        ParserInterface $parser=null,
+        HandlerResolver $resolver=null
+    ) {
         $this->collection = $collection ?: $this->createCollection();
         $this->parser = $parser ?: new Parser();
+        $this->handlerResolver = $resolver ?: new DefaultHandlerResolver();
         $this->cache = new \SplObjectStorage();
     }
 
@@ -62,12 +69,16 @@ class AnnotationSubscriber implements Subscriber
             return;
         }
 
-        $annotations = $this->testCaseAnnotations($testcase);
-
-        $context = $event->getTestContext();
         $result = $event->getTestResult();
+
+        $annotations = $this->testCaseAnnotations($testcase);
         foreach ($annotations as $annot) {
-            $annot->attachRun($testcase, $context, $result);
+            $handlerClass = $this->handlerResolver->toHandler($annot, $testcase);
+            if (!$handlerClass) {
+                continue;
+            }
+            $handler = new $handlerClass();
+            $handler->onRun($annot, $testcase, $result);
         }
     }
 
@@ -80,7 +91,12 @@ class AnnotationSubscriber implements Subscriber
 
         $annotations = $this->testCaseAnnotations($testcase);
         foreach ($annotations as $annot) {
-            $annot->attachSetup($testcase);
+            $handlerClass = $this->handlerResolver->toHandler($annot, $testcase);
+            if (!$handlerClass) {
+                continue;
+            }
+            $handler = new $handlerClass();
+            $handler->onSetup($annot, $testcase);
         }
     }
 
