@@ -22,7 +22,6 @@
 namespace Demeanor\Annotation;
 
 use Demeanor\TestCase;
-use Demeanor\Unit\UnitTestCase;
 
 /**
  * Provides utilities for validating method names in annotations.
