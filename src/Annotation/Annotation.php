@@ -47,6 +47,14 @@ interface Annotation
     public function positional($index);
 
     /**
+     * Get all the positional arguments as an iterator.
+     *
+     * @since   0.5
+     * @return  Traversable
+     */
+    public function allPositional();
+
+    /**
      * Get the argument named $name. Given this annotation:
      *
      *      @Annotation(one="two")
@@ -60,4 +68,12 @@ interface Annotation
      * @return  mixed|null The argument value if present, null otherwise
      */
     public function named($name);
+
+    /**
+     * Get all the named arguments as an iterator
+     *
+     * @since   0.5
+     * @return  Traversable
+     */
+    public function allNamed();
 }
