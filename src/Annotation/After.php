@@ -21,20 +21,12 @@
 
 namespace Demeanor\Annotation;
 
-use Demeanor\Unit\UnitTestCase;
-
 /**
  * Adds before callbacks to a test case.
  *
  * @since   0.1
  */
-class After extends Callback
+class After extends AbstractAnnotation
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function attachCallable(UnitTestCase $testcase, callable $callable)
-    {
-        $testcase->after($callable);
-    }
+    // noop
 }

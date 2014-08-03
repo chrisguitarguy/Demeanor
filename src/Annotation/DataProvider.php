@@ -21,8 +21,6 @@
 
 namespace Demeanor\Annotation;
 
-use Demeanor\Unit\UnitTestCase;
-
 /**
  * Set the data provider for a test case.
  *
@@ -30,32 +28,5 @@ use Demeanor\Unit\UnitTestCase;
  */
 class DataProvider extends AbstractAnnotation
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function attachSetup(UnitTestCase $testcase)
-    {
-        $data = null;
-        if ($this->hasValidMethod($testcase, true)) {
-            $data = $this->callMethod($testcase);
-        } elseif ($this->hasValidFunction($testcase)) {
-            $data = $this->callFunc($testcase);
-        } elseif (isset($this->args['data']) && is_array($this->args['data'])) {
-            $data = $this->args['data'];
-        }
-
-        if ($data) {
-            $testcase->withProvider($data);
-        }
-    }
-
-    private function callMethod(UnitTestCase $testcase)
-    {
-        return call_user_func([$testcase->getReflectionClass()->getName(), $this->args['method']]);
-    }
-
-    private function callFunc(UnitTestCase $testcase)
-    {
-        return call_user_func($this->args['function']);
-    }
+    // noop
 }
