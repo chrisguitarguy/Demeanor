@@ -22,6 +22,8 @@
 namespace Demeanor\Annotation;
 
 use Demeanor\TestCase;
+use Demeanor\Requirement\RequirementsStorage;
+use Demeanor\Requirement\StorageLocator;
 use Demeanor\Requirement\VersionRequirement;
 use Demeanor\Requirement\RegexRequirement;
 use Demeanor\Requirement\ExtensionRequirement;
@@ -34,10 +36,41 @@ use Demeanor\Requirement\ExtensionRequirement;
 class Requirementhandler extends AbstractHandler
 {
     /**
+     * @since   0.5
+     * @var     RequirementsStorage
+     */
+    private $reqStorage;
+
+    /**
+     * Optionally set the RequirementsStorage or the object will fetch the
+     * global one.
+     *
+     * @since   0.5
+     * @param   RequirementsStorage|null $storage
+     * @return  void
+     */
+    public function __construct(RequirementsStorage $storage=null)
+    {
+        $this->reqStorage = $storage ?: StorageLocator::get();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function onSetup(Annotation $annotation, TestCase $testcase)
     {
-        
+        $reqs = $this->reqStorage->get($testcase);
+
+        if ($phpVersion = $annotation->named('php')) {
+            $reqs->add(new VersionRequirement($phpVersion));
+        }
+
+        if ($os = $annotation->named('os')) {
+            $reqs->add(new RegexRequirement($os, PHP_OS, 'operating system'));
+        }
+
+        if ($ext = $annotation->named('extension')) {
+            $reqs->add(new ExtensionRequirement($ext));
+        }
     }
 }
