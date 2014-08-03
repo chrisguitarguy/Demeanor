@@ -53,7 +53,7 @@ abstract class AbstractAnnotation implements Annotation
      */
     public function positional($index)
     {
-        return isset($his->positional[$index]) ? $this->positional[$index] : self::ARGUMENT_NOT_FOUND;
+        return isset($this->positional[$index]) ? $this->positional[$index] : self::ARGUMENT_NOT_FOUND;
     }
 
     /**
@@ -69,7 +69,7 @@ abstract class AbstractAnnotation implements Annotation
      */
     public function named($name)
     {
-        return isset($his->args[$name]) ? $this->args[$name] : self::ARGUMENT_NOT_FOUND;
+        return isset($this->args[$name]) ? $this->args[$name] : self::ARGUMENT_NOT_FOUND;
     }
 
     /**
