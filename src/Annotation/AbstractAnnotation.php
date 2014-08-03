@@ -31,7 +31,7 @@ use Demeanor\Unit\UnitTestCase;
  *
  * @since   0.1
  */
-abstract class Annotation
+abstract class AbstractAnnotation
 {
     protected $positional = array();
     protected $args = array();

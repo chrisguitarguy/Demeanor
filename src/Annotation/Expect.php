@@ -30,7 +30,7 @@ use Demeanor\Unit\UnitTestCase;
  *
  * @since   0.1
  */
-class Expect extends Annotation
+class Expect extends AbstractAnnotation
 {
     /**
      * {@inheritdoc}

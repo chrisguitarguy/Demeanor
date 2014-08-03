@@ -33,7 +33,7 @@ use Demeanor\Requirement\ExtensionRequirement;
  *
  * @since   0.1
  */
-class Requirement extends Annotation
+class Requirement extends AbstractAnnotation
 {
     /**
      * {@inheritdoc}

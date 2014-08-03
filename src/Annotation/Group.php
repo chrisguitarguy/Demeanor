@@ -29,7 +29,7 @@ use Demeanor\Group\StorageLocator;
  *
  * @since   0.4
  */
-class Group extends Annotation
+class Group extends AbstractAnnotation
 {
     /**
      * {@inheritdoc}

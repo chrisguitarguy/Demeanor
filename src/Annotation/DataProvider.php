@@ -28,7 +28,7 @@ use Demeanor\Unit\UnitTestCase;
  *
  * @since   0.1
  */
-class DataProvider extends Annotation
+class DataProvider extends AbstractAnnotation
 {
     /**
      * {@inheritdoc}
