@@ -47,7 +47,7 @@ class _CallbackHandlerSpy extends AbstractCallbackHandler
     }
 }
 
-class AbstractCallbackHandlerTest
+class AbstractCallbackHandlerTest extends CallbackTestCase
 {
     use \Counterpart\Assert;
 
@@ -102,21 +102,5 @@ class AbstractCallbackHandlerTest
         $this->handler->onRun($before, $tc);
 
         $this->handler->assertCalledWith('string');
-    }
-
-    public function validMethod()
-    {
-        // noop
-    }
-
-    private function testcase()
-    {
-        $tc = \Mockery::mock('Demeanor\\Unit\\UnitTestCase');
-        $tc->shouldReceive('getReflectionClass')
-            ->andReturn(new \ReflectionClass($this));
-        $tc->shouldReceive('getTestObject')
-            ->andReturn($this);
-
-        return $tc;
     }
 }
