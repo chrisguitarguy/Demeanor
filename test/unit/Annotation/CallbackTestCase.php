@@ -21,6 +21,8 @@
 
 namespace Demeanor\Annotation;
 
+use Demeanor\DefaultTestResult;
+
 class CallbackTestCase
 {
     public function validMethod()
@@ -37,5 +39,10 @@ class CallbackTestCase
             ->andReturn($this);
 
         return $tc;
+    }
+
+    protected function result()
+    {
+        return new DefaultTestResult();
     }
 }

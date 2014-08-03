@@ -22,6 +22,7 @@
 namespace Demeanor\Annotation;
 
 use Demeanor\TestCase;
+use Demeanor\TestResult;
 use Demeanor\Unit\UnitTestCase;
 
 /**
@@ -38,7 +39,7 @@ abstract class AbstractCallbackHandler extends AbstractHandler
     /**
      * {@inheritdoc}
      */
-    public function onRun(Annotation $annotation, TestCase $testcase)
+    public function onRun(Annotation $annotation, TestCase $testcase, TestResult $result)
     {
         if (!$this->isUnitTest($testcase)) {
             return;

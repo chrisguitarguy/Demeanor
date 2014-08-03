@@ -22,6 +22,7 @@
 namespace Demeanor\Annotation;
 
 use Demeanor\TestCase;
+use Demeanor\TestResult;
 
 /**
  * ABC for handlers that fills out the require methods but does nothing.
@@ -41,7 +42,7 @@ abstract class AbstractHandler implements Handler
     /**
      * {@inheritdoc}
      */
-    public function onRun(Annotation $annotation, TestCase $testcase)
+    public function onRun(Annotation $annotation, TestCase $testcase, TestResult $result)
     {
         // noop
     }

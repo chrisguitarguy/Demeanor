@@ -22,6 +22,7 @@
 namespace Demeanor\Annotation;
 
 use Demeanor\TestCase;
+use Demeanor\TestResult;
 
 /**
  * Annotation handlers "attach" an annotation to a test case.
@@ -49,5 +50,5 @@ interface Handler
      * @param   TestCase $testcase
      * @return  void
      */
-    public function onRun(Annotation $annotation, TestCase $testcase);
+    public function onRun(Annotation $annotation, TestCase $testcase, TestResult $result);
 }

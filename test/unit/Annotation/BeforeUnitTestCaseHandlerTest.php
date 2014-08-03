@@ -39,6 +39,6 @@ class BeforeUnitTestCaseHandlerTest extends CallbackTestCase
             ->atLeast(1);
         $before = new Before(['is_array'], []);
 
-        $this->handler->onRun($before, $tc);
+        $this->handler->onRun($before, $tc, $this->result());
     }
 }

@@ -60,7 +60,7 @@ class AbstractCallbackHandlerTest extends CallbackTestCase
 
     public function testNotUnitTestTestCaseDoesNothingOnRun()
     {
-        $this->handler->onRun(new Before([], []), new TestCaseStub());
+        $this->handler->onRun(new Before([], []), new TestCaseStub(), $this->result());
         $this->handler->assertNotCalled();
     }
 
@@ -69,7 +69,7 @@ class AbstractCallbackHandlerTest extends CallbackTestCase
         $tc = $this->testcase();
         $before = new Before(['validMethod'], []);
 
-        $this->handler->onRun($before, $tc);
+        $this->handler->onRun($before, $tc, $this->result());
 
         $this->handler->assertCalledWith('array');
     }
@@ -79,7 +79,7 @@ class AbstractCallbackHandlerTest extends CallbackTestCase
         $tc = $this->testcase();
         $before = new Before([], ['method' => 'validMethod']);
 
-        $this->handler->onRun($before, $tc);
+        $this->handler->onRun($before, $tc, $this->result());
 
         $this->handler->assertCalledWith('array');
     }
@@ -89,7 +89,7 @@ class AbstractCallbackHandlerTest extends CallbackTestCase
         $tc = $this->testcase();
         $before = new Before(['is_array'], []);
 
-        $this->handler->onRun($before, $tc);
+        $this->handler->onRun($before, $tc, $this->result());
 
         $this->handler->assertCalledWith('string');
     }
@@ -99,7 +99,7 @@ class AbstractCallbackHandlerTest extends CallbackTestCase
         $tc = $this->testcase();
         $before = new Before([], ['function' => 'is_array']);
 
-        $this->handler->onRun($before, $tc);
+        $this->handler->onRun($before, $tc, $this->result());
 
         $this->handler->assertCalledWith('string');
     }
