@@ -25,9 +25,31 @@ use Demeanor\Events;
 use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestRunEvent;
 use Demeanor\Requirement\Requirements;
+use Demeanor\Requirement\RequirementsStorage;
+use Demeanor\Requirement\StorageLocator;
 
 class RequirementSubscriber implements Subscriber
 {
+    /**
+     * The requirements storage object.
+     *
+     * @since   0.5
+     * @var     RequirementsStorage
+     */
+    private $reqStorage;
+
+    /**
+     * Optionally set the requirements storage object.
+     *
+     * @since   0.5
+     * @param   RequirementsStorage|null $storage
+     * @return  void
+     */
+    public function __construct(RequirementsStorage $storage=null)
+    {
+        $this->reqStorage = $storage ?: StorageLocator::get();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -49,7 +71,7 @@ class RequirementSubscriber implements Subscriber
     public function setupRequirements(TestRunEvent $event)
     {
         $context = $event->getTestContext();
-        $context['requirements'] = new Requirements();
+        $context['requirements'] = $this->reqStorage->get($event->getTestCase());
     }
 
     /**
@@ -62,12 +84,7 @@ class RequirementSubscriber implements Subscriber
      */
     public function checkRequirements(TestRunEvent $event)
     {
-        $context = $event->getTestContext();
-        if (!isset($context['requirements']) || !count($context['requirements'])) {
-            return;
-        }
-
-        if (!$context['requirements']->met()) {
+        if (!$this->reqStorage->get($event->getTestCase())->met()) {
             $context->skip((string)$context['requirements']);
         }
     }
