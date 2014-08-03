@@ -19,14 +19,39 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Annotation;
+namespace Demeanor;
 
 /**
- * Adds before callbacks to a test case.
+ * Useful when deterministic test case classes are needed.
  *
- * @since   0.1
+ * @since   0.5
  */
-class After extends AbstractAnnotation
+class TestCaseStub extends AbstractTestCase
 {
-    // noop
+    private $name;
+
+    public function __construct($name=null)
+    {
+        $this->name = $name;
+    }
+
+    public function filename()
+    {
+        return __FILE__;
+    }
+
+    public function lineno()
+    {
+        return 1;
+    }
+
+    protected function doRun(array $args)
+    {
+        // noop
+    }
+
+    protected function generateName()
+    {
+        return $this->name;
+    }
 }

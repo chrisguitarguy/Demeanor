@@ -21,12 +21,10 @@
 
 namespace Demeanor\Annotation;
 
-/**
- * Adds before callbacks to a test case.
- *
- * @since   0.1
- */
-class After extends AbstractAnnotation
+class AnnotationStub extends AbstractAnnotation
 {
-    // noop
+    public function __construct(array $positional=array(), array $named=array())
+    {
+        parent::__construct($positional, $named);
+    }
 }

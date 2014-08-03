@@ -22,11 +22,14 @@
 namespace Demeanor\Annotation;
 
 /**
- * Adds before callbacks to a test case.
+ * Provides utilities for validation function names in annotations.
  *
- * @since   0.1
+ * @since   0.5
  */
-class After extends AbstractAnnotation
+trait FunctionValidatorTrait
 {
-    // noop
+    protected function isValidFunction($funcName)
+    {
+        return function_exists($funcName);
+    }
 }

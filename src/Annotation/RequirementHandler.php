@@ -19,27 +19,31 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Subscriber;
+namespace Demeanor\Annotation;
 
-use Demeanor\Events;
-use Demeanor\Event\Subscriber;
-use Demeanor\Event\TestRunEvent;
-use Demeanor\Requirement\Requirements;
+use Demeanor\TestCase;
 use Demeanor\Requirement\RequirementsStorage;
 use Demeanor\Requirement\StorageLocator;
+use Demeanor\Requirement\VersionRequirement;
+use Demeanor\Requirement\RegexRequirement;
+use Demeanor\Requirement\ExtensionRequirement;
 
-class RequirementSubscriber implements Subscriber
+/**
+ * Handler class for requirement annotations.
+ *
+ * @since   0.5
+ */
+class Requirementhandler extends AbstractHandler
 {
     /**
-     * The requirements storage object.
-     *
      * @since   0.5
      * @var     RequirementsStorage
      */
     private $reqStorage;
 
     /**
-     * Optionally set the requirements storage object.
+     * Optionally set the RequirementsStorage or the object will fetch the
+     * global one.
      *
      * @since   0.5
      * @param   RequirementsStorage|null $storage
@@ -53,41 +57,20 @@ class RequirementSubscriber implements Subscriber
     /**
      * {@inheritdoc}
      */
-    public function getSubscribedEvents()
+    public function onSetup(Annotation $annotation, TestCase $testcase)
     {
-        return [
-            Events::BEFORE_TESTCASE     => ['setupRequirements', 1000],
-            Events::BEFORERUN_TESTCASE  => ['checkRequirements', -1000],
-        ];
-    }
+        $reqs = $this->reqStorage->get($testcase);
 
-    /**
-     * Set up the `Requirements` collection on the test context.
-     *
-     * @since   0.1
-     * @param   TestRunEvent $event
-     * @return  void
-     */
-    public function setupRequirements(TestRunEvent $event)
-    {
-        $context = $event->getTestContext();
-        $context['requirements'] = $this->reqStorage->get($event->getTestCase());
-    }
+        if ($phpVersion = $annotation->named('php')) {
+            $reqs->add(new VersionRequirement($phpVersion));
+        }
 
-    /**
-     * Check the requirements for a given test case and skip the test if they
-     * are not met.
-     *
-     * @since   0.1
-     * @param   TestRunEvent $event
-     * @return  void
-     */
-    public function checkRequirements(TestRunEvent $event)
-    {
-        $reqs = $this->reqStorage->get($event->getTestCase());
+        if ($os = $annotation->named('os')) {
+            $reqs->add(new RegexRequirement($os, PHP_OS, 'operating system'));
+        }
 
-        if (!$reqs->met()) {
-            $event->getTestContext()->skip((string)$reqs);
+        if ($ext = $annotation->named('extension')) {
+            $reqs->add(new ExtensionRequirement($ext));
         }
     }
 }

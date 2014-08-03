@@ -21,25 +21,12 @@
 
 namespace Demeanor\Annotation;
 
-use Demeanor\Unit\UnitTestCase;
-use Demeanor\Group\StorageLocator;
-
 /**
  * Annotation for adding groups to test cases.
  *
  * @since   0.4
  */
-class Group extends Annotation
+class Group extends AbstractAnnotation
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function attachSetup(UnitTestCase $testcase)
-    {
-        foreach ($this->positional as $groupName) {
-            if ($groupName && is_string($groupName)) {
-                StorageLocator::get()->addGroup($testcase, (string)$groupName);
-            }
-        }
-    }
+    // noop
 }

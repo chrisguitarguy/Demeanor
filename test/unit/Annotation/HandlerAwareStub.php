@@ -21,12 +21,20 @@
 
 namespace Demeanor\Annotation;
 
-/**
- * Adds before callbacks to a test case.
- *
- * @since   0.1
- */
-class After extends AbstractAnnotation
+use Demeanor\TestCase;
+
+class HandlerAwareStub extends AnnotationStub implements HandlerAware
 {
-    // noop
+    private $handler;
+
+    public function __construct($handler, array $positional=array(), $named=array())
+    {
+        $this->handler = $handler;
+        parent::__construct($positional, $named);
+    }
+
+    public function handledBy(TestCase $testcase)
+    {
+        return $this->handler;
+    }
 }

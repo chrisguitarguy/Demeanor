@@ -21,12 +21,22 @@
 
 namespace Demeanor\Annotation;
 
+use Demeanor\TestCase;
+
 /**
- * Adds before callbacks to a test case.
+ * An interface for annotation to implement if they want to manage their own
+ * handler resolution rather than using the default convensions.
  *
- * @since   0.1
+ * @since   0.5
  */
-class After extends AbstractAnnotation
+interface HandlerAware
 {
-    // noop
+    /**
+     * Return the handler class for the annotation.
+     *
+     * @since   0.5
+     * @param   TestCase $testcase
+     * @return  string|null The handler class name if found, or null otherwise
+     */
+    public function handledBy(TestCase $testcase);
 }

@@ -30,7 +30,7 @@ use Demeanor\Unit\UnitTestCase;
  *
  * @since   0.1
  */
-abstract class Callback extends Annotation
+abstract class Callback extends AbstractAnnotation
 {
     /**
      * {@inheritdoc}

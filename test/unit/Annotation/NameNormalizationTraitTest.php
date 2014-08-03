@@ -21,12 +21,16 @@
 
 namespace Demeanor\Annotation;
 
-/**
- * Adds before callbacks to a test case.
- *
- * @since   0.1
- */
-class After extends AbstractAnnotation
+class NameNormalizationTraitTest
 {
-    // noop
+    use \Counterpart\Assert;
+    use NameNormalizationTrait;
+
+    public function testNormalizeNameRemovesDoubleBackslashes()
+    {
+        $this->assertEquals(
+            'Demeanor\\TestCase',
+            $this->normalizeName('Demeanor\\\\TestCase')
+        );
+    }
 }

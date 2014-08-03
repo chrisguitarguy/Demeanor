@@ -19,14 +19,38 @@
  * @license     http://opensource.org/licenses/apache-2.0 Apache-2.0
  */
 
-namespace Demeanor\Annotation;
+namespace Demeanor\Requirement;
 
 /**
- * Adds before callbacks to a test case.
- *
- * @since   0.1
+ * @Before("backupStorage")
+ * @After("restoreStorage")
  */
-class After extends AbstractAnnotation
+class StorageLocatorTest
 {
-    // noop
+    use \Counterpart\Assert;
+
+    private $storage;
+
+    public function backupStorage()
+    {
+        $this->storage = StorageLocator::get();
+    }
+
+    public function restoreStorage()
+    {
+        StorageLocator::set($this->storage);
+    }
+
+    public function testGetReturnsTheSameInstanceOnMultipleCalls()
+    {
+        $store = StorageLocator::get();
+        $this->assertIdentical($store, StorageLocator::get());
+    }
+
+    public function testGetCreatesNewInstanceOnFirstCall()
+    {
+        $current = StorageLocator::get();
+        StorageLocator::remove();
+        $this->assertFalse($current === StorageLocator::get());
+    }
 }

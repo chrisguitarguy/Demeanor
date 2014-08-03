@@ -21,12 +21,28 @@
 
 namespace Demeanor\Annotation;
 
-/**
- * Adds before callbacks to a test case.
- *
- * @since   0.1
- */
-class After extends AbstractAnnotation
+use Demeanor\DefaultTestResult;
+
+class CallbackTestCase
 {
-    // noop
+    public function validMethod()
+    {
+        // noop
+    }
+
+    protected function testcase()
+    {
+        $tc = \Mockery::mock('Demeanor\\Unit\\UnitTestCase');
+        $tc->shouldReceive('getReflectionClass')
+            ->andReturn(new \ReflectionClass($this));
+        $tc->shouldReceive('getTestObject')
+            ->andReturn($this);
+
+        return $tc;
+    }
+
+    protected function result()
+    {
+        return new DefaultTestResult();
+    }
 }

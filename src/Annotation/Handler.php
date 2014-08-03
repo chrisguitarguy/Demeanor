@@ -21,12 +21,34 @@
 
 namespace Demeanor\Annotation;
 
+use Demeanor\TestCase;
+use Demeanor\TestResult;
+
 /**
- * Adds before callbacks to a test case.
+ * Annotation handlers "attach" an annotation to a test case.
  *
- * @since   0.1
+ * @since   0.5
  */
-class After extends AbstractAnnotation
+interface Handler
 {
-    // noop
+    /**
+     * Attach the annotation to a test case when its being set up -- well before
+     * its run.
+     *
+     * @since   0.5
+     * @param   Annotation $annotation
+     * @param   TestCase $testcase
+     * @return  void
+     */
+    public function onSetup(Annotation $annotation, TestCase $testcase);
+
+    /**
+     * Attach the annotation to the test case right before its run.
+     *
+     * @since   0.5
+     * @param   Annotation $annotation
+     * @param   TestCase $testcase
+     * @return  void
+     */
+    public function onRun(Annotation $annotation, TestCase $testcase, TestResult $result);
 }

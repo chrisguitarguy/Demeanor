@@ -21,12 +21,24 @@
 
 namespace Demeanor\Annotation;
 
+use Demeanor\TestCase;
+
 /**
- * Adds before callbacks to a test case.
+ * Resolves an annotation instance into an appropriate handler.
  *
- * @since   0.1
+ * @since   0.5
  */
-class After extends AbstractAnnotation
+interface HandlerResolver
 {
-    // noop
+    /**
+     * Get the handler for a given annotation and test case. Handlers may change
+     * depending on the testcase.
+     *
+     * @since   0.5
+     * @param   Annotation $annotation The for which the handler will be found
+     * @param   TestCase $testcase The test case on which the annotation will act
+     * @return  string|null The string class name if present, or null if a handler
+     *          is not found.
+     */
+    public function toHandler(Annotation $annotation, TestCase $testcase);
 }

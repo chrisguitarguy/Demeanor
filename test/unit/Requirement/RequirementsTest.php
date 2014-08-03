@@ -71,8 +71,56 @@ class RequirementsTest
         }
     }
 
+    public function testMetSucceedsIfAllSubRequirementsSuccess()
+    {
+        $reqs = new Requirements();
+        $reqs->add($this->requirementReturning(true));
+
+        Assert::assertTrue($reqs->met());
+    }
+
+    public function testMetFailsIfASubRequirementFails()
+    {
+        $reqs = new Requirements();
+        $reqs->add($this->requirementReturning(false));
+
+        Assert::assertFalse($reqs->met());
+    }
+
+    public function testToStringReturnsACombinationOfAllRequirementStrings()
+    {
+        $reqs = new Requirements();
+        $reqs->add($this->requirementWithName('one name'));
+        $reqs->add($this->requirementWithName('two name'));
+
+        $name = (string)$reqs;
+
+        Assert::assertStringContains('one name', $name);
+        Assert::assertStringContains('two name', $name);
+    }
+
     private function requirement()
     {
         return \Mockery::mock('Demeanor\\Requirement\\Requirement');
+    }
+
+    private function requirementReturning($met)
+    {
+        $r = $this->requirement();
+        $r->shouldReceive('met')
+            ->atLeast(1)
+            ->andReturn($met);
+
+        return $r;
+    }
+
+    private function requirementWithName($name)
+    {
+        $r = $this->requirement();
+        $r->shouldReceive('__toString')
+            ->atLeast(1)
+            ->andReturn($name);
+
+        return $r;
     }
 }

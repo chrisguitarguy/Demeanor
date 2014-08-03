@@ -21,12 +21,29 @@
 
 namespace Demeanor\Annotation;
 
+use Demeanor\TestCase;
+use Demeanor\TestResult;
+
 /**
- * Adds before callbacks to a test case.
+ * ABC for handlers that fills out the require methods but does nothing.
  *
- * @since   0.1
+ * @since   0.5
  */
-class After extends AbstractAnnotation
+abstract class AbstractHandler implements Handler
 {
-    // noop
+    /**
+     * {@inheritdoc}
+     */
+    public function onSetup(Annotation $annotation, TestCase $testcase)
+    {
+        // noop
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onRun(Annotation $annotation, TestCase $testcase, TestResult $result)
+    {
+        // noop
+    }
 }

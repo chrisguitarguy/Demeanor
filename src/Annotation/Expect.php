@@ -21,44 +21,12 @@
 
 namespace Demeanor\Annotation;
 
-use Demeanor\TestContext;
-use Demeanor\TestResult;
-use Demeanor\Unit\UnitTestCase;
-
 /**
  * Set the expected exeception for the test case.
  *
  * @since   0.1
  */
-class Expect extends Annotation
+class Expect extends AbstractAnnotation
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
-    {
-        if (isset($this->positional[0])) {
-            $this->args['exception'] = $this->positional[0];
-        }
-
-        if (!isset($this->args['exception'])) {
-            return;
-        }
-
-        $this->args['exception'] = $this->normalizeName($this->args['exception']);
-
-        if (
-            !class_exists($this->args['exception']) &&
-            !interface_exists($this->args['exception'])
-        ) {
-            $result->error();
-            $result->addMessage('error', sprintf(
-                'Expected exception class "%s" does not exist',
-                $this->args['exception']
-            ));
-            return;
-        }
-
-        $testcase->willThrow($this->args['exception']);
-    }
+    // noop
 }

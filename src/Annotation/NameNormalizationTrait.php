@@ -22,11 +22,21 @@
 namespace Demeanor\Annotation;
 
 /**
- * Adds before callbacks to a test case.
+ * Trait for normalizing backslashes in canonical class and function names.
  *
- * @since   0.1
+ * @since   0.5
  */
-class After extends AbstractAnnotation
+trait NameNormalizationTrait
 {
-    // noop
+    /**
+     * Remove doubled backslashes and replace them with singles.
+     *
+     * @since   0.1
+     * @param   string $ident
+     * @return  string
+     */
+    protected function normalizeName($ident)
+    {
+        return str_replace('\\\\', '\\', $ident);
+    }
 }

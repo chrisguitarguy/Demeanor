@@ -21,27 +21,7 @@
 
 namespace Demeanor\Annotation;
 
-use Counterpart\Assert;
-use Demeanor\Group\StorageLocator;
-
-class GroupTest
+class NoSpecificHandlerStubHandler extends AbstractHandler
 {
-    private $test;
-
-    public function __construct()
-    {
-        $this->test = \Mockery::mock('Demeanor\\Unit\\UnitTestCase');
-    }
-
-    public function testAttachSetupAddsAllPositionalArgumentsAsGroups()
-    {
-        $groups = ['one', 'two'];
-        $annot = new Group($groups, []);
-
-        $annot->attachSetup($this->test);
-
-        foreach ($groups as $group) {
-            Assert::assertTrue(StorageLocator::get()->hasGroup($this->test, $group));
-        }
-    }
+    // noop
 }

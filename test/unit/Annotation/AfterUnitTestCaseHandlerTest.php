@@ -21,12 +21,24 @@
 
 namespace Demeanor\Annotation;
 
-/**
- * Adds before callbacks to a test case.
- *
- * @since   0.1
- */
-class After extends AbstractAnnotation
+class AfterUnitTestCaseHandlerTest extends CallbackTestCase
 {
-    // noop
+    use \Counterpart\Assert;
+
+    private $handler;
+
+    public function __construct()
+    {
+        $this->handler = new AfterUnitTestCaseHandler();
+    }
+
+    public function testOnRunAttachsCallableBeforeTestCase()
+    {
+        $tc = $this->testcase();
+        $tc->shouldReceive('after')
+            ->atLeast(1);
+        $before = new Before(['is_array'], []);
+
+        $this->handler->onRun($before, $tc, $this->result());
+    }
 }

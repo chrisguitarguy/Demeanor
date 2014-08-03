@@ -21,12 +21,32 @@
 
 namespace Demeanor\Annotation;
 
-/**
- * Adds before callbacks to a test case.
- *
- * @since   0.1
- */
-class After extends AbstractAnnotation
+use Demeanor\TestCaseStub;
+
+class GroupHandlerTest
 {
-    // noop
+    use \Counterpart\Assert;
+
+    private $storage;
+    private $handler;
+
+    public function __construct()
+    {
+        $this->storage = \Mockery::mock('Demeanor\\Group\\GroupStorage');
+        $this->handler = new GroupHandler($this->storage);
+    }
+
+    public function testHandlerAddsGroupsFoundInPositionalArgumentsOnSetup()
+    {
+        $this->willAddGroup();
+        $group = new Group(['aGroup', 'anotherGroup'], []);
+
+        $this->handler->onSetup($group, new TestCaseStub());
+    }
+
+    private function willAddGroup()
+    {
+        $this->storage->shouldReceive('addGroup')
+            ->atLeast(1);
+    }
 }

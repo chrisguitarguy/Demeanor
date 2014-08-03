@@ -21,12 +21,18 @@
 
 namespace Demeanor\Annotation;
 
-/**
- * Adds before callbacks to a test case.
- *
- * @since   0.1
- */
-class After extends AbstractAnnotation
+class FunctionValidatorTraitTest
 {
-    // noop
+    use \Counterpart\Assert;
+    use FunctionValidatorTrait;
+
+    public function testValidFunctionSucceedsWhenFunctionExists()
+    {
+        $this->assertTrue($this->isValidFunction('is_array'));
+    }
+
+    public function testValidFunctionFailsWhenFunctionDoesNotExist()
+    {
+        $this->assertFalse($this->isValidFunction('nope_nope_nope_nope'));
+    }
 }

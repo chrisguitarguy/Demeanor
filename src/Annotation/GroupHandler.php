@@ -21,12 +21,35 @@
 
 namespace Demeanor\Annotation;
 
-/**
- * Adds before callbacks to a test case.
- *
- * @since   0.1
- */
-class After extends AbstractAnnotation
+use Demeanor\TestCase;
+use Demeanor\Group\GroupStorage;
+use Demeanor\Group\StorageLocator;
+
+class GroupHandler extends AbstractHandler
 {
-    // noop
+    private $groupStorage;
+
+    /**
+     * Constructor. Optionally set the group storage.
+     *
+     * @since   0.5
+     * @param   GroupStorage $storage
+     * @return  void
+     */
+    public function __construct(GroupStorage $storage=null)
+    {
+        $this->groupStorage = $storage ?: StorageLocator::get();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onSetup(Annotation $annotation, TestCase $testcase)
+    {
+        foreach ($annotation->allPositional() as $groupName) {
+            if ($groupName && is_string($groupName)) {
+                $this->groupStorage->addGroup($testcase, (string)$groupName);
+            }
+        }
+    }
 }

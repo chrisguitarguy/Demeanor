@@ -21,39 +21,39 @@
 
 namespace Demeanor\Annotation;
 
-use Demeanor\TestContext;
+use Demeanor\TestCase;
 use Demeanor\TestResult;
-use Demeanor\Unit\UnitTestCase;
-use Demeanor\Requirement\VersionRequirement;
-use Demeanor\Requirement\RegexRequirement;
-use Demeanor\Requirement\ExtensionRequirement;
 
 /**
- * Set the expected exeception for the test case.
+ * Handler for the expect annotation.
  *
- * @since   0.1
+ * @since   0.5
  */
-class Requirement extends AbstractAnnotation
+class ExpectHandler extends AbstractHandler
 {
+    use NameNormalizationTrait;
+
     /**
      * {@inheritdoc}
      */
-    public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
+    public function onRun(Annotation $annotation, TestCase $testcase, TestResult $result)
     {
-        if (!isset($context['requirements'])) {
+        $class = $annotation->positional(0);
+        if (!$class) {
+            $class = $annotation->named('exception');
+        }
+
+        if (!$class) {
             return;
         }
 
-        if (isset($this->args['php'])) {
-            $context['requirements']->add(new VersionRequirement($this->args['php']));
+        $class = $this->normalizeName($class);
+        if (!class_exists($class) && !interface_exists($class)) {
+            $result->error();
+            $result->addMessage('error', sprintf('Expected exception "%s" does not exist', $class));
+            return;
         }
 
-        if (isset($this->args['os'])) {
-            $context['requirements']->add(new RegexRequirement($this->args['os'], PHP_OS, 'operating system'));
-        }
-
-        if (isset($this->args['extension'])) {
-            $context['requirements']->add(new ExtensionRequirement($this->args['extension']));
-        }
+        $testcase->willThrow($class);
     }
 }

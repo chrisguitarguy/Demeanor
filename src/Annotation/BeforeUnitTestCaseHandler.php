@@ -21,39 +21,20 @@
 
 namespace Demeanor\Annotation;
 
-use Demeanor\TestContext;
-use Demeanor\TestResult;
 use Demeanor\Unit\UnitTestCase;
-use Demeanor\Requirement\VersionRequirement;
-use Demeanor\Requirement\RegexRequirement;
-use Demeanor\Requirement\ExtensionRequirement;
 
 /**
- * Set the expected exeception for the test case.
+ * Before callback handler for unit tests.
  *
- * @since   0.1
+ * @since   0.5
  */
-class Requirement extends AbstractAnnotation
+class BeforeUnitTestCaseHandler extends AbstractCallbackHandler
 {
     /**
      * {@inheritdoc}
      */
-    public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
+    public function attachCallable(UnitTestCase $testcase, callable $callback)
     {
-        if (!isset($context['requirements'])) {
-            return;
-        }
-
-        if (isset($this->args['php'])) {
-            $context['requirements']->add(new VersionRequirement($this->args['php']));
-        }
-
-        if (isset($this->args['os'])) {
-            $context['requirements']->add(new RegexRequirement($this->args['os'], PHP_OS, 'operating system'));
-        }
-
-        if (isset($this->args['extension'])) {
-            $context['requirements']->add(new ExtensionRequirement($this->args['extension']));
-        }
+        $testcase->before($callback);
     }
 }

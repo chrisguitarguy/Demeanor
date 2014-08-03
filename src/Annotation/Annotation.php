@@ -21,116 +21,59 @@
 
 namespace Demeanor\Annotation;
 
-use Demeanor\TestContext;
-use Demeanor\TestResult;
-use Demeanor\Unit\UnitTestCase;
-
 /**
- * An ABC for all the annotation used in this extenion. Annotation know how to
- * attach themselves to test suites.
+ * Defines a single annotation. Annotations are simple value objects and containers
+ * for the arguments passed into them.
  *
- * @since   0.1
+ * @since   0.5
  */
-abstract class Annotation
+interface Annotation
 {
-    protected $positional = array();
-    protected $args = array();
+    const ARGUMENT_NOT_FOUND = null;
 
     /**
-     * Costructor. Set up the arguments from the annotation parser.
+     * The the position argument at $index. Given this annotation:
      *
-     * @since   0.1
-     * @param   array $args
+     *      @Annotation("here")
+     *
+     * `getPositional` would:
+     *
+     *      $position = $someAnnotation->positional(0); // "here"
+     *
+     * @since   0.5
+     * @param   int $index The zero-based index of the positional argument
+     * @return  mixed|null The positional argument value if its present, null otherwise
      */
-    public function __construct(array $positional, array $args)
-    {
-        $this->positional = $positional;
-        $this->args = $args;
-    }
+    public function positional($index);
 
     /**
-     * Attach actions to the test case on setup.
+     * Get all the positional arguments as an iterator.
      *
-     * @since   0.1
-     * @param   TestCase $testcase
-     * @return  void
+     * @since   0.5
+     * @return  Traversable
      */
-    public function attachSetup(UnitTestCase $testcase)
-    {
-
-    }
+    public function allPositional();
 
     /**
-     * Do whatever the annotation is meant to do with the test case. This is
-     * called from a `TestRunEvent` that's aware of test results and contexts
+     * Get the argument named $name. Given this annotation:
      *
-     * @since   0.1
-     * @param   TestCase $testcase
-     * @param   TestContext $context
-     * @param   TestResult $result
-     * @return  void
+     *      @Annotation(one="two")
+     *
+     * `named` would:
+     *
+     *      $named = $someAnnotation->named('one'); // "two"
+     *
+     * @since   0.5
+     * @param   string $name The named argument to fetch
+     * @return  mixed|null The argument value if present, null otherwise
      */
-    public function attachRun(UnitTestCase $testcase, TestContext $context, TestResult $result)
-    {
-        // noop by default, subclasses can do their thing
-    }
+    public function named($name);
 
     /**
-     * Remove doubled backslashes and replace them with singles.
+     * Get all the named arguments as an iterator
      *
-     * @since   0.1
-     * @param   string $ident
-     * @return  string
+     * @since   0.5
+     * @return  Traversable
      */
-    protected function normalizeName($ident)
-    {
-        return str_replace('\\\\', '\\', $ident);
-    }
-
-    /**
-     * Check for the `method` argument in the `args` array, if it's there and
-     * test object has the method and it's public, this will return true.
-     *
-     * Otherwise, false.
-     *
-     * @since   0.1
-     * @param   UnitTestCase $testcase
-     * @param   boolean $requireStatic If true, the method will be checked to ensure
-     *          that it's static.
-     * @return  boolean|ReflectionMethod
-     */
-    protected function hasValidMethod(UnitTestCase $testcase, $requireStatic=false)
-    {
-        $method = null;
-        if (isset($this->positional[0])) {
-            $method = $this->positional[0];
-            $this->args['method'] = $method;
-        } elseif (isset($this->args['method'])) {
-            $method = $this->args['method'];
-        }
-
-        if (!$method) {
-            return false;
-        }
-
-        try {
-            $ref = $testcase->getReflectionClass()->getMethod($method);
-        } catch (\ReflectionException $e) {
-            return false;
-        }
-
-        return $ref->isPublic() && (!$requireStatic || $ref->isStatic());
-    }
-
-    /**
-     * Check the function argument in the `args` array. If it exists and is an
-     * existing function, this will return true.
-     *
-     * @since   0.1
-     * @return  boolean
-     */
-    protected function hasValidFunction(UnitTestCase $testcase)
-    {
-        return isset($this->args['function']) && function_exists($this->args['function']);
-    }
+    public function allNamed();
 }
