@@ -26,7 +26,7 @@ namespace Demeanor\Requirement;
  *
  * @since   0.1
  */
-class Requirements implements \IteratorAggregate, \Countable
+class Requirements implements Requirement, \IteratorAggregate, \Countable
 {
     /**
      * The requirement storage object. We use SplObjectStorage here because
@@ -46,6 +46,33 @@ class Requirements implements \IteratorAggregate, \Countable
     public function __construct()
     {
         $this->storage = new \SplObjectStorage();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function met()
+    {
+        foreach ($this as $req) {
+            if (!$req->met()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        $messages = array();
+        foreach ($this as $req) {
+            $messages[] = (string)$req;
+        }
+
+        return implode(' AND ', $messages);
     }
 
     /**

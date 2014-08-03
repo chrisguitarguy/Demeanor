@@ -67,10 +67,8 @@ class RequirementSubscriber implements Subscriber
             return;
         }
 
-        foreach ($context['requirements'] as $requirement) {
-            if (!$requirement->met()) {
-                $context->skip((string)$requirement);
-            }
+        if (!$context['requirements']->met()) {
+            $context->skip((string)$context['requirements']);
         }
     }
 }
