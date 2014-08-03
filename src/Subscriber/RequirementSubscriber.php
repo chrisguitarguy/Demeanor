@@ -84,8 +84,10 @@ class RequirementSubscriber implements Subscriber
      */
     public function checkRequirements(TestRunEvent $event)
     {
-        if (!$this->reqStorage->get($event->getTestCase())->met()) {
-            $context->skip((string)$context['requirements']);
+        $reqs = $this->reqStorage->get($event->getTestCase());
+
+        if (!$reqs->met()) {
+            $event->getTestContext()->skip((string)$reqs);
         }
     }
 }
