@@ -66,4 +66,14 @@ $this->describe('#Annotation', function () {
 
         Assert::assertThat(Matchers::stringDoesNotContain(': Skipped'), $proc->getOutput());
     });
+
+    $this->it('should should mark test as skipped when specfication test requirements are not met', function (TestContext $ctx) {
+        $proc = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/req_annotnotmet_spectest');
+        $proc->run();
+
+        $ctx->log(sprintf('STDOUT> %s', $proc->getOutput()));
+        $ctx->log(sprintf('STDERR> %s', $proc->getErrorOutput()));
+
+        Assert::assertStringContains('Skipped', $proc->getOutput());
+    });
 });

@@ -1,0 +1,7 @@
+{
+    "testsuites": {
+        "aSuite": {
+            "type": "spec"
+        }
+    }
+}
