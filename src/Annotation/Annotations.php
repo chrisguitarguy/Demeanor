@@ -99,6 +99,7 @@ class Annotations
         return new Parser\CachingTestCaseParser(
             new Parser\DefaultTestCaseParser(new Reader\ChainReader([
                 new Reader\UnitTestCaseReader(),
+                new Reader\SpecTestCaseReader(),
             ]))
         );
     }
