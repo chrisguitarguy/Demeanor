@@ -48,7 +48,7 @@ class DefaultEmitter implements Emitter
 
         $event = $event ?: new DefaultEvent();
         krsort($this->listeners[$eventName], SORT_NUMERIC);
-        foreach ($this->listeners[$eventName] as $priority => $listeners) {
+        foreach ($this->listeners[$eventName] as $listeners) {
             foreach ($listeners as $listener) {
                 call_user_func($listener, $event);
                 if ($event->stopped()) {
