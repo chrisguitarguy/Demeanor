@@ -34,9 +34,6 @@ class DataProviderHandler extends AbstractHandler
      */
     public function onSetup(Annotation $annotation, TestCase $testcase)
     {
-        $foundProvider = false;
-        $providerData = null;
-
         $method = $first = $annotation->positional(0);
         if (!$method) {
             $method = $annotation->named('method');
