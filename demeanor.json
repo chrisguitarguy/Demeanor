@@ -27,9 +27,7 @@
     }
     , "coverage": {
         "reports": {
-            "diff": "coverage/diff"
-            , "html": "coverage/html"
-            , "text": "coverage/coverage.txt"
+            "html": "coverage"
         }
         , "directories": [
             "src"

@@ -1,5 +1,6 @@
 /vendor
 /composer.lock
+/coverage/*
 
 # ignore certain files
 *.swp
