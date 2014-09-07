@@ -21,10 +21,6 @@
 
 namespace Demeanor\Annotation;
 
-use Demeanor\TestContext;
-use Demeanor\TestResult;
-use Demeanor\Unit\UnitTestCase;
-
 /**
  * An ABC for all the annotation used in this extenion. Annotation know how to
  * attach themselves to test suites.
