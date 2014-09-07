@@ -23,6 +23,8 @@ Data providers can be one of three types:
 Static Method Data Provider
 ---------------------------
 
+This can only be done for `unit tests <types/unit-tests>`.
+
 .. code-block:: php
 
     <?php
@@ -67,6 +69,7 @@ Function Data Provider
         ];
     }
 
+    // DataProviderFunctionTest.php
     class DataProviderFunctionTest
     {
         /**
@@ -78,12 +81,23 @@ Function Data Provider
         }
     }
 
+    // some.spec.php
+    /**
+     * @Provider("acceptance_dataprovider_function")
+     */
+    $this->it('has a data provider', function (TestContext $ctx, $arg) {
+        Assert::assertType('string', $arg);
+    });
+
 Inline Data Provider
 --------------------
 
 .. code-block:: php
 
     <?php
+
+    // DataProviderInlineTest.php
+
     use Demeanor\TestContext;
     use Counterpart\Assert;
 
@@ -105,6 +119,14 @@ Inline Data Provider
             Assert::assertType('string', $arg);
         }
     }
+
+    // some.spec.php
+    /**
+     * @Provider(["one", "two"]);
+     */
+    $this->it('has a data provider', function (TestContext $ctx, $arg) {
+        Assert::assertType('string', $arg);
+    });
 
 The Test Context
 ----------------

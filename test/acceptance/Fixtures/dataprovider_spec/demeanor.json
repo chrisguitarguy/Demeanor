@@ -1,0 +1,10 @@
+{
+    "testsuites": {
+        "aSuite": {
+            "type": "spec"
+            , "files": [
+                "test.php"
+            ]
+        }
+    }
+}

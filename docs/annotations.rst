@@ -2,12 +2,12 @@ Annotations
 ===========
 
 Demeanor uses a `simple annotation library <https://github.com/chrisguitarguy/Annotation>`_
-to make it a bit easier to configure unit tests.
+to make it a bit easier to configure unit and spec tests.
 
 Annotations are case sensitive.
 
-Annotations on Classes or Methods?
-----------------------------------
+Where to Put Annotations
+------------------------
 
 Annotations can be defined on the test class or test method. Annotations on the
 class will be applied to all test methods in the class. A great use case for
@@ -29,8 +29,24 @@ this is running a method before every test.
         }
     }
 
+Additionally, annotations can be used with `specification tests <types/spec-tests>`.
+The annotation *must* be in a docblock directly before a call to ``it``.
+
+.. code-block:: php
+
+    <?php
+
+    /**
+     * @Excpect("LogicException")
+     */
+    $this->it('will throw a logic exception', function () {
+        throw new \LogicException();
+    });
+
 Adding Before/After Callbacks
 -----------------------------
+
+*Only supported in `unit test cases <types/unit-tests>`*.
 
 The ``Before`` and ``After`` annotations provide ways to call methods on the test
 class or some function before and after each test case.

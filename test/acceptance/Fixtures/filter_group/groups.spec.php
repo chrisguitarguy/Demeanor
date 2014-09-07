@@ -9,7 +9,9 @@ $this->describe('#GroupOne', function () {
 });
 
 $this->describe('#GroupTwo', function () {
-    $this->group('groupTwo');
+    /**
+     * @Group("groupTwo")
+     */
     $this->it('is in group two', function (TestContext $ctx) {
         $ctx->log('hello from group two');
     });

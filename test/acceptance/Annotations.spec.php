@@ -65,6 +65,15 @@ $this->describe('#Expect', function () {
         $ctx->log(sprintf('STDERR> %s', $proc->getErrorOutput()));
         Assert::assertEquals(0, $proc->getExitCode());
     });
+
+    $this->it('should add an expected exception on spec tests when valid exceptions are used', function (TestContext $ctx) {
+        $proc = new Process(DEMEANOR_BINARY, __DIR__.'/Fixtures/goodexpect_spec');
+        $proc->run();
+
+        $ctx->log(sprintf('STDOUT> %s', $proc->getOutput()));
+        $ctx->log(sprintf('STDERR> %s', $proc->getErrorOutput()));
+        Assert::assertEquals(0, $proc->getExitCode());
+    });
 });
 
 $this->describe('#Provider', function () {
@@ -87,6 +96,11 @@ $this->describe('#Provider', function () {
 
     $this->it('should set a valid provider with inline data and exit successfully', function (TestContext $ctx) {
         $ctx['proc'] = new Process(DEMEANOR_BINARY.' -vv', __DIR__.'/Fixtures/dataprovider_inline');
+        $ctx['proc']->run();
+    });
+
+    $this->it('should allow data providers in specification tests', function (TestContext $ctx) {
+        $ctx['proc'] = new Process(DEMEANOR_BINARY.' -vv', __DIR__.'/Fixtures/dataprovider_spec');
         $ctx['proc']->run();
     });
 });

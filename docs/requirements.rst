@@ -119,3 +119,17 @@ version, OS, and extension requirements.
             // requirements are checked before this is run
         }
     }
+
+Requirement annotations can also be done on spec tests.
+
+.. code-block:: php
+
+    <?php
+    // some.spec.php
+
+    /**
+     * @Require(php="5.4")
+     */
+    $this->it('requires php 5.4+', function () {
+
+    });
