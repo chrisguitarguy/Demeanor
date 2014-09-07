@@ -21,6 +21,7 @@
 
 namespace Demeanor\Annotation\Parser;
 
+use Chrisguitarguy\Annotation\Parser;
 use Chrisguitarguy\Annotation\ParserInterface;
 use Chrisguitarguy\Annotation\AnnotationCollection;
 use Chrisguitarguy\Annotation\AnnotationCollectionInterface;
@@ -56,18 +57,18 @@ class DefaultTestCaseParser implements TestCaseParser
      * Set up the parser and reader.
      *
      * @since   0.5
-     * @param   ParserInterface $parser
      * @param   DocblockReader $reader
+     * @param   ParserInterface|null $parser
      * @param   AnnotationCollectionInterface $collection
      * @return  void
      */
     public function __construct(
-        ParserInterface $parser,
         DocblockReader $reader,
+        ParserInterface $parser=null,
         AnnotationCollectionInterface $collection=null
     ) {
-        $this->parser = $parser;
         $this->reader = $reader;
+        $this->parser = $parser ?: new Parser();
         $this->annotations = $collection ?: $this->createDefaultCollection();
     }
 

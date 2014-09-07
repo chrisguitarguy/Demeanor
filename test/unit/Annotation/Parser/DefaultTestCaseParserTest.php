@@ -21,7 +21,6 @@
 
 namespace Demeanor\Annotation\Parser;
 
-use Chrisguitarguy\Annotation\Parser as AnnotParser;
 use Demeanor\TestCaseStub;
 
 /**
@@ -36,7 +35,7 @@ class DefaultTestCaseParserTest
     public function __construct()
     {
         $this->reader = \Mockery::mock('Demeanor\\Annotation\\Reader\\DocblockReader');
-        $this->parser = new DefaultTestCaseParser(new AnnotParser(), $this->reader);
+        $this->parser = new DefaultTestCaseParser($this->reader);
     }
 
     public function testNoDocblocksReturnsNoAnnotationObjects()
