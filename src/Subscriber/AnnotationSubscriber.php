@@ -25,7 +25,6 @@ use Demeanor\Events;
 use Demeanor\Event\Subscriber;
 use Demeanor\Event\TestRunEvent;
 use Demeanor\Event\TestCaseEvent;
-use Demeanor\Unit\UnitTestCase;
 use Demeanor\Annotation\Annotations;
 
 class AnnotationSubscriber implements Subscriber
