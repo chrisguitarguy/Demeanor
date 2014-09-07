@@ -29,7 +29,7 @@ this is running a method before every test.
         }
     }
 
-Additionally, annotations can be used with `specification tests <types/spec-tests>`.
+Additionally, annotations can be used with :doc:`specification tests <types/spec-tests>`.
 The annotation *must* be in a docblock directly before a call to ``it``.
 
 .. code-block:: php
@@ -46,7 +46,7 @@ The annotation *must* be in a docblock directly before a call to ``it``.
 Adding Before/After Callbacks
 -----------------------------
 
-*Only supported in `unit test cases <types/unit-tests>`*.
+*Only supported in :doc:`unit test cases <types/unit-tests>`*.
 
 The ``Before`` and ``After`` annotations provide ways to call methods on the test
 class or some function before and after each test case.

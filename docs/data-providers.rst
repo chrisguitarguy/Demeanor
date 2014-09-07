@@ -23,7 +23,7 @@ Data providers can be one of three types:
 Static Method Data Provider
 ---------------------------
 
-This can only be done for `unit tests <types/unit-tests>`.
+This can only be done for :doc:`unit tests <types/unit-tests>`.
 
 .. code-block:: php
 
