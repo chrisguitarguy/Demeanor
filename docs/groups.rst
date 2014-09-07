@@ -66,3 +66,18 @@ like before and after callbacks, child tests inherit their parent's groups.
             // this test will be in `aGroup` and `anotherGroup`
         });
     });
+
+The ``@Group`` annotation may also be used, but does not cause the inheritance
+that ``$this->group()`` does.
+
+.. code-block:: php
+
+    <?php
+    // some.spec.php
+
+    /**
+     * @Group("AGroup")
+     */
+    $this->it('has a group', function () {
+
+    });
